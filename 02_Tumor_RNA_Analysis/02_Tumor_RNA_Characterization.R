@@ -105,6 +105,49 @@ clinical_dimplot
 #ggsave(clinical_dimplot,filename = "reference_data/RNA_Seq/outputs/plots/02a_Seurat_clinical_attributes_on_pcs.png",dpi=300,width=24,height=12)
 ggsave(clinical_dimplot,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_clinical_attributes_on_pcs_res15.png",dpi=300,width=24,height=12)
 
+## clinical markers
+# General markers for angisoarcoma
+general_asc_markers = c(
+  "PECAM1", # PECAM1, most sensitive marker for endpthelial cells, almost universial positive
+  "CD34", # Frequently positive in angiosarcoma, common endothelial cell marker
+  "VWF", # Less used, endothelial differentiation marker
+  "ERG", # Nuclear transcription factor sensitive for endothelial lineage
+  "FLI1" #transcription factor expressed in most endothelial cells
+)
+cutaneous_asc_markers = c(
+  "LYVE1", # (Lymphatic Vessel Endothelial Hyaluronan Receptor 1): Useful in distinguishing lymphatic from blood vessel origin, particularly relevant in cutaneous angiosarcoma.
+  "PDPN" # (Podoplanin): Marks lymphatic endothelial cells, supporting a lymphatic origin which can sometimes be seen in angiosarcomas, especially those of the skin.
+)
+breast_asc_markers = c(
+  "MYC" # typically associated with secondary angiosarcoma of the breast
+)
+epithelioid_asc_markers = c(
+  "KRT1", # any keratin,
+  "EMA" # epithelial membrane antigen
+)
+other_markers = c(
+  "TERT","NRP1","NRP2","FLT1","KDR","FLT3","FLT4",
+  "PROX1","FLT4", "ANGPT2",
+  "TBX1","TIE1",
+  "PLCG1","PTPRB","PTPRC","PTPRD",
+  "VEGFA","DUSP1","DUSP10","DUSP26","DUSP12","MK2","BCL2L1","IL6","IL8","CPLA2","COX2","TNF","HBEGF","C5","CXCL12" #p38 MAPK
+)
+
+asc_clinical_markers = c(
+  general_asc_markers,
+  cutaneous_asc_markers,
+  breast_asc_markers,
+  epithelioid_asc_markers,
+  other_markers
+)
+
+
+#Idents(so) = so@meta.data$`PRIMARY SITE (EHR_EXTRACTED)`
+Idents(so) = so@meta.data$seurat_clusters
+asc_clinical_marker_heatmap = DoHeatmap(so, features = asc_clinical_markers, 
+          disp.max = 3.5,disp.min = -3.5,slot="vst_scaled",label=TRUE)
+asc_clinical_marker_heatmap
+ggsave(asc_clinical_marker_heatmap,file="02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_asc_clinical_markers_heatmap.png",dpi=300,width=24,height=12)
 
 ## Find markers associated with each cluster
 Idents(so) = so@meta.data$seurat_clusters
@@ -143,6 +186,68 @@ top_5_cluster_markers = all_markers %>%
 top_markers_dimplot = FeaturePlot(so, features = top_5_cluster_markers$gene,pt.size = 2,ncol = 5,reduction = "pca")
 top_markers_dimplot
 ggsave(top_markers_dimplot,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_top_5_markers_per_cluster_on_pca_plot.png",dpi=300,width=24,height=12)
+
+## Save the Seurat Object
+if (FALSE) {
+  saveRDS(so, "data/processed/rna/ASCSeuratObj.rds")
+}
+
+## Plot the ASC markers combining clinical and new features
+cluster_0_markers = c(
+  "CD34","CD36","CD93","TERT",#"VWF","ERG","FLI1",
+  "NRP1","FLT1","PDGFB","PIGF",
+  "VEGFC","FIGF","ITGA5"
+)
+cluster_1_markers = c(
+  "CD320",
+  #"CD4","CD8A","CD8B",
+  "NRP2","FLT4","LYVE1","PROX1","PECAM1","PDPN","MYC",
+  "TBX1","TIE1"#"ANGPT2",
+)
+cluster_2_markers = c(
+  "CD44",
+  "CDH1","VCAM1",
+  "FLT3",
+  "KRT1"#,"KRT10"
+  #"KRT1","KRT2","KRT5","KRT10","KRT14","KRT15","KRT24","KRT77","KRT78","KRT80"
+)
+cluster_3_markers = c(
+  "KRT5",#"KRT14",
+  "KRT6A",#"KRT16",
+  "CD82"
+  #"KRT9","KRT16","KRT17"
+)
+cluster_4_markers = c(
+  "EPCAM","CD163",
+  "KRT8","KRT18",
+  "VEGFA","VEGFB","VEGFC","FGF2"
+  #"CD302"
+  #,"KRT19","KRT7"
+)
+#keratin_markers = paste0("KRT",1:99)
+#keratin_markers = c(keratin_markers,"KRT6A","KRT6B")
+
+# cluster_4_markers = c(
+#   "EGF","TGFB1",
+#   #"VEGFA","VEGFB","VEGFC","VEGFD","PTPRD","CD144"#,"TNF","KDR","TP53"
+# )
+
+cd_markers = paste0("CD",1:400)
+
+asc_new_markers = c(
+  cluster_0_markers,
+  cluster_1_markers,
+  cluster_2_markers,
+  cluster_3_markers,
+  cluster_4_markers
+  #cd_markers
+  #keratin_markers
+  #other_markers
+)
+Idents(so) = so@meta.data$seurat_clusters
+asc_new_marker_heatmap = DoHeatmap(so, features = asc_new_markers, 
+                                        disp.max = 3.5,disp.min = -3.5,slot="vst_scaled",label=TRUE)
+asc_new_marker_heatmap
 
 
 ## Perform ORA on genes that are positively enriched in each cluster (GO BP and KEGG Pathways)

@@ -78,7 +78,7 @@ recurrent_mutation_plot = ggplot(mut_by_site_table,aes(y=tumor_mutation_id_short
   geom_bar(stat = "identity",position = "stack") +
   theme_minimal() +
   scale_x_continuous(breaks= pretty_breaks()) + 
-  labs(fill="Primary Site")
+  labs(y="Gene",x="Number of Patients with Mutation",fill="Primary Site")
 ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.png")
 
 
