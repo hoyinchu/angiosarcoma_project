@@ -3,6 +3,8 @@ library(cowplot)
 library(ggplot2)
 library(tidyr)
 library(dplyr)
+library(fgsea)
+library(msigdbr)
 
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
@@ -122,7 +124,7 @@ breast_asc_markers = c(
   "MYC" # typically associated with secondary angiosarcoma of the breast
 )
 epithelioid_asc_markers = c(
-  "KRT1", # any keratin,
+  "KRT5", # any keratin,
   "EMA" # epithelial membrane antigen
 )
 other_markers = c(
@@ -159,6 +161,83 @@ all_markers = FindAllMarkers(
 )
 ## Save the output
 write.csv(all_markers,"02_Tumor_RNA_Analysis/outputs/DEGs/02_Seurat_all_markers.csv")
+
+## Load gene set libraries
+fgsea_kegg_set = msigdbr(species = "Homo sapiens", category = "C2", subcategory = "CP:KEGG") %>% split(x = .$gene_symbol, f = .$gs_name)
+fgsea_c5_set = msigdbr(species = "Homo sapiens", category = "C5", subcategory = "GO:BP") %>% split(x = .$gene_symbol, f = .$gs_name)
+fgsea_c6_set = msigdbr(species = "Homo sapiens", category = "C6") %>% split(x = .$gene_symbol, f = .$gs_name)
+fgsea_c8_set = msigdbr(species = "Homo sapiens", category = "C8") %>% split(x = .$gene_symbol, f = .$gs_name)
+
+run_fgsea = function(degs,fgsea_sets) {
+  deg_genes = degs %>%
+    arrange(desc(avg_log2FC)) %>% 
+    dplyr::select(gene, avg_log2FC)
+  vec = deg_genes$avg_log2FC; names(vec) = deg_genes$gene
+  fgseaRes = fgseaMultilevel(fgsea_sets, stats = vec)
+  return(fgseaRes)
+}
+
+run_fora = function(degs,fgsea_sets) {
+  genes = degs[degs$p_val_adj < 0.1,]$gene
+  universe = rownames(so@assays$RNA$counts)
+  fora_res = fora(fgsea_sets, genes, universe, minSize = 5, maxSize = 500)
+  return(fora_res)
+}
+
+plot_fgsea = function(fgsea_res,title) {
+  fgsea_res_sorted = fgsea_res %>% arrange((pval))
+  p1 = ggplot(fgsea_res_sorted, aes(x = ES, y = -log10(padj), label=pathway)) + 
+    geom_text_repel(data = fgsea_res_sorted[fgsea_res_sorted$pval < 0.05,]) +
+    geom_hline(yintercept = -log10(0.05),linetype = "dashed") +
+    geom_vline(xintercept = 0,linetype = "dashed") +
+    geom_point() + labs(x = "Enrichment score", y = "-log10 padj", title=title)# +
+    #pretty_plot(fontsize = 8) + L_border()
+  return(p1)
+}
+
+
+clust0_degs_fora_res = run_fora(all_markers[all_markers$cluster==0,],fgsea_c8_set)
+clust1_degs_fora_res = run_fora(all_markers[all_markers$cluster==1,],fgsea_c8_set)
+clust2_degs_fora_res = run_fora(all_markers[all_markers$cluster==2,],fgsea_c8_set)
+clust3_degs_fora_res = run_fora(all_markers[all_markers$cluster==3,],fgsea_c8_set)
+clust4_degs_fora_res = run_fora(all_markers[all_markers$cluster==4,],fgsea_c8_set)
+
+## Plot to see what genes are enriched in cluster 2 vs. 3
+clust2_ora = all_markers[all_markers$cluster==2,]
+clust3_ora = all_markers[all_markers$cluster==3,]
+clust2_3_ora_merged =  merge(clust2_ora,clust3_ora,by="gene",suffixes = c("_cluster_2","_cluster_3"))
+clust2_3_ora_merged$neg_log_pval_clust2 = -log(clust2_3_ora_merged$p_val_adj_cluster_2)
+clust2_3_ora_merged$neg_log_pval_clust3 = -log(clust2_3_ora_merged$p_val_adj_cluster_3)
+subset_to_viz = clust2_3_ora_merged[
+  (clust2_3_ora_merged$neg_log_pval_clust3 > 10) | (clust2_3_ora_merged$neg_log_pval_clust2 > 7.5),
+  ]
+clust2_vs_clust3_ora_plot = ggplot(clust2_3_ora_merged,aes(x=neg_log_pval_clust2,y=neg_log_pval_clust3,label=gene)) + 
+  geom_point() +
+  geom_abline() +
+  geom_text_repel(data=subset_to_viz)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_clust2_vs_clust3_ora_plot.png",clust2_vs_clust3_ora_plot)
+
+# Cluster 0: Vascular endothelial cells
+# Cluster 1: Lymphatic endothelial cells
+## https://www.proteinatlas.org/humanproteome/single+cell+type/squamous+epithelial+cells
+# Cluster 2: General squamous epithelial cells? (NK-cell rich? KLRF2, CLEC2A)
+# Cluster 3: More specialized Squamous Epithelial cells (T-cell rich? CD82, CST6 / Secretory?)
+# Cluster 4: Mixed Type
+
+clust0_degs_fgsea_res = run_fgsea(all_markers[all_markers$cluster==0,],fgsea_c8_set)
+clust1_degs_fgsea_res = run_fgsea(all_markers[all_markers$cluster==1,],fgsea_c8_set)
+clust2_degs_fgsea_res = run_fgsea(all_markers[all_markers$cluster==2,],fgsea_c8_set)
+clust3_degs_fgsea_res = run_fgsea(all_markers[all_markers$cluster==3,],fgsea_c8_set)
+clust4_degs_fgsea_res = run_fgsea(all_markers[all_markers$cluster==4,],fgsea_c8_set)
+
+clust0_fgsea_plot = plot_fgsea(clust0_degs_fgsea_res,"Cell Type GSEA, Cluster 0")
+clust1_fgsea_plot = plot_fgsea(clust1_degs_fgsea_res,"Cell Type GSEA, Cluster 1")
+clust2_fgsea_plot = plot_fgsea(clust2_degs_fgsea_res,"Cell Type GSEA, Cluster 2")
+clust3_fgsea_plot = plot_fgsea(clust3_degs_fgsea_res,"Cell Type GSEA, Cluster 3")
+clust4_fgsea_plot = plot_fgsea(clust4_degs_fgsea_res,"Cell Type GSEA, Cluster 4")
+
+combined_celltype_gsea_plot = plot_grid(clust0_fgsea_plot,clust1_fgsea_plot,clust2_fgsea_plot,clust3_fgsea_plot,clust4_fgsea_plot)
+
 
 ## Check the top genes in each cluster
 top_cluster_markers = all_markers %>%
@@ -206,15 +285,19 @@ cluster_1_markers = c(
 )
 cluster_2_markers = c(
   "CD44",
-  "CDH1","VCAM1",
+  "CDH1",#"VCAM1",
   "FLT3",
-  "KRT1"#,"KRT10"
+  #"KRT1","FLG",
+  "KRT5","SERPINB5","GATA3", #"CASP14","TP73","CDH3",
+  "CLEC2A","KLRF2"
+  #,"KRT10"
   #"KRT1","KRT2","KRT5","KRT10","KRT14","KRT15","KRT24","KRT77","KRT78","KRT80"
 )
 cluster_3_markers = c(
-  "KRT5",#"KRT14",
-  "KRT6A",#"KRT16",
-  "CD82"
+  #"KRT5",#"KRT14",
+  "KRT6A","KRT16",
+  "CD82",
+  "CST6","MUC1","VIL1"
   #"KRT9","KRT16","KRT17"
 )
 cluster_4_markers = c(
@@ -233,6 +316,7 @@ cluster_4_markers = c(
 # )
 
 cd_markers = paste0("CD",1:400)
+il_markers = paste0("IL",1:400)
 
 asc_new_markers = c(
   cluster_0_markers,
@@ -240,6 +324,7 @@ asc_new_markers = c(
   cluster_2_markers,
   cluster_3_markers,
   cluster_4_markers
+  #il_markers
   #cd_markers
   #keratin_markers
   #other_markers
@@ -248,7 +333,7 @@ Idents(so) = so@meta.data$seurat_clusters
 asc_new_marker_heatmap = DoHeatmap(so, features = asc_new_markers, 
                                         disp.max = 3.5,disp.min = -3.5,slot="vst_scaled",label=TRUE)
 asc_new_marker_heatmap
-
+ggsave(asc_new_marker_heatmap,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_top_cluster_marker_heatmap.png",dpi=300,width=24,height=12)
 
 ## Perform ORA on genes that are positively enriched in each cluster (GO BP and KEGG Pathways)
 library(clusterProfiler)
@@ -362,6 +447,7 @@ go_kegg_msigdb_bars_combined = cowplot::plot_grid(
 )
 go_kegg_msigdb_bars_combined
 ggsave(go_kegg_msigdb_bars_combined,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_top_markers_go_kegg_msigdb_enrichments.png",dpi=300,width=24,height=16)
+
 
 
 ## Check endothelial migration genes
@@ -522,21 +608,6 @@ mutation_dimplot
 ggsave(mutation_dimplot,filename = "reference_data/RNA_Seq/outputs/plots/02a_Seurat_mutation_status_on_pcs.png",dpi=300,width=24,height=12)
 
 
-
-# ## Given the high display of keratin related markers, we filter out markers that are significant when compared  between cluster 1 and 4 
-# hnfs_clust_vs_cut_breast = FindMarkers(
-#   so,
-#   #cells.1 = 2,#WhichCells(so,idents=2),
-#   #cells.2 = 4,#WhichCells(so,idents=4),
-#   ident.1 = 2,
-#   ident.2 = 4,
-#   slot="counts",
-#   test.use = "wilcox",
-#   only.pos=TRUE,
-#   )
-# hnfs_clust_vs_cut_breast_sig = hnfs_clust_vs_cut_breast %>% dplyr::filter(p_val_adj < 0.05)
-# #remove_genes = 
-
 ## Visualize the top enriched genes in each cluster
 top_markers_plot = VlnPlot(so, features = c(
   "FLT1","APLNR","EBF3","NRP1",
@@ -579,9 +650,6 @@ expr_dim_plot = FeaturePlot(so,reduction = "pca", features=c(
 expr_dim_plot
 ggsave(expr_dim_plot,filename = "reference_data/RNA_Seq/outputs/plots/02a_Seurat_gene_expression_pca_plot.png",dpi=300,width=24,height=12)
 
-
-
-
 ## Combine all previous information and combine them into heatmap
 top_cluster_markers = all_markers %>%
   group_by(cluster) %>%
@@ -600,202 +668,5 @@ write.csv(so@meta.data,"reference_data/RNA_Seq/outputs/seurat/seurat_processed_m
 
 
 
-## Overlay enriched pathways in path view
-# Back-translate to gene names
-#enriched_uniprot = cluster_0_enrichement$kegg@
-#bitr(sig_genes,fromType="SYMBOL",toType="UNIPROT",OrgDb = org.Hs.eg.db)$UNIPROT 
-# 
-# library(pathview)
-# sub_df = all_markers[all_markers$cluster==0,]
-# sig_genes = rownames(sub_df[sub_df$p_val < 0.05,])
-# enriched_path_viz = pathview(gene.data=sig_genes, pathway.id="hsa04370", species = "hsa",gene.idtype="SYMBOL",out.suffix = "cluster0")
-# enriched_path_viz = pathview(gene.data=sig_genes, pathway.id="hsa04080", species = "hsa",gene.idtype="SYMBOL",out.suffix = "cluster0")
-# enriched_path_viz = pathview(gene.data=sig_genes, pathway.id="hsa04024", species = "hsa",gene.idtype="SYMBOL",out.suffix = "cluster0")
-# enriched_path_viz = pathview(gene.data=sig_genes, pathway.id="hsa04015", species = "hsa",gene.idtype="SYMBOL",out.suffix = "cluster0.rap_signaling")
-# enriched_path_viz = pathview(gene.data=sig_genes, pathway.id="hsa04218", species = "hsa",gene.idtype="SYMBOL",out.suffix = "cluster0.senescence")
-# enriched_path_viz = pathview(gene.data=sig_genes, pathway.id="hsa04514", species = "hsa",gene.idtype="SYMBOL",out.suffix = "cluster0.adhesion")
 
-#browseKEGG(cluster_0_enrichement$kegg,pathID="hsa04370")
-
-
-## Overlay expression of genes from difference endothelial / angiogenesis pathways?
-
-# Show some gsva scores that are correlated with PCs
-gsva_bp_clinical_dimplot = FeaturePlot(
-  so,reduction="pca",features=c(
-    "GOBP_SKIN_EPIDERMIS_DEVELOPMENT","GOBP_RAP_PROTEIN_SIGNAL_TRANSDUCTION","GOBP_MORPHOGENESIS_OF_AN_ENDOTHELIUM",
-    "GOBP_NEGATIVE_REGULATION_OF_CELLULAR_SENESCENCE","GOBP_NEGATIVE_REGULATION_OF_CELL_MIGRATION_INVOLVED_IN_SPROUTING_ANGIOGENESIS","GOBP_ENDOTHELIAL_CELL_MATRIX_ADHESION",
-    "GOBP_POSITIVE_REGULATION_OF_FIBROBLAST_MIGRATION","GOBP_POSITIVE_REGULATION_OF_CHROMATIN_BINDING","GOBP_REGULATION_OF_PLATELET_DERIVED_GROWTH_FACTOR_RECEPTOR_ALPHA_SIGNALING_PATHWAY",
-    "GOBP_RENAL_SYSTEM_VASCULATURE_MORPHOGENESIS","GOBP_OVULATION_CYCLE","GOBP_SMOOTH_MUSCLE_TISSUE_DEVELOPMENT",
-    "GOBP_MEIOTIC_CELL_CYCLE_PHASE_TRANSITION","GOBP_POSITIVE_REGULATION_OF_MITOTIC_CYTOKINESIS","GOBP_G2_MI_TRANSITION_OF_MEIOTIC_CELL_CYCLE",
-    "GOBP_DOUBLE_STRAND_BREAK_REPAIR_VIA_BREAK_INDUCED_REPLICATION"
-  ),pt.size=3
-)
-gsva_bp_clinical_dimplot
-ggsave(gsva_bp_clinical_dimplot,filename = "reference_data/RNA_Seq/outputs/plots/02a_Seurat_gsva_bp_corr_on_pcs.png",dpi=300,width=36,height=18)
-
-## Show some cancer related gsva scores that correlate with PCs
-gsva_cancer_clinical_dimplot = FeaturePlot(
-  so,reduction="pca",features=c(
-    "MYC","MYC_UP.V1_DN","MYC_UP.V1_UP",
-    "KRAS","KRAS.600_UP.V1_DN","KRAS.600_UP.V1_UP",
-    "KDR", "VEGF_A_UP.V1_DN", "VEGF_A_UP.V1_UP",
-    "HRAS","TERT","POT1"
-    #"SINGH_KRAS_DEPENDENCY_SIGNATURE","KRAS.50_UP.V1_DN","ESC_J1_UP_EARLY.V1_UP","PKCA_DN.V1_UP",
-    #"CSR_EARLY_UP.V1_UP","E2F1_UP.V1_UP","BCAT_BILD_ET_AL_DN","CSR_LATE_UP.V1_UP",
-    #"VEGF_A_UP.V1_UP","VEGF_A_UP.V1_DN","MYC_UP.V1_UP","PKCA_DN.V1_UP","YAP1_UP"
-    #"JNK_DN.V1_UP","CORDENONSI_YAP_CONSERVED_SIGNATURE",
-    #"RAF_UP.V1_UP",
-  ),pt.size = 3,
-  ncol=3
-  #cols=c("blue","red")#,keep.scale="all"
-)
-gsva_cancer_clinical_dimplot
-
-## Check POT1 and TERT expression by mutation status
-Idents(so) = so@meta.data$POT1_Mut_Onehot
-so_sub = subset(x = so, subset = primary_site_combined == "BREAST (PARENCHYMAL)")
-VlnPlot(so,features=c("TERT","POT1","TRF1","TRF2",
-                      "ATRX","DAXX","BRCA1","BRCA2",
-                      "MRE11","RAD50","NBS1",
-                      "BLM","RAD51","RAD52","WRN","FEN1",
-                      "SMARCB1"
-                      ),layer="data",pt.size = 3)
-
-## Show some hallmark pathway set related gsva scores that correlate with PCs
-gsva_hallmark_clinical_dimplot = FeaturePlot(
-  so,reduction="pca",features=c(
-    "HALLMARK_KRAS_SIGNALING_UP","HALLMARK_ESTROGEN_RESPONSE_LATE","HALLMARK_ESTROGEN_RESPONSE_EARLY",
-    "HALLMARK_MITOTIC_SPINDLE","HALLMARK_G2M_CHECKPOINT","HALLMARK_TGF_BETA_SIGNALING",
-    "HALLMARK_UV_RESPONSE_UP","HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION","HALLMARK_COAGULATION",
-    "HALLMARK_MYC_TARGETS_V2","HALLMARK_E2F_TARGETS","HALLMARK_ANGIOGENESIS"
-  ),pt.size = 3,ncol=3
-  #cols=c("blue","red")#,kemep.scale="all"
-)
-gsva_hallmark_clinical_dimplot
-
-## Show the relative log TPM expression of known angiosarcoma related genes
-angiosarcoma_genes_dimplot= FeaturePlot(
-  so,reduction="pca",features=c(
-    "MYC","KDR","PLCG1","PTPRB","POT1","HRAS","KRAS","NRAS"
-  ),pt.size = 3
-  #cols=c("blue","red")#,keep.scale="all"
-)
-angiosarcoma_genes_dimplot
-
-
-# gsva_up_clinical_dimplot = FeaturePlot(
-#   so, reduction = "pca", features=c(
-#     "KRAS.300_UP.V1_UP","KRAS.600.LUNG.BREAST_UP.V1_UP","KRAS.LUNG.BREAST_UP.V1_UP",
-#     "MYC_UP.V1_UP","P53_DN.V1_UP","P53_DN.V2_UP","PDGF_UP.V1_UP","PGF_UP.V1_UP","PKCA_DN.V1_UP",
-#     "SINGH_KRAS_DEPENDENCY_SIGNATURE","SRC_UP.V1_UP","VEGF_A_UP.V1_UP","YAP1_UP"
-#     ),pt.size=3)
-# gsva_clinical_dimplot
-# 
-# gsva_dn_clinical_dimplot = FeaturePlot(
-#   so, reduction = "pca", features=c(
-#     "KRAS.300_UP.V1_DN","KRAS.600.LUNG.BREAST_UP.V1_DN","KRAS.LUNG.BREAST_UP.V1_DN",
-#     "MYC_UP.V1_DN","P53_DN.V1_DN","P53_DN.V2_DN","PDGF_UP.V1_DN","PGF_UP.V1_DN","PKCA_DN.V1_DN",
-#     "SINGH_KRAS_DEPENDENCY_SIGNATURE","SRC_UP.V1_DN","VEGF_A_UP.V1_DN","YAP1_DN"
-#   ),pt.size=3)
-# gsva_dn_clinical_dimplot
-
-## Check which features correlate with PCs
-gobp_columns <- grep("^GOBP", names(so@meta.data), value = TRUE)
-cancer_sig_columns <- colnames(gsva_cancer_data)
-cancer_sig_columns <- cancer_sig_columns[cancer_sig_columns!="id"]
-hallmark_columns <- colnames(gsva_hallmark_data)
-hallmark_columns <- hallmark_columns[hallmark_columns!="id"]
-
-
-# Define the function
-correlatePCs <- function(seuratObj,columns, pc_num) {
-  # Ensure the object has PCA results
-    # Extract PC1 scores
-    pc1_scores <- so@reductions$pca@cell.embeddings[, pc_num]
-    
-    # Filter metadata columns that start with "GOBP"
-    #go_columns <- grep("^GOBP", names(seuratObj@meta.data), value = TRUE)
-    
-    # Initialize a list to store correlation results
-    correlations <- list()
-    # Loop through the GOBP columns and calculate correlation with PC1
-    for(col in columns) {
-      # Ensure that the column is numeric
-      if(is.numeric(seuratObj@meta.data[[col]])) {
-        # Calculate correlation
-        cor_result <- cor.test(pc1_scores, seuratObj@meta.data[[col]], method = "pearson")
-        
-        # Store the correlation coefficient and p-value
-        correlations[[col]] <- list(correlation = cor_result$estimate,
-                                    p_value = cor_result$p.value)
-      } else {
-        warning(paste("Column", col, "is not numeric and was skipped."))
-      }
-    }
-    # Return the list of correlations
-    return(correlations)
-}
-
-convertCorListToDF <- function(cor_list) {
-  # Extracting correlations, p-values, and names
-  correlations <- sapply(cor_list, function(x) x$correlation)
-  p_values <- sapply(cor_list, function(x) x$p_value)
-  names_vector <- names(cor_list)
-  # Create a dataframe from the extracted values
-  cor_df <- data.frame(
-    Names = names_vector,
-    Correlation = correlations,
-    P_Value = p_values,
-    stringsAsFactors = FALSE  # To keep strings as character type
-  )
-  return(cor_df)
-}
-
-## Create the correlation dfs
-gobp_corr_pc1 = correlatePCs(so,gobp_columns,1)
-gobp_corr_pc2 = correlatePCs(so,gobp_columns,2)
-cancer_corr_pc1 = correlatePCs(so,cancer_sig_columns,1)
-cancer_corr_pc2 = correlatePCs(so,cancer_sig_columns,2)
-hallmark_corr_pc1 = correlatePCs(so,hallmark_columns,1)
-hallmark_corr_pc2 = correlatePCs(so,hallmark_columns,2)
-
-## Check GO_BP correlations
-pc1_corr_df = convertCorListToDF(gobp_corr_pc1)
-pc1_corr_df_nom_sig = pc1_corr_df[pc1_corr_df$P_Value<0.05,]
-pc1_corr_df_nom_sig = pc1_corr_df_nom_sig[order(pc1_corr_df_nom_sig$P_Value),]
-pc1_corr_df_nom_sig_pos = pc1_corr_df_nom_sig[pc1_corr_df_nom_sig$Correlation > 0,]
-pc1_corr_df_nom_sig_neg = pc1_corr_df_nom_sig[pc1_corr_df_nom_sig$Correlation < 0,]
-
-pc2_corr_df = convertCorListToDF(gobp_corr_pc2)
-pc2_corr_df_nom_sig = pc2_corr_df[pc2_corr_df$P_Value<0.05,]
-pc2_corr_df_nom_sig = pc2_corr_df_nom_sig[order(pc2_corr_df_nom_sig$P_Value),]
-pc2_corr_df_nom_sig_pos = pc2_corr_df_nom_sig[pc2_corr_df_nom_sig$Correlation > 0,]
-pc2_corr_df_nom_sig_neg = pc2_corr_df_nom_sig[pc2_corr_df_nom_sig$Correlation < 0,]
-
-## Check Cancer correlations
-pc1_cancer_corr_df = convertCorListToDF(cancer_corr_pc1)
-pc1_cancer_corr_df_nom_sig = pc1_cancer_corr_df[pc1_cancer_corr_df$P_Value<0.05,]
-pc1_cancer_corr_df_nom_sig = pc1_cancer_corr_df_nom_sig[order(pc1_cancer_corr_df_nom_sig$P_Value),]
-pc1_cancer_corr_df_nom_sig_pos = pc1_cancer_corr_df_nom_sig[pc1_cancer_corr_df_nom_sig$Correlation > 0,]
-pc1_cancer_corr_df_nom_sig_neg = pc1_cancer_corr_df_nom_sig[pc1_cancer_corr_df_nom_sig$Correlation < 0,]
-
-pc2_cancer_corr_df = convertCorListToDF(cancer_corr_pc2)
-pc2_cancer_corr_df_nom_sig = pc2_cancer_corr_df[pc2_cancer_corr_df$P_Value<0.05,]
-pc2_cancer_corr_df_nom_sig = pc2_cancer_corr_df_nom_sig[order(pc2_cancer_corr_df_nom_sig$P_Value),]
-pc2_cancer_corr_df_nom_sig_pos = pc2_cancer_corr_df_nom_sig[pc2_cancer_corr_df_nom_sig$Correlation > 0,]
-pc2_cancer_corr_df_nom_sig_neg = pc2_cancer_corr_df_nom_sig[pc2_cancer_corr_df_nom_sig$Correlation < 0,]
-
-## Check Hallmark correlations
-pc1_hallmark_corr_df = convertCorListToDF(hallmark_corr_pc1)
-pc1_hallmark_corr_df_nom_sig = pc1_hallmark_corr_df[pc1_hallmark_corr_df$P_Value<0.05,]
-pc1_hallmark_corr_df_nom_sig = pc1_hallmark_corr_df_nom_sig[order(pc1_hallmark_corr_df_nom_sig$P_Value),]
-pc1_hallmark_corr_df_nom_sig_pos = pc1_hallmark_corr_df_nom_sig[pc1_hallmark_corr_df_nom_sig$Correlation > 0,]
-pc1_hallmark_corr_df_nom_sig_neg = pc1_hallmark_corr_df_nom_sig[pc1_hallmark_corr_df_nom_sig$Correlation < 0,]
-
-pc2_hallmark_corr_df = convertCorListToDF(hallmark_corr_pc2)
-pc2_hallmark_corr_df_nom_sig = pc2_hallmark_corr_df[pc2_hallmark_corr_df$P_Value<0.05,]
-pc2_hallmark_corr_df_nom_sig = pc2_hallmark_corr_df_nom_sig[order(pc2_hallmark_corr_df_nom_sig$P_Value),]
-pc2_hallmark_corr_df_nom_sig_pos = pc2_hallmark_corr_df_nom_sig[pc2_hallmark_corr_df_nom_sig$Correlation > 0,]
-pc2_hallmark_corr_df_nom_sig_neg = pc2_hallmark_corr_df_nom_sig[pc2_hallmark_corr_df_nom_sig$Correlation < 0,]
 
