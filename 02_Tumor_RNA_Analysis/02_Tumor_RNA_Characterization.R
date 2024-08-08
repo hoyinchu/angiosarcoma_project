@@ -5,6 +5,11 @@ library(tidyr)
 library(dplyr)
 library(fgsea)
 library(msigdbr)
+library(ggsci)
+library(ComplexHeatmap)
+library(ggrepel)
+library(circlize)
+library(RColorBrewer)
 
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
@@ -24,6 +29,11 @@ meta_data[["seurat_id"]] = gsub("_", ".", meta_data[["seurat_id"]])
 meta_data[["seurat_id"]] = gsub("-", ".", meta_data[["seurat_id"]])
 meta_data[meta_data == ""] = NA
 rownames(meta_data) = meta_data$seurat_id
+
+## If Seurat Object has already been created, load it here instead of creating a new one
+if (FALSE) {
+  so = readRDS("")
+}
 
 # Create a seurat object and add meta data
 so = CreateSeuratObject(counts = vst_data,min.cells = 0, min.features = 0, meta.data = meta_data)
@@ -59,7 +69,9 @@ get_var_explained = function(so) {
 
 # Plot PCA
 pca_plot_by_batch = DimPlot(so, reduction = "pca",group.by="LC_BATCH",pt.size=4)
-pca_plot_by_site = DimPlot(so, reduction = "pca",group.by="PRIMARY SITE (Combined)",pt.size=4)
+#pca_plot_by_site = DimPlot(so, reduction = "pca",group.by="PRIMARY SITE (Combined)",pt.size=4)
+pca_plot_by_site = DimPlot(so, reduction = "pca",group.by="Primary Site (Recombined)",pt.size=4)
+
 
 pc_var_explained = get_var_explained(so)
 pca_plot_by_batch = pca_plot_by_batch + 
@@ -99,13 +111,176 @@ dim_score_first_3_pcs_plot
 ggsave(dim_score_first_3_pcs_plot,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_dim_heatmap_first_3_pcs_plot.png",dpi=300,width=8,height=12)
 
 ## Show clinical metadata overlaid on top of PCA
-clinical_dimplot = DimPlot(so,reduction="pca",group.by = c(
-  "seurat_clusters","PRIMARY SITE (Combined)","CUTANEOUS AS (EHR_EXTRACTED)","SEX (EHR_EXTRACTED)",
+clin_groups = c(
+  "seurat_clusters","Primary Site (Recombined)","CUTANEOUS AS (EHR_EXTRACTED)","SEX (EHR_EXTRACTED)",
   "BX_SPINDLE_CELL","BX_NUCLEAR_GRADE","BX_VASOFORMATIVE","BX_EPITHELIOID",
-  "RAAS_LAAS_Class","CUTANEOUS AS (EHR_EXTRACTED)"),pt.size=3)
-clinical_dimplot
+  "RAAS_LAAS_Class","CUTANEOUS AS (EHR_EXTRACTED)","BATCH NUMBER (EHR_EXTRACTED)"
+  )
+clinical_dimplot = DimPlot(so,reduction="pca",group.by = clin_groups,pt.size=3)
+clinical_dimplot_2cols = DimPlot(so,reduction="pca",group.by = clin_groups,pt.size=3, ncol = 2)
+
+
+clinical_dimplot_2cols
+
+## Prettify it for figures
+### PC plot
+pc_embeddings = Embeddings(so,reduction="pca")[,c("PC_1","PC_2")]
+clin_attr_subset = so@meta.data[,clin_groups]
+clin_attr_subset_merged = merge(clin_attr_subset,pc_embeddings,by = 'row.names', all.x = TRUE)
+
+# Pick a palette
+# chosen based on: 
+# show_col(pal_npg("nrc")(9))
+primary_site_palette = c(
+  "Other Visceral Organs"=pal_npg("nrc")(9)[1],
+  "Hepatobiliary"=pal_npg("nrc")(9)[2],
+  "Breast (Cutaneous)"=pal_npg("nrc")(9)[3],
+  "HNFS"=pal_npg("nrc")(9)[4],
+  "Extremities"=pal_npg("nrc")(9)[5],
+  "Heart"=pal_npg("nrc")(9)[6],
+  "Musculoskeletal"=pal_npg("nrc")(9)[7],
+  "Breast (Parenchymal)"=pal_npg("nrc")(9)[8],
+  "NA"=pal_npg("nrc")(9)[9]
+)
+
+make_embedding_plot = function(df, color_col) {
+  embed_plot = ggplot(df,aes_string(x="PC_1",y="PC_2",color=color_col)) +
+    geom_point(size=2) +
+    theme_minimal() 
+  return(embed_plot)
+}
+
+seurart_cluster_palette =c(
+  "0"=pal_npg("nrc")(5)[1],
+  "1"=pal_npg("nrc")(5)[2],
+  "2"=pal_npg("nrc")(5)[3],
+  "3"=pal_npg("nrc")(5)[4],
+  "4"=pal_npg("nrc")(5)[5]
+)
+primary_site_plot = make_embedding_plot(clin_attr_subset_merged,"`Primary Site (Recombined)`") +
+  scale_color_manual(values=primary_site_palette) +
+  labs(x="PC 1",y="PC 2",color="Primary Site")
+cluster_plot = make_embedding_plot(clin_attr_subset_merged,"seurat_clusters") +
+  scale_color_manual(values=seurart_cluster_palette) +
+  labs(x="PC 1",y="PC 2",color="Unsupervised Clusters")
+
+combined_primary_clusters = plot_grid(cluster_plot,primary_site_plot)
+combined_primary_clusters
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_Fig2_cluster_primay_site_pc_plot.png",combined_primary_clusters,dpi=300,width=10,height=3)
+
+## TODO: Plot the rest of the clinical attributes
+cutaneous_palette = c(
+  "Non-cutaneous AS"=pal_npg("nrc")(5)[1],
+  "Cutaneous AS"=pal_npg("nrc")(5)[2]
+)
+sex_clin_palette = c(
+  "Female"=pal_npg("nrc")(5)[1],
+  "Male"=pal_npg("nrc")(5)[2]
+)
+bx_palette = c(
+  "Female"=pal_npg("nrc")(5)[1],
+  "Male"=pal_npg("nrc")(5)[2],
+)
+RAAS_class_palette = c(
+  "RAAS" = "#DC0000FF",
+  "LAAS" = "#4DBBD5FF",
+  "RAAS & LAAS" = "#00A087FF",
+  "Non-RAAS/LAAS" = "#3C5488FF",
+  "Unknown" = "#B09C85FF"
+)
+clin_attr_subset_merged = clin_attr_subset_merged %>% 
+  mutate(cutaneous_viz = case_when(
+    `CUTANEOUS AS (EHR_EXTRACTED)` == "0" ~ "Non-cutaneous AS",
+    `CUTANEOUS AS (EHR_EXTRACTED)` == "1" ~ "Cutaneous AS",
+    TRUE ~ "NA"
+  )) %>%
+  mutate(sex_viz = case_when(
+    `SEX (EHR_EXTRACTED)` == "F" ~ "Female",
+    `SEX (EHR_EXTRACTED)` == "M" ~ "Male",
+    TRUE~ "NA"
+  )) %>%
+  mutate(batch_num = as.factor(`BATCH NUMBER (EHR_EXTRACTED)`))
+cluster_plot_new = cluster_plot + labs(title="Unsupervised Clusters") +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank()) 
+primary_site_plot_new = primary_site_plot + labs(title="Primary Sites") +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())# +
+  #guides(color=guide_legend(ncol=2))
+
+cutaneous_clin_plot = make_embedding_plot(clin_attr_subset_merged,"cutaneous_viz") +
+  scale_color_manual(values=cutaneous_palette) +
+  labs(x="PC 1",y="PC 2",color="Is Cutaneous",title="Is Cutaneous") +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())
+sex_clin_plot = make_embedding_plot(clin_attr_subset_merged,"sex_viz") +
+  scale_color_manual(values=sex_clin_palette) +
+  labs(x="PC 1",y="PC 2",color="Sex",title="Sex") +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())
+bx_spindle_cell_plot = make_embedding_plot(clin_attr_subset_merged,"BX_SPINDLE_CELL") +
+  scale_color_npg() +
+  labs(x="PC 1",y="PC 2",color="Spindle Cell Status",title="Spindle Cell Status") +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())
+bx_nuclear_grade_plot = make_embedding_plot(clin_attr_subset_merged,"BX_NUCLEAR_GRADE") +
+  scale_color_npg() +
+  labs(x="PC 1",y="PC 2",color="Nuclear Grade",title="Nuclear Grade") +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())
+bx_vasoformative_grade_plot = make_embedding_plot(clin_attr_subset_merged,"BX_VASOFORMATIVE") +
+  scale_color_npg() +
+  labs(x="PC 1",y="PC 2",color="Vasoformative",title="Vasoformative") +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())
+bx_epitheliod_grade_plot = make_embedding_plot(clin_attr_subset_merged,"BX_EPITHELIOID") +
+  scale_color_npg() +
+  labs(x="PC 1",y="PC 2",color="Epithelioid",title="Epithelioid") +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())
+raas_laas_clin_plot = make_embedding_plot(clin_attr_subset_merged,"RAAS_LAAS_Class") +
+  scale_color_manual(values=RAAS_class_palette) +
+  labs(x="PC 1",y="PC 2",color="RAAS/LAAS",title="RAAS/LAAS") +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())
+batch_plot = make_embedding_plot(clin_attr_subset_merged,"batch_num") +
+  scale_color_npg() +
+  labs(x="PC 1",y="PC 2",color="Batch",title="Batch") + 
+  #guides(color=guide_legend(ncol=2)) +
+  theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())
+
+
+combined_clin_plot = plot_grid(
+  cluster_plot_new,primary_site_plot_new,
+  cutaneous_clin_plot,sex_clin_plot,
+  bx_spindle_cell_plot,bx_nuclear_grade_plot,
+  bx_vasoformative_grade_plot,bx_epitheliod_grade_plot,
+  raas_laas_clin_plot,batch_plot,
+  ncol = 2
+)
+combined_clin_plot
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_Fig2_Extended_All_Clin_Attr_Dimplot.png",combined_clin_plot,dpi=300,width=14,height=18)
+
+clin_attr_subset_merged
+
+# ggplot(clin_attr_subset_merged,aes(x=PC_1,y=PC_2,color=`Primary Site (Recombined)`)) +
+#   geom_point(size=3) +
+#   scale_color_manual(values=primary_site_palette) +
+#   theme_minimal() +
+#   labs(x="PC 1",y="PC 2",color="Primary Site")
+# 
+# clin_attr_subset_merged_long = clin_attr_subset_merged %>% pivot_longer(
+#   cols = -c(PC_1,PC_2),
+#   names_to = "variable",
+#   values_to = "fillval"
+# )
+# clin_attr_subset_merged_long = clin_attr_subset_merged_long %>% filter(
+#   variable != "Row.names"
+# )
+# clin_attr_subset_merged_long
+# 
+# clin_attr_subset_merged_long_filtered = clin_attr_subset_merged_long %>% filter(variable == "seurat_clusters")
+# 
+# pc_embedding_plot = ggplot(clin_attr_subset_merged_long_filtered,aes(x=PC_1,y=PC_2,color=fillval)) +
+#   geom_point() +
+#   scale_color_npg()
+# ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/test_plot.png",pc_embedding_plot)
+# pc_embedding_plot
+
 #ggsave(clinical_dimplot,filename = "reference_data/RNA_Seq/outputs/plots/02a_Seurat_clinical_attributes_on_pcs.png",dpi=300,width=24,height=12)
 ggsave(clinical_dimplot,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_clinical_attributes_on_pcs_res15.png",dpi=300,width=24,height=12)
+ggsave(clinical_dimplot_2cols,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_clinical_attributes_on_pcs_res15_2cols.png",dpi=300,width=16,height=20)
 
 ## clinical markers
 # General markers for angisoarcoma
@@ -168,6 +343,7 @@ fgsea_c5_set = msigdbr(species = "Homo sapiens", category = "C5", subcategory = 
 fgsea_c6_set = msigdbr(species = "Homo sapiens", category = "C6") %>% split(x = .$gene_symbol, f = .$gs_name)
 fgsea_c8_set = msigdbr(species = "Homo sapiens", category = "C8") %>% split(x = .$gene_symbol, f = .$gs_name)
 
+
 run_fgsea = function(degs,fgsea_sets) {
   deg_genes = degs %>%
     arrange(desc(avg_log2FC)) %>% 
@@ -195,6 +371,42 @@ plot_fgsea = function(fgsea_res,title) {
   return(p1)
 }
 
+clust0_degs_gobp_fora_res = run_fora(all_markers[all_markers$cluster==0,],fgsea_c5_set)
+clust0_degs_gobp_fora_res$cluster = "Cluster 0"
+clust1_degs_gobp_fora_res = run_fora(all_markers[all_markers$cluster==1,],fgsea_c5_set)
+clust1_degs_gobp_fora_res$cluster = "Cluster 1"
+clust2_degs_gobp_fora_res = run_fora(all_markers[all_markers$cluster==2,],fgsea_c5_set)
+clust2_degs_gobp_fora_res$cluster = "Cluster 2"
+clust3_degs_gobp_fora_res = run_fora(all_markers[all_markers$cluster==3,],fgsea_c5_set)
+clust3_degs_gobp_fora_res$cluster = "Cluster 3"
+clust4_degs_gobp_fora_res = run_fora(all_markers[all_markers$cluster==4,],fgsea_c5_set)
+clust4_degs_gobp_fora_res$cluster = "Cluster 4"
+all_clust_degs_gobp_fora_res = rbind(clust0_degs_gobp_fora_res,clust1_degs_gobp_fora_res,
+                                     clust2_degs_gobp_fora_res,clust3_degs_gobp_fora_res,clust4_degs_gobp_fora_res)
+all_clust_degs_gobp_fora_res$pathway_minimized = gsub("GOBP_","",all_clust_degs_gobp_fora_res$pathway)
+all_clust_degs_gobp_fora_res$pathway_minimized = gsub("_"," ",all_clust_degs_gobp_fora_res$pathway_minimized)
+all_clust_degs_gobp_fora_sig_res = all_clust_degs_gobp_fora_res[all_clust_degs_gobp_fora_res$padj < 0.05]
+all_clust_degs_gobp_fora_sig_res$neglog_pval = -log(all_clust_degs_gobp_fora_sig_res$pval)
+all_clust_degs_gobp_fora_sig_res$neglog_padj = -log(all_clust_degs_gobp_fora_sig_res$padj)
+all_clust_degs_gobp_fora_sig_res$enrichment_ratio = all_clust_degs_gobp_fora_sig_res$overlap/all_clust_degs_gobp_fora_sig_res$size
+all_clust_degs_gobp_fora_sig_res_viz= all_clust_degs_gobp_fora_sig_res %>% filter(
+  (((enrichment_ratio > 0.2) | (neglog_pval > 20)) | ((cluster=="Cluster 4") & (neglog_pval > 11)) ),
+  (( (((cluster == "Cluster 1") & (enrichment_ratio > 0.4)) | ((cluster == "Cluster 1") & (neglog_pval > 20)))
+    ) | (cluster != "Cluster 1"))
+)
+
+gobp_fora_plots = ggplot(all_clust_degs_gobp_fora_sig_res,aes(y=neglog_pval,x=enrichment_ratio,label=pathway_minimized)) +
+  geom_point() +
+  geom_text_repel(data=all_clust_degs_gobp_fora_sig_res_viz,max.overlaps = 10) +
+  facet_wrap(~cluster,scales="free",ncol = 5) +
+  theme_minimal() +
+  theme(strip.text.x = element_text(size = 12)) +
+  labs(x="Enrichment Ratio",y="-log(p-value)")
+gobp_fora_plots
+
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_GOBP_fora_by_cluster_plots_wide.png",gobp_fora_plots,dpi=300,width=24,height=6)
+
+# TODO: same for cell type
 
 clust0_degs_fora_res = run_fora(all_markers[all_markers$cluster==0,],fgsea_c8_set)
 clust1_degs_fora_res = run_fora(all_markers[all_markers$cluster==1,],fgsea_c8_set)
@@ -202,20 +414,20 @@ clust2_degs_fora_res = run_fora(all_markers[all_markers$cluster==2,],fgsea_c8_se
 clust3_degs_fora_res = run_fora(all_markers[all_markers$cluster==3,],fgsea_c8_set)
 clust4_degs_fora_res = run_fora(all_markers[all_markers$cluster==4,],fgsea_c8_set)
 
-## Plot to see what genes are enriched in cluster 2 vs. 3
-clust2_ora = all_markers[all_markers$cluster==2,]
-clust3_ora = all_markers[all_markers$cluster==3,]
-clust2_3_ora_merged =  merge(clust2_ora,clust3_ora,by="gene",suffixes = c("_cluster_2","_cluster_3"))
-clust2_3_ora_merged$neg_log_pval_clust2 = -log(clust2_3_ora_merged$p_val_adj_cluster_2)
-clust2_3_ora_merged$neg_log_pval_clust3 = -log(clust2_3_ora_merged$p_val_adj_cluster_3)
-subset_to_viz = clust2_3_ora_merged[
-  (clust2_3_ora_merged$neg_log_pval_clust3 > 10) | (clust2_3_ora_merged$neg_log_pval_clust2 > 7.5),
-  ]
-clust2_vs_clust3_ora_plot = ggplot(clust2_3_ora_merged,aes(x=neg_log_pval_clust2,y=neg_log_pval_clust3,label=gene)) + 
-  geom_point() +
-  geom_abline() +
-  geom_text_repel(data=subset_to_viz)
-ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_clust2_vs_clust3_ora_plot.png",clust2_vs_clust3_ora_plot)
+# ## Plot to see what genes are enriched in cluster 2 vs. 3
+# clust2_ora = all_markers[all_markers$cluster==2,]
+# clust3_ora = all_markers[all_markers$cluster==3,]
+# clust2_3_ora_merged =  merge(clust2_ora,clust3_ora,by="gene",suffixes = c("_cluster_2","_cluster_3"))
+# clust2_3_ora_merged$neg_log_pval_clust2 = -log(clust2_3_ora_merged$p_val_adj_cluster_2)
+# clust2_3_ora_merged$neg_log_pval_clust3 = -log(clust2_3_ora_merged$p_val_adj_cluster_3)
+# subset_to_viz = clust2_3_ora_merged[
+#   (clust2_3_ora_merged$neg_log_pval_clust3 > 10) | (clust2_3_ora_merged$neg_log_pval_clust2 > 7.5),
+#   ]
+# clust2_vs_clust3_ora_plot = ggplot(clust2_3_ora_merged,aes(x=neg_log_pval_clust2,y=neg_log_pval_clust3,label=gene)) + 
+#   geom_point() +
+#   geom_abline() +
+#   geom_text_repel(data=subset_to_viz)
+# ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_clust2_vs_clust3_ora_plot.png",clust2_vs_clust3_ora_plot)
 
 # Cluster 0: Vascular endothelial cells
 # Cluster 1: Lymphatic endothelial cells
@@ -237,6 +449,7 @@ clust3_fgsea_plot = plot_fgsea(clust3_degs_fgsea_res,"Cell Type GSEA, Cluster 3"
 clust4_fgsea_plot = plot_fgsea(clust4_degs_fgsea_res,"Cell Type GSEA, Cluster 4")
 
 combined_celltype_gsea_plot = plot_grid(clust0_fgsea_plot,clust1_fgsea_plot,clust2_fgsea_plot,clust3_fgsea_plot,clust4_fgsea_plot)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_combined_celltype_gsea_plot.png",combined_celltype_gsea_plot)
 
 
 ## Check the top genes in each cluster
@@ -271,69 +484,342 @@ if (FALSE) {
   saveRDS(so, "data/processed/rna/ASCSeuratObj.rds")
 }
 
+all_markers %>% filter(cluster == 0, grepl("CD", gene))
+
 ## Plot the ASC markers combining clinical and new features
-cluster_0_markers = c(
-  "CD34","CD36","CD93","TERT",#"VWF","ERG","FLI1",
-  "NRP1","FLT1","PDGFB","PIGF",
-  "VEGFC","FIGF","ITGA5"
+angiogenesis_markers = c(
+  #"VWF","ERG","FLI1",
+  #"CD36","CD93"
+  #"ITGA5","FIGF"
+  #"TGFBR1","PIGF",
+  #"VEGFC"
+  #"KDR","PIK3CA","PGF"
+  #"STAT1"
+  "FLT1","NRP1","APLNR",#"PDGFA","PDGFRA",
+  "PDGFB","PDGFRB",
+  "CD34"
 )
-cluster_1_markers = c(
-  "CD320",
-  #"CD4","CD8A","CD8B",
-  "NRP2","FLT4","LYVE1","PROX1","PECAM1","PDPN","MYC",
-  "TBX1","TIE1"#"ANGPT2",
+angiogenesis_df = data.frame(row.names = angiogenesis_markers)
+angiogenesis_df$`Gene Set` = "Angiogenesis"
+
+stem_cell_proliferation_markers = c(
+  "CD34","FERMT2"
+  #"TGFB1","TGFBR1","CCNE1","SIX2"
+  #"TERT"
+  #"FGF2","PTPRC","NANOG","WNT1","WNT3"
 )
-cluster_2_markers = c(
-  "CD44",
-  "CDH1",#"VCAM1",
-  "FLT3",
+stem_cell_df = data.frame(row.names = stem_cell_proliferation_markers)
+stem_cell_df$`Gene Set` = "Stem Cell Proliferation"
+
+lymphoangiogensis_markers = c(
+  #"CD320",
+  #"LYVE1",
+  "FLT4","NRP2","PROX1","PDPN","MYC", #"PECAM1",
+  "TBX1","TIE1"
+  #"CLEC14A",#"ANGPT2",
+  #"CCBE1","EPHA2","VEGFC","VASH1"
+)
+lymphoangiogensis_df = data.frame(row.names = lymphoangiogensis_markers)
+lymphoangiogensis_df$`Gene Set` = "Lymphoangiogenesis"
+
+endothelial_migration_markers = c(
+  "IL37","IL18","FLT3","CD44",
+  "SELP","CDH1",#"KDR",
+  #"VCAM1",
+  "MYCL","FGFR3"#"FGF10"
   #"KRT1","FLG",
-  "KRT5","SERPINB5","GATA3", #"CASP14","TP73","CDH3",
-  "CLEC2A","KLRF2"
+  #"KRT5","SERPINB5","GATA3", #"CASP14","TP73","CDH3",
+  #"CLEC2A","KLRF2"
   #,"KRT10"
   #"KRT1","KRT2","KRT5","KRT10","KRT14","KRT15","KRT24","KRT77","KRT78","KRT80"
 )
-cluster_3_markers = c(
+endothelial_migration_df = data.frame(row.names = endothelial_migration_markers)
+endothelial_migration_df$`Gene Set` = "Endothelial Cells Migration"
+
+skin_epithelial_markers = c(
   #"KRT5",#"KRT14",
-  "KRT6A","KRT16",
-  "CD82",
-  "CST6","MUC1","VIL1"
+  "KRT6A","KRT16","GSDMA","CTSV",
+  "CD82",#"FOXC1",
+  "CST6" #,"MUC1"
+  #"SOX9"
+  #,"VIL1"
   #"KRT9","KRT16","KRT17"
 )
-cluster_4_markers = c(
+skin_epithelial_df = data.frame(row.names = skin_epithelial_markers)
+skin_epithelial_df$`Gene Set` = "Skin Epithelial"
+
+other_markers = c(
+  "IL10","IL8",
+  "STAT3","SOCS3",
+  "BCL3",#"IL21",
+  "PTPRD","OLR1",
   "EPCAM","CD163",
-  "KRT8","KRT18",
-  "VEGFA","VEGFB","VEGFC","FGF2"
+  
+  #"KRT8","KRT18",
+  "ICAM1",
+  "THBS1","PTPRO","EGR1",
+  "VEGFA"
+  #"MMP2","MMP9","CTNNB1","CDH1","ITGA","S100A4"
+  #,"VEGFB"#,"VEGFC"
   #"CD302"
   #,"KRT19","KRT7"
 )
-#keratin_markers = paste0("KRT",1:99)
-#keratin_markers = c(keratin_markers,"KRT6A","KRT6B")
+other_markers_df = data.frame(row.names = other_markers)
+other_markers_df$`Gene Set` = "Others"
 
-# cluster_4_markers = c(
-#   "EGF","TGFB1",
-#   #"VEGFA","VEGFB","VEGFC","VEGFD","PTPRD","CD144"#,"TNF","KDR","TP53"
-# )
+#gene_set_df = rbind(angiogenesis_df,stem_cell_df,lymphoangiogensis_df,epitheliod_df,diff_epitheliod_df,other_markers_df)
+gene_set_df = rbind(angiogenesis_df,lymphoangiogensis_df,endothelial_migration_df,skin_epithelial_df,other_markers_df)
 
-cd_markers = paste0("CD",1:400)
-il_markers = paste0("IL",1:400)
+gene_set_df$`Gene Set` = factor(gene_set_df$`Gene Set`,levels = c("Angiogenesis",
+                                                            #"Stem Cell Proliferation",
+                                                            "Lymphoangiogenesis",
+                                                            "Endothelial Cells Migration",
+                                                            "Skin Epithelial",
+                                                            "Others"
+                                                            ))
+gene_set_df
 
-asc_new_markers = c(
-  cluster_0_markers,
-  cluster_1_markers,
-  cluster_2_markers,
-  cluster_3_markers,
-  cluster_4_markers
-  #il_markers
-  #cd_markers
-  #keratin_markers
-  #other_markers
-)
+# cd_markers = paste0("CD",1:400)
+# il_markers = paste0("IL",1:400)
+
+asc_new_markers = rownames(gene_set_df)
 Idents(so) = so@meta.data$seurat_clusters
 asc_new_marker_heatmap = DoHeatmap(so, features = asc_new_markers, 
                                         disp.max = 3.5,disp.min = -3.5,slot="vst_scaled",label=TRUE)
-asc_new_marker_heatmap
+
+## prettify the results for figure
+# First sort by cluster ID to make sure they are in the same order
+asc_cluster_idents = so@meta.data %>% arrange(seurat_clusters,`entity:sample_id`) %>% select(seurat_clusters)  %>% mutate(seurat_clusters = paste0("Cluster ",seurat_clusters))
+asc_primary_sites =  so@meta.data %>% arrange(seurat_clusters,`entity:sample_id`) %>% select(`Primary Site (Recombined)`) 
+asc_new_marker_heatmap_data = GetAssayData(so,slot="vst_scaled")[asc_new_markers,rownames(asc_cluster_idents)]
+
+gene_set_df
+all_markers_dedupped = all_markers %>% arrange(-avg_log2FC) %>% distinct(gene, .keep_all = TRUE)
+all_new_markers_FC = all_markers_dedupped %>% filter(gene %in% rownames(gene_set_df))
+all_new_markers_FC = all_new_markers_FC %>% mutate(
+  significance = case_when(
+    p_val_adj < 0.01 ~ "adj. p < 0.01",
+    p_val_adj < 0.1 ~ "adj. p < 0.1",
+    p_val < 0.05 ~ "nom. p < 0.05",
+    TRUE ~ "nom. p >= 0.05"
+  )
+)
+
+all_new_markers_FC
+sig_high_fc = all_markers %>% filter(p_val_adj < 0.05)
+
+cluster_color_map = seurart_cluster_palette
+names(cluster_color_map) = paste0("Cluster ",names(seurart_cluster_palette))
+
+asc_new_marker_heatmap_matrix = asc_new_marker_heatmap_data
+# asc_top_annotations = HeatmapAnnotation(
+#   #Cluster=asc_cluster_idents$seurat_clusters,
+#   `Primary Site`=asc_primary_sites$`Primary Site (Recombined)`,
+#   col=list(`Primary Site`=primary_site_palette)#Cluster=cluster_color_map,
+# )
+
+## Make sure the palette is consistent to the palette used for clustering
+gene_set_palette = c(
+  "Angiogenesis"=pal_npg("nrc")(5)[1],
+  "Lymphoangiogenesis"=pal_npg("nrc")(5)[2],
+  "Endothelial Cells Migration"=pal_npg("nrc")(5)[3],
+  "Skin Epithelial"=pal_npg("nrc")(5)[4],
+  "Others"=pal_npg("nrc")(5)[5]
+)
+# Annotate the overall category of genes each highlighted genes represent
+asc_gene_set_annotations = rowAnnotation(`Gene Set`=gene_set_df$`Gene Set`,
+                                         col=list(`Gene Set`=gene_set_palette))
+
+FC_col_annot = colorRamp2(c(0, 5), c("white", "red"))
+#logp_col_annot = colorRamp2(c(0, 5), c("white", "purple"))
+purples_cols = brewer.pal(4,"Purples")
+significance_pal = c(
+  "adj. p < 0.01" = purples_cols[4],
+  "adj. p < 0.1" = purples_cols[3],
+  "nom. p < 0.05" = purples_cols[2],
+  "nom. p >= 0.05" = purples_cols[1]
+)
+# Annotate the gene's FC in its highest expressed cluster relative to other clusters
+asc_FC_annotations = rowAnnotation(
+  `Gene log2FC`=all_new_markers_FC[rownames(gene_set_df),"avg_log2FC"],
+  `Gene Significance`=all_new_markers_FC[rownames(gene_set_df),"significance"],
+  #`Gene -log10(p-value)`=-log10(all_new_markers_FC[rownames(gene_set_df),"p_val_adj"]),
+  annotation_name_rot=90,
+  col=list(`Gene log2FC`=FC_col_annot,`Gene Significance`=significance_pal)
+)
+
+# Annotate each sample by their most representative somatic, germline, or both mutations
+# This annotation require inputs from running all other scripts so if it is your first time 
+# Running this block you should come back after running all other scripts first
+rep_mut_df = read.csv("03_Tumor_WES_Analysis/outputs/tables/representative_mutation_table.csv",check.names = FALSE)
+rep_mut_df = rep_mut_df[,c("sample_alias_cleaned","tumor_mutation_id","tumor_mutation_id_short","Hugo_Symbol")] %>%
+  rename(
+    rep_tumor_mutation_id = "tumor_mutation_id",
+    rep_tumor_mutation_id_short = "tumor_mutation_id_short",
+    rep_Hugo_Symbol = "Hugo_Symbol"
+  )
+representative_somatic_muts_merged = merge(so@meta.data,rep_mut_df,by="sample_alias_cleaned",all.x=TRUE)
+
+germline_rep_mut_df = read.csv("05_Germline_WES_Analysis/outputs/tables/representative_germline_pv_table.csv",check.names=FALSE)
+germline_cols_to_keep = c("Sample","inferred_ancestry_PCA","inferred_sex","Hugo_Symbol","STUDY ID","germline_gene_priority_score")
+germline_rep_mut_df_smol = germline_rep_mut_df[,germline_cols_to_keep]
+germline_rep_mut_df_smol = germline_rep_mut_df_smol %>%
+  rename(
+    "germline_inferred_sex" = "inferred_sex",
+    "germline_inferred_ancestry_PCA" = "inferred_ancestry_PCA",
+    "germline_Hugo_Symbol" = "Hugo_Symbol"
+  )
+# Making sure only one sample per study id
+length(unique(germline_rep_mut_df_smol$`STUDY ID`)) == length(unique(germline_rep_mut_df_smol$`Sample`))
+representative_somatic_muts_merged_with_germline = merge(
+  representative_somatic_muts_merged,
+  germline_rep_mut_df_smol,
+  by="STUDY ID",
+  all.x=TRUE
+)
+
+representative_somatic_muts_merged = representative_somatic_muts_merged_with_germline %>%
+  arrange(seurat_clusters,`entity:sample_id`) %>% 
+  replace_na(list(rep_Hugo_Symbol="Not available"))
+
+representative_germline_vars_merged = representative_somatic_muts_merged_with_germline %>%
+  arrange(seurat_clusters,`entity:sample_id`) %>% 
+  #select(`germline_Hugo_Symbol`) %>% 
+  replace_na(list(germline_Hugo_Symbol="No PV Detected"))
+
+## Only highlight genes that are interesting (somatic)
+rep_som_mut_palette = c(
+  "POT1"=pal_npg("nrc")(10)[1],
+  "TP53"=pal_npg("nrc")(10)[2],
+  "CFTR"=pal_npg("nrc")(10)[3],
+  "KDR"=pal_npg("nrc")(10)[4],
+  "PLCG1"=pal_npg("nrc")(10)[5],
+  #"FLG"=pal_npg("nrc")(10)[3],
+  #"FLT1"=pal_npg("nrc")(10)[1],
+  #"FLT3"=pal_npg("nrc")(10)[3],
+  #"FLT4"=pal_npg("nrc")(10)[4],
+  #"FLG"=pal_npg("nrc")(10)[8],
+  #"BRAF"=pal_npg("nrc")(10)[9],
+  "Others"="gray",
+  "Not available"="white"
+)
+
+rep_germ_var_palette = c(
+  "POT1"=pal_npg("nrc")(10)[1],
+  "TP53"=pal_npg("nrc")(10)[2],
+  "CFTR"=pal_npg("nrc")(10)[3],
+  "BRCA2"=pal_npg("nrc")(10)[6],
+  "CHEK2"=pal_npg("nrc")(10)[7],
+  #"FLG"=pal_npg("nrc")(10)[3],
+  #"BRCA1"=pal_npg("nrc")(10)[7],
+  #"MUTYH"=pal_npg("nrc")(10)[10],
+  #"PKHD1"="red",
+  #"USH2A"="pink",
+  #"PAH"=pal_npg("nrc")(10)[11],
+  #"GJB2"=pal_npg("nrc")(10)[12],
+  "Others"="gray",
+  "No PV Detected"="white"
+)
+
+rep_som_genes_to_highlight = names(rep_som_mut_palette)
+rep_germ_genes_to_highlight = names(rep_germ_var_palette)
+
+representative_somatic_muts_merged = representative_somatic_muts_merged %>%
+  mutate(highlight_som_rep=case_when(
+    rep_Hugo_Symbol %in% rep_som_genes_to_highlight ~ rep_Hugo_Symbol,
+    TRUE ~ "Others"
+  )) %>%
+  mutate(`SEX (EHR_EXTRACTED)`=case_when(
+    `SEX (EHR_EXTRACTED)`=="F" ~ "Female",
+    `SEX (EHR_EXTRACTED)`=="M" ~ "Male",
+    TRUE ~ NA
+  ))
+representative_germline_vars_merged = representative_germline_vars_merged %>%
+  mutate(highlight_germ_rep=case_when(
+    germline_Hugo_Symbol %in% rep_germ_genes_to_highlight ~ germline_Hugo_Symbol,
+    TRUE ~ "Others"
+  ))
+representative_germline_vars_merged
+
+## Top Annotation
+age_col_annot = colorRamp2(c(20, 80), c("white", "purple"))
+asc_top_annotations = HeatmapAnnotation(
+  `Primary Site`= asc_primary_sites$`Primary Site (Recombined)`,
+  "RAAS/LAAS" = representative_somatic_muts_merged$RAAS_LAAS_Class,
+  `Age`= representative_somatic_muts_merged$`Age (Combined)`,
+  "Sex" = representative_somatic_muts_merged$`SEX (EHR_EXTRACTED)`,
+  col=list(
+    `Primary Site`=primary_site_palette,
+    "RAAS/LAAS" = RAAS_class_palette,
+    "Sex" = sex_clin_palette,
+    "Age" = age_col_annot
+    )
+)
+
+## Bottom Annotation
+asc_rep_mut_annnotation = HeatmapAnnotation(
+  `Repr. Somatic Mut.` = representative_somatic_muts_merged$highlight_som_rep,
+  `Repr. Germline Var.` = representative_germline_vars_merged$highlight_germ_rep,
+  col = list(
+    `Repr. Somatic Mut.`=rep_som_mut_palette,
+    `Repr. Germline Var.`=rep_germ_var_palette
+    )
+)
+
+# Make the actual heatmap plot
+complex_heatmap_fig = ComplexHeatmap::Heatmap(
+  asc_new_marker_heatmap_matrix,
+  #name = "Scaled Expression",
+  #col = hcl.colors(palette = "Blue-Red 3",n=20),
+  cluster_rows=FALSE,
+  cluster_columns=FALSE,
+  #show_row_names=FALSE,
+  show_column_names=FALSE,
+  top_annotation=asc_top_annotations,
+  bottom_annotation = asc_rep_mut_annnotation,
+  right_annotation=asc_gene_set_annotations,
+  left_annotation=asc_FC_annotations,
+  column_split = asc_cluster_idents,
+  row_split = gene_set_df,
+  heatmap_legend_param = list(
+    title = "Scaled Expression", at = c(-3, 0, 3) 
+    #labels = c("neg_two", "zero", "pos_two")
+  )
+)
+pdf("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_gene_set_heatmap.pdf",width=18,height=14)
+draw(complex_heatmap_fig, heatmap_legend_side = "bottom", annotation_legend_side = "bottom",merge_legend = TRUE)
+dev.off()
+
+## Find the gene sets each gene belongs to
+msigdb_c2 = msigdbr(species = "Homo sapiens", category = "C2")
+msigdb_go = msigdbr(species = "Homo sapiens", category = "C5", subcategory = "GO:BP")
+
+find_common_gene_sets = function(gene1,gene2,gs_db) {
+  gs1 = gs_db %>% filter(gene_symbol==gene1)
+  gs2 = gs_db %>% filter(gene_symbol==gene2)
+  overlap_geneset = intersect(gs1$gs_name,gs2$gs_name)
+  gs_subset = gs_db %>% filter(gs_name %in% overlap_geneset)
+  gs_subset_sizes = gs_subset %>% group_by(gs_name) %>% summarise(n())
+  gs_subset_merged = merge(gs_subset,gs_subset_sizes,on="gs_name") %>% distinct(gs_name,.keep_all = TRUE) %>% arrange(`n()`)
+  gs_subset_merged_small = gs_subset_merged[,c("gs_name","n()")]
+  return(gs_subset_merged_small)
+}
+find_common_gene_sets("CD93","CD34",msigdb_go)
+
+(msigdb_go %>% filter(gs_name=="GOBP_POSITIVE_REGULATION_OF_MESENCHYMAL_CELL_PROLIFERATION"))$gene_symbol
+
+unique((msigdb_go %>% filter(grepl("STEM_CELL",gs_name)))$gs_name)
+test_pathsets = (msigdb_go %>% filter(grepl("STEM_CELL",gs_name)))
+test_pathsets %>% group_by(gs_name) %>% summarise(n()) %>% arrange(`n()`)# %>% distinct(gene_symbol,.keep_all = FALSE)
+
+
+(msigdb_go %>% filter(gs_name=="GOBP_POSITIVE_REGULATION_OF_MESENCHYMAL_CELL_PROLIFERATION"))$gene_symbol
+
 ggsave(asc_new_marker_heatmap,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_top_cluster_marker_heatmap.png",dpi=300,width=24,height=12)
+
+## Prettify for figure
+
+
 
 ## Perform ORA on genes that are positively enriched in each cluster (GO BP and KEGG Pathways)
 library(clusterProfiler)

@@ -32,7 +32,6 @@ asc_maf = read.maf(maf=asc_maf_path,clinicalData=asc_maf_metadata_path)
 ## Verify that the total number of variants are the same between the two
 dim(asc_maf@data)[[1]] == dim(nonsilent_maf)[[1]]
 
-
 ## TODO:
 ## 3. Make a rank plot where x is ordered in total frequency, y is frequency, show see KDR p.771R and POT1 R117C pop up on top
 make_count_df = function(maf,col,colnames) {
@@ -79,8 +78,70 @@ recurrent_mutation_plot = ggplot(mut_by_site_table,aes(y=tumor_mutation_id_short
   theme_minimal() +
   scale_x_continuous(breaks= pretty_breaks()) + 
   labs(y="Gene",x="Number of Patients with Mutation",fill="Primary Site")
+recurrent_mutation_plot
 ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.png")
 
+## Make a "representative somatic / germline mutation" per sample table that has somatic vs. germline mutation?
+## Somatic Logic: Hotspot Mutation -> Mutation in Mutsig Significant Gene -> Mutation in COSMIC Cancer Tier 1 gene
+## Germline Logic: POT1 -> Mutation in COSMIC Cancer Tier 1 gene -> Other recurrent mutations?
+
+# Indicate whether a mutation is recurrent across patients (hotspots)
+recurrent_mutations_short_ids = tumor_mutation_id_short_order
+# or is in a MutSig significant gene
+mutsig_output_path = "data/processed/tumor_WES/mutsig/Apr16_2024_sig_genes.txt"
+mutsig_gene = read.csv(mutsig_output_path,sep="\t")
+mutsig_q10_genes = mutsig_gene[mutsig_gene$q < 0.1,]$gene
+# Or if it is a COSMIC tier 1 gene
+cosmic_path = "data/public/cosmic_cancer_gene_census.csv"
+cosmic_df = read.csv(cosmic_path)
+cosmic_tier1_genes = cosmic_df[cosmic_df$Tier==1,]$Gene.Symbol
+# Or if germline pathogenic variant was also detected in the gene
+# Getting this table requires running a script from a later step (00_two_hit_scan.R)
+# So skip this step if it's the first time running this
+somatic_germline_mut_table = read.csv("06_Germline_WES_Tumor_WES_Analysis/outputs/tables/germline_vs_tumor_gene_counts.csv")
+somatic_gerline_mut_genes = somatic_germline_mut_table %>%
+  filter(germline_pv_carrier_count > 0, somatic_nonsyn_carrier_count>0) %>%
+  pull(Hugo_Symbol)
+# Or if it is in a gene of interest
+goi_list = c("CFTR")
+nonsilent_maf = nonsilent_maf %>% mutate(
+  is_recurrent_mutation = tumor_mutation_id_short %in% recurrent_mutations_short_ids,
+  is_mutsig_significant = Hugo_Symbol %in% mutsig_q10_genes,
+  is_cosmic_tier1_gene = Hugo_Symbol %in% cosmic_tier1_genes,
+  has_germline_somatic_mut = Hugo_Symbol %in% somatic_gerline_mut_genes,
+  is_in_gene_of_interest = Hugo_Symbol %in% goi_list
+)
+## Assign priority scores to mutation based on these criteria
+nonsilent_maf = nonsilent_maf %>% mutate(
+  mut_priority_score = (is_recurrent_mutation*2) + 
+    (is_mutsig_significant*1) + 
+    (is_cosmic_tier1_gene*1) +
+    (has_germline_somatic_mut*1) +
+    (is_in_gene_of_interest * 3)
+)
+maf_high_score_muts_only = nonsilent_maf %>%
+  arrange(-mut_priority_score) %>%
+  #filter(mut_priority_score > 1) %>%
+  distinct(Tumor_Sample_Barcode,.keep_all = TRUE)
+dim(maf_high_score_muts_only)
+maf_high_score_muts_only$Hugo_Symbol
+maf_high_score_muts_only[,c("Tumor_Sample_Barcode","tumor_mutation_id","Hugo_Symbol","mut_priority_score")]
+
+## Write down the "representative mutations" table somewhere
+write.csv(maf_high_score_muts_only,"03_Tumor_WES_Analysis/outputs/tables/representative_mutation_table.csv",row.names = FALSE)
+
+
+
+## Check if recurrent mutated genes are enriched in certain pathways
+library(msigdbr)
+fgsea_kegg_set = msigdbr(species = "Homo sapiens", category = "C2", subcategory = "CP:KEGG") %>% split(x = .$gene_symbol, f = .$gs_name)
+fgsea_c5_set = msigdbr(species = "Homo sapiens", category = "C5", subcategory = "GO:BP") %>% split(x = .$gene_symbol, f = .$gs_name)
+fgsea_c6_set = msigdbr(species = "Homo sapiens", category = "C6") %>% split(x = .$gene_symbol, f = .$gs_name)
+fgsea_c8_set = msigdbr(species = "Homo sapiens", category = "C8") %>% split(x = .$gene_symbol, f = .$gs_name)
+
+test_genes = c("KDR","POT1","DEAF1","CGREF1","TPO","SYPL2","SPERT","PTPRO","PHF21B","OR10AG1","NYAP2","NCKAP5","MGRN1","MALT1","FAM194B","ERN2","DSCAM","DNAI1","COL19A1","CNR1","CHD3","ACTN2")
+test_pathways = fgsea::fora(fgsea_c8_set,genes=test_genes,universe=unique(maf_merged$Hugo_Symbol))
+test_pathways
 
 # ## Add MutSig information for each gene
 # mutsig_output_path = "data/processed/tumor_WES/mutsig/Apr16_2024_sig_genes.txt"

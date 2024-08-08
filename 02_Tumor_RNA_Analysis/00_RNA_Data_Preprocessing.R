@@ -78,7 +78,9 @@ sample_qc_summary_df[["individual_alias"]] = paste0("ASCProject_",sapply(strspli
 sample_qc_summary_df[["sample_alias"]] = paste0(sample_qc_summary_df[["individual_alias"]],"_",sapply(strsplit(sample_qc_summary_df$`entity:sample_id`, "_"), `[`, 4))
 
 ## We then filter out samples that do not have clinical metadata
+#clin_data = read.csv("data/processed/sample_clin_data.tsv",sep="\t",check.names = FALSE)
 clin_data = read.csv("data/processed/sample_clin_data.tsv",sep="\t",check.names = FALSE)
+
 sample_qc_summary_df[["HAS_METADATA"]] = sample_qc_summary_df$individual_alias %in% clin_data$individual_alias
 sample_qc_summary_df[["ALL_FILTERS_PASSED"]] = (sample_qc_summary_df[["QC_FLAG"]]=="PASS") & (sample_qc_summary_df[["HAS_METADATA"]]==TRUE)
 sample_qc_summary_df[["SAMPLE_DATA_TYPE"]] = "tumor_RNA"

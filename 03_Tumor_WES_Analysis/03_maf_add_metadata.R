@@ -54,6 +54,7 @@ if (FALSE) {
   write.table(total_mutations_per_sample_combined,file="data/processed/tumor_WES/00b_total_mutations_per_sample.tsv",sep="\t",row.names=FALSE,quote = FALSE)
 }
 
+
 # Read in the mutational signature decomposition outputs
 sig_matrix = read.csv("data/processed/tumor_WES/mutational_signatures/ASC_mutational_signature_relative.tsv",sep="\t",check.names = FALSE,row.names = 1)
 sig_matrix_t = as.data.frame(t(sig_matrix),check.names=FALSE)
@@ -64,6 +65,13 @@ sig_matrix_t$SBS7 = sig_matrix_t$SBS7a + sig_matrix_t$SBS7b + sig_matrix_t$SBS7c
 # Add tmb and signature decomposition to original metadata
 sample_meta_df_added = merge(sample_meta_df_subset,total_mutations_per_sample_combined,by.x="entity:sample_id",by.y="Tumor_Sample_Barcode",all.x=TRUE)
 sample_meta_df_added = merge(sample_meta_df_added,sig_matrix_t,by.x="entity:sample_id",by.y="Tumor_Sample_Barcode",all.x=TRUE)
+
+## Plot TMB by primary sites
+tmb_by_site_plot = ggplot(sample_meta_df_added,aes(x=`Primary Site (Recombined)`,y=TMB_nonsyn)) +
+  geom_violin() +
+  geom_boxplot()+
+  geom_point()
+ggsave(filename="03_Tumor_WES_Analysis/outputs/plots/03_TMB_by_primary_sites.png",tmb_by_site_plot,dpi=300)
 
 # Change column name and order for downstream compatibility
 processed_meta_data = sample_meta_df_added %>% rename("Tumor_Sample_Barcode"="entity:sample_id")

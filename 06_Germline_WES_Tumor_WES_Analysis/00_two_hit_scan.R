@@ -82,6 +82,8 @@ germline_versus_tumor_gene_plot = ggplot(
   
 ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/00_germline_versus_tumor_gene_plot.png",germline_versus_tumor_gene_plot,dpi=300,width=10,height=8)
 
+## Write the count table 
+write.csv(germline_versus_tumor_mut_counts,"06_Germline_WES_Tumor_WES_Analysis/outputs/tables/germline_vs_tumor_gene_counts.csv",row.names = FALSE)
 
 ## Also add other clinically relevant information
 clin_data = read.csv("data/processed/clinical_data.tsv",sep="\t",check.names = FALSE)

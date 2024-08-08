@@ -6,7 +6,7 @@ library(ggrepel)
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
 ## Load the preprocessed one-hot encoded sample by pathogenic variant carrier status dataframe. 
-germline_df = read.csv("reference_data/ClinicalTables/Jun2023_ASC_Case_Control_Sample_Merged_Germline.tsv",sep="\t",check.names=FALSE)
+germline_df = read.csv("../reference_data/ClinicalTables/Jun2023_ASC_Case_Control_Sample_Merged_Germline.tsv",sep="\t",check.names=FALSE)
 
 ## Define columns to use as covariate
 pc_columns = paste0("PCA",1:10)
