@@ -1,0 +1,65 @@
+Primary Site (Recombined),Mets Sites Ever (Recombined),n
+Breast (Cutaneous),Bone,2
+Breast (Cutaneous),Breast,1
+Breast (Cutaneous),Distant Lymph Node,2
+Breast (Cutaneous),Liver,1
+Breast (Cutaneous),Lung,4
+Breast (Cutaneous),No Mets,26
+Breast (Cutaneous),Trunk,2
+Breast (Parenchymal),Bone,6
+Breast (Parenchymal),Brain,1
+Breast (Parenchymal),Breast,3
+Breast (Parenchymal),Distant Lymph Node,1
+Breast (Parenchymal),Extremities,2
+Breast (Parenchymal),Liver,8
+Breast (Parenchymal),Lung,4
+Breast (Parenchymal),No Mets,25
+Breast (Parenchymal),Other Soft Tissues,4
+Breast (Parenchymal),Trunk,2
+Breast (Parenchymal),Visceral Organ,1
+Extremities,Bone,2
+Extremities,Breast,1
+Extremities,Distant Lymph Node,4
+Extremities,Lung,6
+Extremities,No Mets,3
+Extremities,Other Soft Tissues,1
+Extremities,Trunk,3
+HNFS,Bone,5
+HNFS,Distant Lymph Node,8
+HNFS,Liver,2
+HNFS,Lung,6
+HNFS,No Mets,24
+HNFS,Other Soft Tissues,3
+HNFS,Visceral Organ,1
+Heart,Bone,5
+Heart,Brain,3
+Heart,Distant Lymph Node,1
+Heart,Liver,4
+Heart,Lung,4
+Heart,Other Soft Tissues,1
+Heart,Spleen,2
+Heart,Visceral Organ,4
+Hepatobiliary,Bone,4
+Hepatobiliary,Distant Lymph Node,1
+Hepatobiliary,Liver,4
+Hepatobiliary,Lung,2
+Hepatobiliary,No Mets,3
+Hepatobiliary,Other Soft Tissues,1
+Hepatobiliary,Spleen,1
+Missing or Unknown,Bone,1
+Missing or Unknown,Distant Lymph Node,1
+Missing or Unknown,Liver,2
+Missing or Unknown,Lung,1
+Missing or Unknown,Visceral Organ,1
+Musculoskeletal,Bone,1
+Musculoskeletal,Liver,1
+Musculoskeletal,Lung,1
+Musculoskeletal,No Mets,5
+Musculoskeletal,Other Soft Tissues,1
+Musculoskeletal,Visceral Organ,1
+Other Rare Sites,No Mets,2
+Other Visceral Organs,Bone,1
+Other Visceral Organs,Brain,1
+Other Visceral Organs,Distant Lymph Node,3
+Other Visceral Organs,No Mets,3
+Other Visceral Organs,Other Soft Tissues,1
