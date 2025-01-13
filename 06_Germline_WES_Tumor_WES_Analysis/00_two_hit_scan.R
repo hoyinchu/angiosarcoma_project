@@ -61,7 +61,7 @@ germline_versus_tumor_mut_counts = germline_versus_tumor_mut_counts %>% mutate(
 always_show_genes = germline_versus_tumor_mut_counts[germline_versus_tumor_mut_counts$germline_and_somatic_count > 0,]
 germline_vs_tumor_label_subset = subset(germline_versus_tumor_mut_counts,
                                         ((germline_pv_carrier_count > 2 & somatic_nonsyn_carrier_count>1) |
-                                          (germline_pv_carrier_count > 2) | 
+                                          (germline_pv_carrier_count > 3) | 
                                           (somatic_nonsyn_carrier_count > 3) |
                                           (germline_and_somatic_count > 0)) & (!(Hugo_Symbol %in% always_show_genes$Hugo_Symbol)) 
 )
@@ -70,15 +70,18 @@ germline_versus_tumor_gene_plot = ggplot(
   germline_versus_tumor_mut_counts,
   aes(x=germline_pv_carrier_count,y=somatic_nonsyn_carrier_count,label=Hugo_Symbol,color=bicarrier_category)) +
   geom_point(aes(size=germline_and_somatic_count)) +
-  geom_text_repel(data=always_show_genes, box.padding = 0.5) +
-  geom_text_repel(data=germline_vs_tumor_label_subset,max.overlaps = 10) +
+  geom_label_repel(data=germline_vs_tumor_label_subset,max.overlaps = 10) +
+  geom_label_repel(data=always_show_genes, box.padding = 0.5) +
   theme_minimal() +
+  theme(legend.position = "top") +
   guides(size="none") +
   labs(
     x="# of Patients with Germline Pathogenic Variants in Gene",
     y="# of Patients with Non-synonomous Mutations in Gene",
-    color="# of Patients with both germline PVs\nand somatic mutations detected in the same gene"
+    color="# of Patients with double hits"
     )
+
+germline_versus_tumor_gene_plot
   
 ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/00_germline_versus_tumor_gene_plot.png",germline_versus_tumor_gene_plot,dpi=300,width=10,height=8)
 
@@ -132,19 +135,26 @@ clin_data = clin_data %>% mutate(
 
 pot1_age_plot = ggplot(clin_data,aes(
   x=pot1_mutation_status,
-  y=!!sym("Age (Combined)"),
-  group=pot1_mutation_status
+  y=!!sym("Age (Combined)")
+  #group=pot1_mutation_status
   #color=germline_somatic_avail_status,
   #group = interaction(pot1_mutation_status,germline_somatic_avail_status)
   )) +
   geom_violin(fill = "skyblue", alpha = 0.5) +  # Violin plot for each x-category
   geom_boxplot(width = 0.1, fill = "white") +  # Boxplot for each x-category
-  geom_point(aes(color = germline_somatic_avail_status), 
-             position = position_jitter(width = 0.2), size = 2) +  # Points with different colors
+  geom_point(
+             position = position_jitter(width = 0.1), size = 1) +  # Points with different colors
   labs(x = "POT1 Mutation Status", y = "Age of onset", color="Sample availability status") +
-  theme_minimal() + stat_compare_means(comparisons = list(c("Somatic + Germline","None Detected")))
+  theme_minimal() + 
+  stat_compare_means(comparisons = list(c("Somatic + Germline","None Detected"),
+                                        c("Somatic Only","None Detected"),c("Germline Only","None Detected"))) +
+  theme(axis.text.x = element_text(angle = 45, vjust = .5, hjust=.5))
 
+clin_data %>% group_by(pot1_mutation_status) %>% summarise(mean_age=mean(`Age (Combined)`,na.rm=TRUE))
+
+pot1_age_plot
 #ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset_both_avail_only.png",pot1_age_plot,dpi=300,width=10,height=8)
-ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset.png",pot1_age_plot,dpi=300,width=10,height=8)
+#ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset.png",pot1_age_plot,dpi=300,width=10,height=8)
+ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset_no_hue.png",pot1_age_plot,dpi=300,width=4,height=6)
 
 

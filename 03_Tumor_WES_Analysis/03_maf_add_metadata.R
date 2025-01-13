@@ -1,5 +1,7 @@
 library(dplyr)
 library(ggplot2)
+library(forcats)
+library(ggpubr)
 
 ## This script prepares the metadata in a format that is compatible with downstream analysis
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
@@ -47,12 +49,27 @@ total_nonsyn_mutations_per_sample = maf_df %>%
   summarise(Total_Nonsyn_Mutations = n()) %>%
   mutate(TMB_nonsyn = Total_Nonsyn_Mutations / exome_size_mb)
 
+
 # Merge the two
 total_mutations_per_sample_combined = merge(total_mutations_per_sample,total_nonsyn_mutations_per_sample,by="Tumor_Sample_Barcode",all.x=TRUE)
 
+# Inspect the IQR of TMB
+quantile(total_mutations_per_sample_combined$TMB_all_mutations,prob=c(.25,.5,.75))
+
+## Add meta info back
+sample_meta_df_subset_smol = sample_meta_df_subset %>%
+  select(c("entity:sample_id","sample_alias","individual_alias"))
+total_mutations_per_sample_combined_with_meta = merge(
+  total_mutations_per_sample_combined,sample_meta_df_subset_smol,
+  by.x="Tumor_Sample_Barcode",by.y="entity:sample_id",all.x=TRUE
+)
+
+
 if (FALSE) {
-  write.table(total_mutations_per_sample_combined,file="data/processed/tumor_WES/00b_total_mutations_per_sample.tsv",sep="\t",row.names=FALSE,quote = FALSE)
+  write.csv(total_mutations_per_sample_combined_with_meta,file="03_Tumor_WES_Analysis/outputs/tables/total_mutations_per_sample.csv",row.names=FALSE)
+  #write.table(total_mutations_per_sample_combined,file="data/processed/tumor_WES/00b_total_mutations_per_sample.tsv",sep="\t",row.names=FALSE,quote = FALSE)
 }
+
 
 
 # Read in the mutational signature decomposition outputs
@@ -67,11 +84,24 @@ sample_meta_df_added = merge(sample_meta_df_subset,total_mutations_per_sample_co
 sample_meta_df_added = merge(sample_meta_df_added,sig_matrix_t,by.x="entity:sample_id",by.y="Tumor_Sample_Barcode",all.x=TRUE)
 
 ## Plot TMB by primary sites
-tmb_by_site_plot = ggplot(sample_meta_df_added,aes(x=`Primary Site (Recombined)`,y=TMB_nonsyn)) +
+tmb_by_site_plot = ggplot(sample_meta_df_added,aes(x=fct_reorder(`Primary Site (Recombined)`,-TMB_all_mutations),y=TMB_all_mutations)) +
   geom_violin() +
   geom_boxplot()+
-  geom_point()
-ggsave(filename="03_Tumor_WES_Analysis/outputs/plots/03_TMB_by_primary_sites.png",tmb_by_site_plot,dpi=300)
+  geom_point() +
+  scale_y_continuous(trans='log10') +
+  labs(x="Primary Site",y="TMB") +
+  theme_minimal() +
+  annotation_logticks(sides = 'l') +
+  stat_compare_means(comparisons = list(
+    c("Breast (Cutaneous)","Breast (Parenchymal)"),
+    c("HNFS","Breast (Cutaneous)")
+    ),label = after_stat("p.signif")) +
+  geom_jitter(width=0.25)
+tmb_by_site_plot
+ggsave(filename="03_Tumor_WES_Analysis/outputs/plots/03_TMB_by_primary_sites.png",tmb_by_site_plot,dpi=300,height = 4,width=12)
+
+## Get TMB mean of each site
+sample_meta_df_added %>% group_by(`Primary Site (Recombined)`) %>% summarise(median(TMB_all_mutations))
 
 # Change column name and order for downstream compatibility
 processed_meta_data = sample_meta_df_added %>% rename("Tumor_Sample_Barcode"="entity:sample_id")

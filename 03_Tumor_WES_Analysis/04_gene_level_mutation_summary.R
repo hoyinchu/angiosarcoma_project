@@ -3,6 +3,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(ggrepel)
+library(forcats)
 
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
@@ -11,18 +12,24 @@ asc_maf_path = "data/processed/tumor_WES/ASC_mutations.maf"
 asc_maf_metadata_path = "data/processed/tumor_WES/ASC_mutations_metadata.tsv"
 asc_maf = read.maf(maf=asc_maf_path,clinicalData=asc_maf_metadata_path)
 
-make_oncoplot = function(maf,save_path="") {
+make_oncoplot = function(maf,save_path="",top_n=15) {
   if (save_path!="") {
-    pdf(file=save_path,height=6)
+    pdf(file=save_path,height=10,width=12)
     #pdf(file = "Tumor_WES_Analysis/outputs/01_oncoplot_all_by_pathways.pdf",height=6)
   }
+  maf@clinical.data$`Primary Site` = maf@clinical.data$`Primary_Site_(Recombined)`
+  maf@clinical.data$`Is Cutaneous` = maf@clinical.data$`CUTANEOUS_AS_(EHR_EXTRACTED)`
+  maf@clinical.data$`Is Cutaneous`[maf@clinical.data$`Is Cutaneous` == 1] = "Cutaneous"
+  maf@clinical.data$`Is Cutaneous`[maf@clinical.data$`Is Cutaneous` == 0] = "Non-cutaneous"
+  maf@clinical.data$`TMB` = maf@clinical.data$`TMB_all_mutations`
   oncoplot(maf = maf,
-           top = 20,
-           clinicalFeatures=c("PRIMARY_SITE_(Combined)","CUTANEOUS_AS_(EHR_EXTRACTED)"),#,"LOCAL_RECURRENCE_(EHR_EXTRACTED)"),
-           topBarData="TMB_nonsyn",
+           top = top_n,
+           clinicalFeatures=c("Primary Site","Is Cutaneous"),#,"LOCAL_RECURRENCE_(EHR_EXTRACTED)"),
+           #clinicalFeatures=c("PRIMARY_SITE_(Combined)","CUTANEOUS_AS_(EHR_EXTRACTED)"),#,"LOCAL_RECURRENCE_(EHR_EXTRACTED)"),
+           topBarData="TMB",
            draw_titv = TRUE,
            sortByAnnotation = TRUE,
-           fontSize = 0.6,
+           fontSize = 0.8,
   )
   if (save_path!="") {
     dev.off()
@@ -34,16 +41,35 @@ make_oncoplot(asc_maf,save_path = "03_Tumor_WES_Analysis/outputs/plots/04_oncopl
 
 ## Subset to specific samples
 ## Non-HNFS
-asc_maf_non_hnfs_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`PRIMARY_SITE_(Combined)` != "HNFS"]$Tumor_Sample_Barcode
+asc_maf_non_hnfs_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`Primary_Site_(Recombined)` != "HNFS"]$Tumor_Sample_Barcode
 asc_maf_non_hnfs = subsetMaf(asc_maf,tsb = asc_maf_non_hnfs_tsb)
 make_oncoplot(asc_maf_non_hnfs,save_path = "03_Tumor_WES_Analysis/outputs/plots/04_oncoplot_non_HNFS.pdf")
 somaticInteractions(maf = asc_maf_non_hnfs, top = 25, pvalue = c(0.05, 0.1))
 
 ## HNFS
-asc_maf_hnfs_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`PRIMARY_SITE_(Combined)` == "HNFS"]$Tumor_Sample_Barcode
+asc_maf_hnfs_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`Primary_Site_(Recombined)` == "HNFS"]$Tumor_Sample_Barcode
 asc_maf_hnfs = subsetMaf(asc_maf,tsb = asc_maf_hnfs_tsb)
 make_oncoplot(asc_maf_hnfs,save_path = "03_Tumor_WES_Analysis/outputs/plots/04_oncoplot_HNFS.pdf")
 somaticInteractions(maf = asc_maf_hnfs, top = 25, pvalue = c(0.05, 0.1))
+
+## Cutaneous
+asc_maf_cut_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`Is Cutaneous` == "Cutaneous"]$Tumor_Sample_Barcode
+asc_maf_cut = subsetMaf(asc_maf,tsb = asc_maf_cut_tsb)
+make_oncoplot(asc_maf_cut,save_path = "03_Tumor_WES_Analysis/outputs/plots/04_oncoplot_cutaneous.pdf",top_n=30)
+somaticInteractions(maf = asc_maf_cut, top = 25, pvalue = c(0.05, 0.1))
+
+## Non-Cutaneous
+asc_maf_noncut_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`Is Cutaneous` == "Non-cutaneous"]$Tumor_Sample_Barcode
+asc_maf_noncut = subsetMaf(asc_maf,tsb = asc_maf_noncut_tsb)
+make_oncoplot(asc_maf_noncut,save_path = "03_Tumor_WES_Analysis/outputs/plots/04_oncoplot_non_cutaneous.pdf",top_n=30)
+somaticInteractions(maf = asc_maf_noncut, top = 25, pvalue = c(0.05, 0.1))
+
+## Low-TMB
+asc_maf_low_tmb_tsb = asc_maf@clinical.data[asc_maf@clinical.data$TMB <= 10]$Tumor_Sample_Barcode
+asc_maf_low_tmb = subsetMaf(asc_maf,tsb = asc_maf_low_tmb_tsb)
+make_oncoplot(asc_maf_low_tmb,save_path = "03_Tumor_WES_Analysis/outputs/plots/04_oncoplot_sub10_tmb.pdf",top_n=30)
+somaticInteractions(maf = asc_maf_low_tmb, top = 25, pvalue = c(0.05, 0.1))
+
 
 ## Highlight Mutsig Significant genes
 mutsig_output_path = "data/processed/tumor_WES/mutsig/Apr16_2024_sig_genes.txt"
@@ -58,21 +84,153 @@ mutsig_gene_sub = gene_mutsig_merged[gene_mutsig_merged$MutatedSamples>=2,] %>%
   drop_na(q_pass_threshold) %>%
   mutate(q_pass_threshold = ifelse(q_pass_threshold, "q < 0.1", "q >= 0.1"))
 
+## add num mutated samples percentage
+mutsig_gene_sub$mutated_percentage = mutsig_gene_sub$MutatedSamples / length(unique(asc_maf@data$Tumor_Sample_Barcode))
+
 # Plot mutsig significant genes
-mutsig_plot = ggplot(mutsig_gene_sub,aes(x=MutatedSamples,y=neg_log_p,label=Hugo_Symbol,color=q_pass_threshold)) +
+mutsig_plot = ggplot(mutsig_gene_sub,aes(x=mutated_percentage,y=neg_log_p,label=Hugo_Symbol,color=q_pass_threshold)) +
   geom_text_repel(data = subset(mutsig_gene_sub, (p < 0.05 & MutatedSamples>=5) | (MutatedSamples>=10) | (q < 0.5))) +
   geom_point(size=3) +
   theme_minimal() +
   geom_hline(yintercept=-log(0.05),linetype="dashed",color="gray") +
   geom_text(aes(0,-log(0.05),label = "p = 0.05", vjust = -1)) +
-  labs(color='Mutsig q-value', y = "-log(Mutsig p-value)", x="Number of Samples with Mutation")
+  scale_x_continuous(labels = scales::percent) +
+  labs(color='Mutsig q-value', y = "-log(Mutsig p-value)", x="% of Samples with Mutation")
 mutsig_plot
-ggsave(mutsig_plot,file="03_Tumor_WES_Analysis/outputs/plots/04_MutSig_num_samples_by_significance_plot.png",width=10,height=12)
+ggsave(mutsig_plot,file="03_Tumor_WES_Analysis/outputs/plots/04_MutSig_num_samples_by_significance_plot.png",width=10,height=6)
 
 ## Identify recurrently mutated genes with nominal MutSig significance
 asc_maf_onehot = table(asc_maf@data$Tumor_Sample_Barcode,asc_maf@data$Hugo_Symbol)
 asc_maf_onehot = (asc_maf_onehot>0)*1
 recurrent_genes = gene_mutsig_merged %>% filter(MutatedSamples >= 5, p < 0.05)
+
+## Do another more curated overall plot 
+## Exclude genes that do not occur at least twice in samples that do not have a known driver
+mutsig_genes = c("TP53","KDR","POT1","PLCG1","ASXL1","BRAF")
+literature_genes = c("PTPRB","PIK3CA","FLT4","MUC16")
+known_mut_genes = c(mutsig_genes,literature_genes)
+known_gene_samples = subsetMaf(asc_maf,genes = known_mut_genes)@data$Tumor_Sample_Barcode
+unknown_gene_samples = setdiff(asc_maf@data$Tumor_Sample_Barcode,known_gene_samples)
+unknown_gene_maf = subsetMaf(asc_maf,tsb = unknown_gene_samples)
+unknown_gene_maf_summary = unknown_gene_maf@gene.summary
+recurrent_unknown_genes = unknown_gene_maf_summary[unknown_gene_maf_summary$AlteredSamples >= 2]
+recurrent_unknown_genes = recurrent_unknown_genes[order(-recurrent_unknown_genes$AlteredSamples),]$Hugo_Symbol
+viz_genes = c(known_mut_genes,recurrent_unknown_genes)
+
+asc_maf@clinical.data$`Primary Site` = asc_maf@clinical.data$`Primary_Site_(Recombined)`
+asc_maf@clinical.data$`Is Cutaneous` = asc_maf@clinical.data$`CUTANEOUS_AS_(EHR_EXTRACTED)`
+asc_maf@clinical.data$`Is Cutaneous`[asc_maf@clinical.data$`Is Cutaneous` == 1] = "Cutaneous"
+asc_maf@clinical.data$`Is Cutaneous`[asc_maf@clinical.data$`Is Cutaneous` == 0] = "Non-cutaneous"
+asc_maf@clinical.data$`TMB` = asc_maf@clinical.data$`TMB_all_mutations`
+
+
+pdf("03_Tumor_WES_Analysis/outputs/plots/04_oncoplot_combined.pdf",width=10,height=8)
+overall_mut_plot = oncoplot(
+  asc_maf,
+  genes = viz_genes,
+  clinicalFeatures=c("Is Cutaneous","Primary Site"),#,"LOCAL_RECURRENCE_(EHR_EXTRACTED)"),
+  #clinicalFeatures=c("PRIMARY_SITE_(Combined)","CUTANEOUS_AS_(EHR_EXTRACTED)"),#,"LOCAL_RECURRENCE_(EHR_EXTRACTED)"),
+  topBarData="TMB",
+  draw_titv = TRUE,
+  sortByAnnotation = TRUE,
+  fontSize = 0.8,
+)
+dev.off()
+
+## Plot gene by clinical attribute (Whether one gene mutation is enriched in cutaneous vs. non-cut)
+asc_maf_ct = table(asc_maf@data$Tumor_Sample_Barcode,asc_maf@data$Hugo_Symbol)
+asc_maf_ct_subset = as.data.frame((asc_maf_ct[,viz_genes] >= 1)) %>% add_rownames(var = "Tumor_Sample_Barcode")  #mutate_if(,as.numeric)
+asc_maf_ct_subset = asc_maf_ct_subset %>% mutate(across(-Tumor_Sample_Barcode, as.integer))
+asc_maf_ct_subset_merged = merge(asc_maf_ct_subset,asc_maf@clinical.data,by="Tumor_Sample_Barcode",all.x=TRUE) %>% drop_na("Is Cutaneous")
+
+## Calculate how many percent of Cutaneous ssamples carried mutation in TP53
+cut_tp53_mut_total = sum(asc_maf_ct_subset_merged[asc_maf_ct_subset_merged$`Is Cutaneous`=="Cutaneous",]$TP53)
+cut_total = dim(asc_maf_ct_subset_merged[asc_maf_ct_subset_merged$`Is Cutaneous`=="Cutaneous",])[1]
+binom.test(cut_tp53_mut_total,cut_total)
+
+## Calculate how many percent of non-cutaneou ssamples carried mutation in KDR,PLCG1,TP53,PTPRB,ASXL1, PIK3CA, and POT1
+asc_maf_ct_subset_merged$has_mut_in_literature_gene = as.integer(rowSums(asc_maf_ct_subset_merged[,c("KDR","PLCG1","TP53","PTPRB","ASXL1","PIK3CA","POT1")])>0)
+non_cut_lit_mut_total = sum(asc_maf_ct_subset_merged[asc_maf_ct_subset_merged$`Is Cutaneous`=="Non-cutaneous",]$has_mut_in_literature_gene)
+non_cut_total = dim(asc_maf_ct_subset_merged[asc_maf_ct_subset_merged$`Is Cutaneous`=="Non-cutaneous",])[1]
+binom.test(non_cut_lit_mut_total,non_cut_total)
+
+
+
+## Count cutaneous mutations
+asc_maf_ct_by_cut = asc_maf_ct_subset_merged %>%
+  select(c(viz_genes,"Tumor_Sample_Barcode","Is Cutaneous")) %>%      # Exclude sample names
+  group_by(`Is Cutaneous`) %>%              # Group by sample type
+  summarise(across(viz_genes, sum)) %>%  # Sum mutations within each group
+  ungroup() %>%
+  pivot_longer(cols = -`Is Cutaneous`, names_to = "Gene", values_to = "Count")
+## Make it a wide table and consider wildtype counts
+asc_maf_ct_by_cut_fisher = asc_maf_ct_by_cut %>% group_by(Gene) %>%
+  summarise(
+    Cutaneous_Mut = sum(Count[`Is Cutaneous`=="Cutaneous"]),
+    NonCutaneous_Mut = sum(Count[`Is Cutaneous`=="Non-cutaneous"]),
+    Cutaneous_Wt = nrow(asc_maf_ct_subset_merged[asc_maf_ct_subset_merged$`Is Cutaneous` == "Cutaneous",]) - sum(Count[`Is Cutaneous`=="Cutaneous"]),
+    NonCutaneous_Wt = nrow(asc_maf_ct_subset_merged[asc_maf_ct_subset_merged$`Is Cutaneous` == "Non-cutaneous",]) - sum(Count[`Is Cutaneous`=="Non-cutaneous"]),
+  )
+## Compute fisher test statistics
+asc_maf_ct_by_cut_fisher = asc_maf_ct_by_cut_fisher %>% rowwise() %>%
+  mutate(
+    cutaneous_total = Cutaneous_Mut+Cutaneous_Wt,
+    noncutaneous_total = NonCutaneous_Mut+NonCutaneous_Wt,
+    cutaneous_mut_prop = Cutaneous_Mut/cutaneous_total,
+    noncutaneous_mut_prop = NonCutaneous_Mut/noncutaneous_total,
+    fisher_pval = {
+      contingency_table <- matrix(
+        c(Cutaneous_Mut, NonCutaneous_Mut, Cutaneous_Wt, NonCutaneous_Wt),
+        nrow = 2
+      )
+      fisher.test(contingency_table)$p.value
+    }
+  )
+## Convert to plot friendly format
+fisher_plot_data = asc_maf_ct_by_cut_fisher %>%
+  select(Gene, cutaneous_mut_prop, noncutaneous_mut_prop, fisher_pval) %>%
+  pivot_longer(cols = c(cutaneous_mut_prop, noncutaneous_mut_prop), 
+               names_to = "Group", values_to = "Proportion") %>%
+  mutate(Group = ifelse(Group == "cutaneous_mut_prop", "Cutaneous", "Non-cutaneous")) %>%
+  arrange(-Proportion) %>%
+  mutate(Percentage = Proportion * 100)
+
+fisher_plot_data = fisher_plot_data %>%
+  group_by(Gene) %>%
+  mutate(Max_Percentage = max(Percentage)) %>%
+  ungroup() %>%
+  arrange(desc(Max_Percentage))
+
+fisher_plot_segment_data = fisher_plot_data %>%
+  distinct(Gene, fisher_pval, Max_Percentage) 
+
+## Make the plot
+driver_fisher_plot = ggplot(fisher_plot_data, aes(x = fct_reorder(Gene, -Max_Percentage), y = Percentage, fill = Group)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.7) +
+  
+  # Add segments above the bars (only once per gene)
+  geom_segment(data = fisher_plot_segment_data,
+               aes(x = as.numeric(fct_reorder(Gene, -Max_Percentage)) - 0.2,
+                   xend = as.numeric(fct_reorder(Gene, -Max_Percentage)) + 0.2,
+                   y = Max_Percentage + 2, yend = Max_Percentage + 2),
+               inherit.aes = FALSE) +
+  
+  # Add p-values above the segments (only once per gene)
+  geom_text(data = fisher_plot_segment_data,
+            aes(x = fct_reorder(Gene, -Max_Percentage),
+                y = Max_Percentage + 3,
+                label = paste0("p = ", signif(fisher_pval, 2))),
+            inherit.aes = FALSE) +
+  
+  labs(#title = "Mutation Proportion by Gene in Cutaneous vs NonCutaneous Samples",
+       x = "Gene", y = "Percentage Mutated %") +
+  scale_fill_manual(values = c("Cutaneous" = pal_npg("nrc")(5)[1], "Non-cutaneous" = pal_npg("nrc")(5)[2])) +
+  theme_minimal() +
+  theme(legend.title = element_blank()) 
+
+
+ggsave(filename = "03_Tumor_WES_Analysis/outputs/plots/04_driver_gene_prop_by_cutaenous_fisher.png",driver_fisher_plot,dpi=300,width=16,height=6)
+
 
 # Plot genes that are enriched by a clinical attributes
 make_clin_enrichment_table = function(maf_df,clin_feat,clin_feat_label) {
@@ -102,12 +260,13 @@ make_clin_enrichment_plot = function(enrichment_table,clin_feat_label) {
 }
 
 # Genes enriched by primary sites
-primary_site_enrichment_table = make_clin_enrichment_table(asc_maf,"PRIMARY_SITE_(Combined)")
-primary_site_enrichment_table_subset = primary_site_enrichment_table[primary_site_enrichment_table$Hugo_Symbol %in% recurrent_genes$Hugo_Symbol,]
-primary_site_enrichment_plot = make_clin_enrichment_plot(primary_site_enrichment_table_subset,"Primary Site")
+primary_site_enrichment_table = make_clin_enrichment_table(asc_maf,"CUTANEOUS_AS_(EHR_EXTRACTED)")
+primary_site_enrichment_table_subset = primary_site_enrichment_table[primary_site_enrichment_table$Hugo_Symbol %in% viz_genes,]
+#primary_site_enrichment_table_subset = primary_site_enrichment_table[primary_site_enrichment_table$Hugo_Symbol %in% recurrent_genes$Hugo_Symbol,]
+primary_site_enrichment_table_subset = primary_site_enrichment_table
+primary_site_enrichment_plot = make_clin_enrichment_plot(primary_site_enrichment_table_subset,"CUTANEOUS_AS_(EHR_EXTRACTED)")
 primary_site_enrichment_plot
 ggsave(primary_site_enrichment_plot,file="03_Tumor_WES_Analysis/outputs/plots/04_gene_mutaton_frequency_enrichment_by_primary_sites.png",width=9)
-
 
 ## Perform ORA on these recurrent mutated genes (GO BP and KEGG Pathways)
 library(clusterProfiler)

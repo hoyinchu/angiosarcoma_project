@@ -20,6 +20,7 @@ twist_pairs = pair_set_df %>% filter(`membership:pair_set_id` == "broad_custom_e
 pair_df[["is_illumina"]] = pair_df[["entity:pair_id"]] %in% illumina_pairs$pair
 pair_df[["is_twist"]] = pair_df[["entity:pair_id"]] %in% twist_pairs$pair
 
+
 # Apply FFPE filter
 illumina_ffpe_qval_threshold = 30
 twist_ffpe_qval_threshold = 35

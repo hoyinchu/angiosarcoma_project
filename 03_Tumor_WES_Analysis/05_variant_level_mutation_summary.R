@@ -71,15 +71,59 @@ mut_by_site_table = as.data.frame(table(maf_subset_unique$tumor_mutation_id_shor
 colnames(mut_by_site_table) = c("tumor_mutation_id_short","primary_site","count")
 
 # Set level by total count
-tumor_mutation_id_short_order = mut_freq_df_mut_recurrent_only[order(mut_freq_df_mut_recurrent_only$mut_count_unique),]$tumor_mutation_id_short
+tumor_mutation_id_short_order = mut_freq_df_mut_recurrent_only[order(-mut_freq_df_mut_recurrent_only$mut_count_unique),]$tumor_mutation_id_short
 mut_by_site_table$tumor_mutation_id_short = factor(mut_by_site_table$tumor_mutation_id_short,levels=tumor_mutation_id_short_order)
-recurrent_mutation_plot = ggplot(mut_by_site_table,aes(y=tumor_mutation_id_short,x=count,fill=primary_site)) +
+recurrent_mutation_plot = ggplot(mut_by_site_table,aes(x=tumor_mutation_id_short,y=count,fill=primary_site)) +
   geom_bar(stat = "identity",position = "stack") +
   theme_minimal() +
-  scale_x_continuous(breaks= pretty_breaks()) + 
-  labs(y="Gene",x="Number of Patients with Mutation",fill="Primary Site")
+  scale_y_continuous(breaks= pretty_breaks()) + 
+  labs(x="Gene",y="Number of Patients with Mutation",fill="Primary Site") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),legend.position="top")
 recurrent_mutation_plot
-ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.png")
+ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.png",height=4,width=6)
+
+## Also calculate the AlphaMissense scores for each of the variant
+## Uniprot ID file = uniprot_to_gene_names.txt
+## AlphaMissenese file is grep to only include entries with uniprot ids of interest
+uniprot_map = read.csv("data/public/uniprot_to_gene_names.txt",sep="\t",header=FALSE)
+colnames(uniprot_map) = c("uniprot_id","id_type","gene_name")
+mut_freq_df_mut_recurrent_only_merged = merge(mut_freq_df_mut_recurrent_only,
+                                              uniprot_map,by.x="Hugo_Symbol",by.y="gene_name",how="left")
+alpha_missense_df = read.csv("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/reference_data/AlphaMissense/AlphaMissense_hg19_subset.tsv",sep="\t")
+alpha_missense_df_subset = alpha_missense_df %>% filter(
+  uniprot_id %in% uniprot_genes$uniprot_id,
+)
+# Rename mutation ID by protein name
+mut_freq_df_mut_recurrent_only$aa_change = strsplit(mut_freq_df_mut_recurrent_only$tumor_mutation_id_short,"\\.") 
+mut_freq_df_mut_recurrent_only$aa_change = sapply(mut_freq_df_mut_recurrent_only$aa_change, function(x) if (length(x) >= 2) x[2] else NA)
+mut_freq_df_mut_recurrent_only_merged$uniprot_aa_change = paste0(mut_freq_df_mut_recurrent_only_merged$uniprot_id,
+                                                                 "_",
+                                                                 mut_freq_df_mut_recurrent_only_merged$aa_change
+                                                                 )
+alpha_missense_df_subset$uniprot_aa_change = paste0(
+  alpha_missense_df_subset$uniprot_id,
+  "_",
+  alpha_missense_df_subset$protein_variant
+)
+# Make # of samples mutated vs. Alpha Missense prediction
+mut_freq_df_mut_recurrent_only_with_score = merge(mut_freq_df_mut_recurrent_only_merged,
+                                                  alpha_missense_df_subset,by="uniprot_aa_change",
+                                                  all.x=TRUE) %>%
+  drop_na() %>%
+  arrange(-am_pathogenicity) %>%
+  distinct(tumor_mutation_id,.keep_all = TRUE)
+mut_freq_df_mut_recurrent_only_with_score
+
+#write.csv(alpha_missense_df_subset,"03_Tumor_WES_Analysis/outputs/alpha_missense_scores_all_recurrent_mut.csv",row.names = FALSE)
+
+write.csv(uniprot_genes,"03_Tumor_WES_Analysis/outputs/uniprot_id_for_gene_with_recurrent_mutated_variants.csv",row.names = FALSE)
+
+mut_count_alphamissense_plot = ggplot(mut_freq_df_mut_recurrent_only_with_score,aes(x=mut_count_unique,y=am_pathogenicity,label=tumor_mutation_id_short)) +
+  geom_point() +
+  ggrepel::geom_label_repel() +
+  theme_minimal() +
+  labs(x="# of Patients with Mutation",y="AlphaMissense Pathogenicity Score")
+ggsave("03_Tumor_WES_Analysis/outputs/plots/05_variant_patients_by_am_pathogenicity.png",mut_count_alphamissense_plot,dpi=300,height=6,width=12)
 
 ## Make a "representative somatic / germline mutation" per sample table that has somatic vs. germline mutation?
 ## Somatic Logic: Hotspot Mutation -> Mutation in Mutsig Significant Gene -> Mutation in COSMIC Cancer Tier 1 gene

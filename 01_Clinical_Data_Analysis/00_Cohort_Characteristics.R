@@ -17,7 +17,7 @@ library(ggbeeswarm)
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
 # Import processed clinical Data
-clin_df = read.csv("data/processed/clinical_data_manual.tsv",sep="\t",check.names = FALSE)
+clin_df = read.csv("data/processed/clinical_data_manual_deident.tsv",sep="\t",check.names = FALSE)
 
 # Make a clinical characteristic table for the entire cohort
 #"Biopsy Location (Wagner2024)",
@@ -80,9 +80,15 @@ prior_cancer_only = clin_other_cancer_df_merged %>% filter(
   (`DATE OTHER CANCERS (DAYS FROM DX)` <= 0) | (`OTHER CANCERS REMAPPED` == "NOT FOUND")
 )
 prior_cancer_only
-prior_cancer_only_counts = as.data.frame(table(prior_cancer_only$`OTHER CANCERS REMAPPED`,prior_cancer_only$`Primary Site (Recombined)`))
+prior_cancer_only_counts = as.data.frame(table(prior_cancer_only$`OTHER CANCERS REMAPPED`,prior_cancer_only$`Primary Site (Recombined)`),stringsAsFactors = FALSE)
 colnames(prior_cancer_only_counts) = c("Prior Cancer", "Primary Site", "n")
-prior_cancer_only_counts 
+# prior_cancer_only_counts = as.data.frame(prior_cancer_only_counts)
+prior_cancer_only_counts$`Prior Cancer`[prior_cancer_only_counts$`Prior Cancer`=="NOT FOUND"] = "NO PRIOR CANCER"
+# prior_cancer_only_counts = prior_cancer_only_counts %>% mutate(
+#   case_when(
+#     `Prior Cancer` == "NOT FOUND" ~ "NO PRIOR CANCER"
+#   )
+# )
 
 prior_history_count_plot = ggplot(data=prior_cancer_only_counts,aes(axis1=`Prior Cancer`,axis2=`Primary Site`,y=n)) +
   geom_alluvium(aes(fill = `Primary Site`)) +
@@ -157,6 +163,9 @@ num_with_mets_prop = num_with_mets/dim(clin_df_with_met_ehr)[1]
 print(num_with_mets)
 print(dim(clin_df_with_met_ehr)[1])
 print(num_with_mets_prop)
+## Calculate 95% confidence interval
+binom_test_res = binom.test(num_with_mets, dim(clin_df_with_met_ehr)[1])
+binom_test_res
 
 # Which primary site had the highest percentage of metastasis?
 met_count_data = clin_df_with_met_ehr %>%
@@ -178,6 +187,14 @@ met_percentage_data_filtered = met_percentage_data %>%
     has_met==FALSE ~ "No Mets",
     has_met==TRUE ~ "Has Met"
   ))
+## Calculate binom exact in each category
+met_percentage_data_filtered = met_percentage_data_filtered %>% rowwise() %>% mutate(
+  has_met_ci_low=binom.test(Count,Total)$conf.int[[1]],
+  has_met_ci_high=binom.test(Count,Total)$conf.int[[2]],
+)
+met_percentage_data_filtered
+met_percentage_data_filtered[c("Primary Site (Recombined)","has_met","Count","Total","has_met_ci_low","has_met_ci_high")]
+
 met_class_palette = c("Has Met" = "#E64B35FF","No Mets" = "#4DBBD5FF")
 met_percentage_data_plot = ggplot(met_percentage_data_filtered, aes(x = fct_rev(fct_reorder(`Primary Site (Recombined)`,has_met_Percentage)), y = Count, fill = has_met,label=Percentage)) +
   geom_bar(stat = "identity", position = "stack") +
@@ -187,7 +204,8 @@ met_percentage_data_plot = ggplot(met_percentage_data_filtered, aes(x = fct_rev(
             position = position_stack(vjust = 0.5), size = 4) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1,size=12)) +
   scale_fill_manual(values=met_class_palette) +
-  labs(x="Primary Site",y="# of Patients")
+  labs(x="Primary Site",y="# of Patients")# +
+  #geom_errorbar(aes(ymin = has_met_ci_low*100, ymax = has_met_ci_high*100), height = 0.2)
   #scale_fill_npg()
 met_percentage_data_plot
 
@@ -207,21 +225,37 @@ clin_df_long = clin_df_with_met_ehr %>%
 met_df = clin_df_long %>%
   filter(!is.na(`Mets Sites Ever (Recombined)`)) %>%
   filter(! `Mets Sites Ever (Recombined)` %in% c("Unknown"))
+
 met_cooccurence = met_df %>% count(`Primary Site (Recombined)`,`Mets Sites Ever (Recombined)`)
 met_cooccurence = met_cooccurence %>% mutate(`Primary Site`=`Primary Site (Recombined)`,`Metastatic Site`=`Mets Sites Ever (Recombined)`)
 
+# Save this as a source data
+write.csv(met_cooccurence, file = "01_Clinical_Data_Analysis/outputs/tables/metastatic_occurence_count_table.csv",row.names = FALSE)
+
 ## What is the most common metastatic site?
+## Also calculate the proportion of metastatic site total (after subtracting no mets events)
 met_cooccurence_totals = met_cooccurence %>%
   group_by(`Metastatic Site`) %>%
-  summarise(Total = sum(n))
+  summarise(Total = sum(n)) %>%
+  mutate(AllMetsTotal = sum(Total)-met_cooccurence_totals[met_cooccurence_totals$`Metastatic Site`=="No Mets",]$Total) %>%
+  rowwise() %>%
+  mutate(
+    met_site_total_prop = Total/AllMetsTotal,
+    met_site_ci_low=binom.test(Total,AllMetsTotal)$conf.int[[1]],
+    met_site_ci_high=binom.test(Total,AllMetsTotal)$conf.int[[2]]
+  )
+met_cooccurence_totals
+
 met_cooccurence_merged = met_cooccurence %>% left_join(met_cooccurence_totals)
-common_met_plot = ggplot(met_cooccurence_merged,aes(y=fct_reorder(`Metastatic Site`,Total),x=n,fill=`Primary Site`)) +
+common_met_plot = ggplot(met_cooccurence_merged,aes(y=fct_reorder(`Metastatic Site`,Total),x=n,fill=`Primary Site (Recombined)`)) +
   geom_bar(stat="identity") +
   scale_fill_npg() +
   theme_minimal() +
   labs(x="# of events",y="Metastatic Site")
 common_met_plot
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_metastatic_site_counts.png",common_met_plot,dpi=300,width=5,height=4)
+
+met_cooccurence_merged
 
 sum(met_cooccurence$n)
 # The primary site to metastatic site alleuvial plot
@@ -314,7 +348,8 @@ clin_df_with_bone_liver_met = subset(
   clin_df_with_met_ehr,
   grepl("Liver", `Mets Sites Ever (Recombined)`) & grepl("Bone", `Mets Sites Ever (Recombined)`)
   )
-table(clin_df_with_bone_liver_met$`Primary Site (Recombined)`)
+originating_table = table(clin_df_with_bone_liver_met$`Primary Site (Recombined)`)
+originating_table
 
 ## Check if different breast AS type has different met tropism towards liver
 cutaneous_breast_met_sites =  met_cooccurence %>% filter(`Primary Site` == "Breast (Cutaneous)",`Metastatic Site` != "No Mets")
@@ -340,9 +375,41 @@ treatment_df_filtered = treatment_df %>% filter(
 # Merge with other clinical information
 treatment_df_filtered_merged = merge(treatment_df_filtered,clin_df,by="STUDY ID",all.x=TRUE)
 
+# Treatment by Primary Sites
+met_treatment_only = treatment_df_filtered_merged[treatment_df_filtered_merged$MODE=="METS",]
+drug_by_site_table = table(treatment_df_filtered_merged$`Primary Site (Recombined)`,treatment_df_filtered_merged$DRUG)
+treatment_col_fun = colorRamp2(c(0, 20), c("white", "red"))
+treatment_col_sum = colSums(drug_by_site_table)
+treatment_row_sum = rowSums(drug_by_site_table)
+drug_by_site_table_ordered = drug_by_site_table[order(treatment_row_sum, decreasing = TRUE), order(treatment_col_sum, decreasing = TRUE)]
+treatment_col_anno = columnAnnotation(`Records` = anno_barplot(colSums(drug_by_site_table_ordered)))
+treatment_row_anno = rowAnnotation(`Records` = anno_barplot(rowSums(drug_by_site_table_ordered)))
+
+treatment_complex_heatmap = Heatmap(drug_by_site_table_ordered, 
+        name = "# of Treatment Records",
+        col=treatment_col_fun,
+        top_annotation = treatment_col_anno,cluster_rows = FALSE,cluster_columns = FALSE,
+        right_annotation = treatment_row_anno,
+        cell_fun = function(j, i, x, y, width, height, fill) {
+          grid.text(sprintf("%.0f", drug_by_site_table_ordered[i, j]), x, y, gp = gpar(fontsize = 10))
+        })
+pdf("01_Clinical_Data_Analysis/outputs/plots/treatment_by_primary_site.pdb",width=14,height=8)
+draw(treatment_complex_heatmap, heatmap_legend_side = "bottom", annotation_legend_side = "bottom")
+dev.off()
+
+
 # Count occurences by treatment setting
 drug_by_mode_count = treatment_df_filtered_merged %>% group_by(DRUG,`MODE (FORMATTED)`) %>% summarize(ModeTotal = n()) %>% ungroup()
 drug_total_count = treatment_df_filtered_merged %>% group_by(DRUG) %>% summarize(OverallTotal = n()) %>% ungroup()
+drug_total_count$AllTreatmentTotal = drug_total_count$OverallTotal %>% sum()
+drug_total_count = drug_total_count %>% rowwise() %>% mutate(
+  drug_percentage=OverallTotal/AllTreatmentTotal,
+  drug_prop_ci_low=binom.test(OverallTotal,AllTreatmentTotal)$conf.int[[1]],
+  drug_prop_ci_high=binom.test(OverallTotal,AllTreatmentTotal)$conf.int[[2]]
+) %>% arrange(-OverallTotal)
+drug_total_count
+  
+
 drug_count_df = drug_total_count %>% left_join(drug_by_mode_count, by = "DRUG") %>% arrange(desc(OverallTotal))
 top_drugs = drug_total_count %>% slice_max(order_by=OverallTotal,n=15)
 drug_count_df_top_only = drug_count_df %>% filter(DRUG %in% top_drugs$DRUG)
@@ -361,7 +428,25 @@ ggsave("01_Clinical_Data_Analysis/outputs/plots/00_top_treatment_received_barplo
 ## Which drug was the most common prescribed in mets setting?
 drug_count_df_met_only = drug_count_df %>%
   filter(`MODE (FORMATTED)`=="METS") %>%
-  mutate(met_percentage = ModeTotal/OverallTotal) %>%
+  mutate(
+    met_total = sum(ModeTotal),
+    met_percentage = ModeTotal/met_total
+    ) %>%
+  rowwise() %>%
+  mutate(
+    met_percentage=ModeTotal/met_total,
+    met_prop_ci_low=binom.test(ModeTotal,met_total)$conf.int[[1]],
+    met_prop_ci_high=binom.test(ModeTotal,met_total)$conf.int[[2]]
+  ) %>%
   arrange(-ModeTotal) 
-drug_count_df_met_only %>% filter(ModeTotal >= 10)
+drug_count_df_met_only
 
+## How much does the top 5 drug category account for all treatment prescribed in the met setting
+top_5_mode_total = sum(drug_count_df_met_only[order(-drug_count_df_met_only$ModeTotal),][1:5,]$ModeTotal)
+met_drug_total = sum(drug_count_df_met_only$ModeTotal)
+top_5_prop_test = binom.test(top_5_mode_total,met_drug_total)
+top_5_mode_total/met_drug_total
+top_5_prop_test
+
+drug_count_df_met_only %>% filter(ModeTotal >= 10) %>%select(-c("MODE (FORMATTED)"))
+drug_count_df_met_only
