@@ -1,0 +1,22 @@
+Gene Symbol,Receptor,Subunit,Pathway,FDA-Approved Inhibitor,Citation,PubMed ID
+VEGFA,Vascular Endothelial Growth Factor A,"Ligand for VEGFR1, VEGFR2",VEGF Signaling,Bevacizumab (Avastin),"Ferrara, 2004",15159664
+VEGFB,Vascular Endothelial Growth Factor B,Ligand for VEGFR1,VEGF Signaling,Investigational,"Bry et al., 2014",24668260
+VEGFC,Vascular Endothelial Growth Factor C,"Ligand for VEGFR2, VEGFR3",VEGF Signaling,Investigational,"Tammela et al., 2005",16025154
+VEGFD,Vascular Endothelial Growth Factor D,"Ligand for VEGFR2, VEGFR3",VEGF Signaling,Investigational,"Stacker et al., 2001",11429471
+FLT1,VEGFR1,"Receptor for VEGFA, VEGFB, VEGFC",VEGF Signaling,Investigational,"Holmes et al., 2007",17965405
+KDR,VEGFR2,"Receptor for VEGFA, VEGFC, VEGFD",VEGF Signaling,"Sorafenib, Axitinib, Pazopanib","Wilhelm et al., 2004",15026404
+FLT4,VEGFR3,"Receptor for VEGFC, VEGFD",VEGF Signaling,Investigational,"Karkkainen et al., 2001",11159907
+PDGFA,Platelet-Derived Growth Factor A,Ligand for PDGFRA,PDGF Signaling,Investigational,"Heldin et al., 2002",12161461
+PDGFB,Platelet-Derived Growth Factor B,Ligand for PDGFRB,PDGF Signaling,"Imatinib (Gleevec), Sunitinib","Ostman et al., 2006",16697951
+PDGFRA,PDGFRA,"Receptor for PDGFA, PDGFB",PDGF Signaling,Imatinib (Gleevec),"Corless et al., 2005",15781834
+PDGFRB,PDGFRB,Receptor for PDGFB,PDGF Signaling,"Sunitinib (Sutent), Pazopanib","Demetri et al., 2006",17063127
+FGF2,Fibroblast Growth Factor 2 (bFGF),"Ligand for FGFR1, FGFR2",FGF Signaling,Investigational,"Beenken et al., 2009",19799660
+FGFR1,Fibroblast Growth Factor Receptor 1,Receptor for multiple FGFs,FGF Signaling,Erdafitinib (Balversa),"Loriot et al., 2019",31079897
+FGFR2,Fibroblast Growth Factor Receptor 2,Receptor for multiple FGFs,FGF Signaling,Pemigatinib (Pemazyre),"Goyal et al., 2019",31715386
+FGFR3,Fibroblast Growth Factor Receptor 3,Receptor for multiple FGFs,FGF Signaling,Erdafitinib (Balversa),"Siefker-Radtke et al., 2020",32184256
+FGFR4,Fibroblast Growth Factor Receptor 4,Receptor for multiple FGFs,FGF Signaling,,,
+NRP1,,,Neuropilin,,,
+NRP2,,,Neuropilin,,,
+PDCD1,,,Immunotherapy,,,
+CD274,,,Immunotherapy,,,
+CTLA4,,,Immunotherapy,,,
