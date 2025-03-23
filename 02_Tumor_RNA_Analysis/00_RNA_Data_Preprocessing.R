@@ -7,9 +7,10 @@ library(DESeq2)
 
 ## Load data
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
+
+
 count_data = read.csv("data/raw/rna/All_Oct2023samples_159bxs.gene_reads.gct",sep="\t",skip=2,check.names = FALSE)
 tpm_data = read.csv("data/raw/rna/All_Oct2023samples_159bxs.gene_tpm.gct",sep="\t",skip=2,check.names = FALSE)
-
 
 ## Perform filtering based on sequencing metrics
 ## Script based on QC RNA metrics provided by Jorge
@@ -105,6 +106,49 @@ count_data_filtered = count_data_filtered[count_data_filtered$Name %in% keep_tx,
 ## Collapse transcript counts into gene counts
 collapsed_filtered_counts = collapse_count_data(count_data_filtered)
 
+## Estimate Tumor Purity using ESTIMATE (Yoshihara K., 2013)
+library(estimate)
+collapsed_count_path="data/processed/rna/collapsed_counts.txt"
+write.table(collapsed_filtered_counts,collapsed_count_path,sep="\t",quote = FALSE)
+filterCommonGenes(input.f=collapsed_count_path, output.f="data/processed/rna/collapsed_counts.gct", id="GeneSymbol")
+estimateScore(input.ds = "data/processed/rna/collapsed_counts.gct",output.ds = "data/processed/rna/estimate_score.gct",platform = "illumina")
+estimate_score_table = read.csv("data/processed/rna/estimate_score.gct",sep="\t",skip=2,check.names = FALSE)
+estimate_scores = estimate_score_table[estimate_score_table$NAME == "ESTIMATEScore", -c(1,2)]
+## Using the equation indicated in the original publication
+purity_estimates = cos(0.6049872018+0.0001467884*estimate_scores)
+purity_estimates_table = as.data.frame(t(purity_estimates))
+colnames(purity_estimates_table) = c("ESTIMATE_purity")
+rownames(purity_estimates_table) <- gsub("\\.", "-", rownames(purity_estimates_table))
+purity_estimates_table = cbind("entity:sample_id" = rownames(purity_estimates_table),purity_estimates_table)
+write.table(purity_estimates_table,  # Add row names as a new column
+  file = "data/processed/rna/estimate_score.tsv",  # Change to .csv if needed
+  sep = "\t",  # Use "," for CSV files
+  quote = FALSE,
+  row.names = FALSE  # Prevent duplicate row names
+)
+
+## Add estimated tumor purity to metadata
+sample_meta_data_filtered = merge(sample_meta_data_filtered,purity_estimates_table,by="entity:sample_id",all.x=TRUE)
+
+## Check per sample expression
+expression_by_sample_long = as.data.frame(collapsed_filtered_counts,check.names=FALSE)
+expression_by_sample_long$gene = rownames(collapsed_filtered_counts)
+expression_by_sample_long = pivot_longer(
+  expression_by_sample_long,
+  cols = -gene, 
+  names_to = "Sample",
+  values_to = "raw_count"
+)
+
+expression_by_sample_plot_prefilter = ggplot(expression_by_sample_long, aes(x = Sample, y = log2(raw_count+1))) +
+  geom_boxplot() +
+  labs(x = "Sample", y = "log2(Raw Count+1)") +
+  theme_minimal() +
+  theme(axis.text.x=element_blank())
+expression_by_sample_plot_prefilter
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/00_qc_plots/00_expression_by_sample_plot_raw_counts.png",expression_by_sample_plot_prefilter,width=10,height=3)
+
+
 ## Applying similar filtering and transformation to tpm data
 tpm_data_filtered = tpm_data[tpm_data$Name %in% keep_tx , c("Name","Description",sample_meta_data_filtered$`entity:sample_id`)]
 collpased_tpm_data = collapse_count_data(tpm_data_filtered)
@@ -112,8 +156,8 @@ collpased_tpm_data = collapse_count_data(tpm_data_filtered)
 ## Apply VST transform and save vst-normalized count data
 dds = DESeqDataSetFromMatrix(
   countData = collapsed_filtered_counts, # the counts values for all samples in our dataset
-  #colData = meta_data_filtered, # annotation data for the samples in the counts data frame
-  colData = sample_meta_data_filtered,
+  #colData = meta_data_filtered, 
+  colData = sample_meta_data_filtered, # annotation data for the samples in the counts data frame
   design = ~1 # Here we are not specifying a model
 )
 dds_norm = vst(dds,blind=FALSE)
@@ -135,7 +179,7 @@ expression_by_sample_plot = ggplot(long_df, aes(x = Sample, y = VSTcount)) +
   theme_minimal() +
   theme(axis.text.x=element_blank())
 expression_by_sample_plot
-ggsave("RNA_Analysis/outputs/plots/00_qc_plots/00_expression_by_sample_plot_post_vst.png",expression_by_sample_plot,width=12)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/00_qc_plots/00_expression_by_sample_plot_post_vst.png",expression_by_sample_plot,width=10,height=3)
 
 ## Add library size to meta data
 total_library_sizes = data.frame("library_size"=colSums(count_data[,-c(1,2)]))
