@@ -12,7 +12,9 @@ library(RColorBrewer)
 library(reshape2)
 library(ggsci)
 library(ggbeeswarm)
-
+library(colorRamp2)
+library(ComplexHeatmap)
+library(viridis)
 
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
@@ -234,17 +236,44 @@ write.csv(met_cooccurence, file = "01_Clinical_Data_Analysis/outputs/tables/meta
 
 ## What is the most common metastatic site?
 ## Also calculate the proportion of metastatic site total (after subtracting no mets events)
-met_cooccurence_totals = met_cooccurence %>%
+
+# Step 1: Summarize the data
+met_cooccurence_totals <- met_cooccurence %>%
   group_by(`Metastatic Site`) %>%
-  summarise(Total = sum(n)) %>%
-  mutate(AllMetsTotal = sum(Total)-met_cooccurence_totals[met_cooccurence_totals$`Metastatic Site`=="No Mets",]$Total) %>%
+  summarise(Total = sum(n), .groups = "drop")
+
+# Step 2: Compute total across all metastatic sites except "No Mets"
+all_mets_total <- met_cooccurence_totals %>%
+  filter(`Metastatic Site` != "No Mets") %>%
+  summarise(AllMetsTotal = sum(Total)) %>%
+  pull(AllMetsTotal)
+
+# Step 3: Compute proportions and confidence intervals
+met_cooccurence_totals <- met_cooccurence_totals %>%
   rowwise() %>%
   mutate(
-    met_site_total_prop = Total/AllMetsTotal,
-    met_site_ci_low=binom.test(Total,AllMetsTotal)$conf.int[[1]],
-    met_site_ci_high=binom.test(Total,AllMetsTotal)$conf.int[[2]]
-  )
+    AllMetsTotal = all_mets_total,
+    met_site_total_prop = Total / AllMetsTotal,
+    ci = list(binom.test(Total, AllMetsTotal)$conf.int),
+    met_site_ci_low = ci[[1]],
+    met_site_ci_high = ci[[2]]
+  ) %>%
+  select(-ci) %>%
+  ungroup()
+
 met_cooccurence_totals
+# 
+# met_cooccurence_totals = met_cooccurence %>%
+#   group_by(`Metastatic Site`) %>%
+#   summarise(Total = sum(n)) %>%
+#   mutate(AllMetsTotal = sum(Total)-met_cooccurence_totals[met_cooccurence_totals$`Metastatic Site`=="No Mets",]$Total) %>%
+#   rowwise() %>%
+#   mutate(
+#     met_site_total_prop = Total/AllMetsTotal,
+#     met_site_ci_low=binom.test(Total,AllMetsTotal)$conf.int[[1]],
+#     met_site_ci_high=binom.test(Total,AllMetsTotal)$conf.int[[2]]
+#   )
+# met_cooccurence_totals
 
 met_cooccurence_merged = met_cooccurence %>% left_join(met_cooccurence_totals)
 common_met_plot = ggplot(met_cooccurence_merged,aes(y=fct_reorder(`Metastatic Site`,Total),x=n,fill=`Primary Site (Recombined)`)) +
@@ -375,29 +404,60 @@ treatment_df_filtered = treatment_df %>% filter(
 # Merge with other clinical information
 treatment_df_filtered_merged = merge(treatment_df_filtered,clin_df,by="STUDY ID",all.x=TRUE)
 
+## Calculate the total number of treatment records per patient
+treatment_records_per_patient = treatment_df_filtered_merged %>% group_by(`STUDY ID`) %>% summarise(n_records = n(), .groups = "drop")
+## Calculate average
+average_num_records = mean(treatment_records_per_patient$n_records)
+treatment_records_per_patient_plot = ggplot(treatment_records_per_patient,aes(x=n_records)) + 
+  geom_histogram(binwidth=1,fill = "gray", color = "black", size = 0.3) + 
+  theme_minimal() +
+  geom_vline(xintercept = average_num_records,linetype="dashed") +
+  labs(x="Number of Treatment Records per Patient",y="Number of Patients")
+
+treatment_records_per_patient_plot
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient_histo.png",treatment_records_per_patient_plot,dpi=300,width=6,height=4)
+
+treatment_records_per_patient
+
+## Calculate the average number of treatment records per patient per primary site
+treatment_records_per_patient_merged = merge(treatment_records_per_patient,clin_df[,c("STUDY ID","Primary Site (Recombined)")],by="STUDY ID")
+treatment_records_per_patient_per_primary_site_plot = ggplot(treatment_records_per_patient_merged,aes(y=`Primary Site (Recombined)`,x=n_records)) + 
+  geom_boxplot() + 
+  geom_jitter() +
+  theme_minimal() +
+  labs(y="Primary Site",x="Number of Treatment Records per Patient")
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient_per_primary_site_boxplot.png",treatment_records_per_patient_per_primary_site_plot,dpi=300,width=4,height=8)
+
+
 # Treatment by Primary Sites
 met_treatment_only = treatment_df_filtered_merged[treatment_df_filtered_merged$MODE=="METS",]
-drug_by_site_table = table(treatment_df_filtered_merged$`Primary Site (Recombined)`,treatment_df_filtered_merged$DRUG)
-treatment_col_fun = colorRamp2(c(0, 20), c("white", "red"))
-treatment_col_sum = colSums(drug_by_site_table)
-treatment_row_sum = rowSums(drug_by_site_table)
-drug_by_site_table_ordered = drug_by_site_table[order(treatment_row_sum, decreasing = TRUE), order(treatment_col_sum, decreasing = TRUE)]
-treatment_col_anno = columnAnnotation(`Records` = anno_barplot(colSums(drug_by_site_table_ordered)))
-treatment_row_anno = rowAnnotation(`Records` = anno_barplot(rowSums(drug_by_site_table_ordered)))
+site_by_drug_table = table(treatment_df_filtered_merged$DRUG,treatment_df_filtered_merged$`Primary Site (Recombined)`)
+treatment_col_fun = colorRamp2(c(0, 20), c("gray", "orange"))
+treatment_col_sum = colSums(site_by_drug_table)
+treatment_row_sum = rowSums(site_by_drug_table)
+site_by_drug_table_ordered = site_by_drug_table[order(treatment_row_sum, decreasing = TRUE), order(treatment_col_sum, decreasing = TRUE)]
+treatment_col_anno = columnAnnotation(`Records` = anno_barplot(colSums(site_by_drug_table_ordered)))
+treatment_row_anno = rowAnnotation(`Records` = anno_barplot(rowSums(site_by_drug_table_ordered)))
+# treatment_col_fun = colorRamp2(
+#   c(min(site_by_drug_table_ordered), max(site_by_drug_table_ordered)), 
+#   viridis(2)
+# )
 
-treatment_complex_heatmap = Heatmap(drug_by_site_table_ordered, 
+treatment_complex_heatmap = Heatmap(site_by_drug_table_ordered, 
         name = "# of Treatment Records",
         col=treatment_col_fun,
         top_annotation = treatment_col_anno,cluster_rows = FALSE,cluster_columns = FALSE,
         right_annotation = treatment_row_anno,
         cell_fun = function(j, i, x, y, width, height, fill) {
-          grid.text(sprintf("%.0f", drug_by_site_table_ordered[i, j]), x, y, gp = gpar(fontsize = 10))
-        })
-pdf("01_Clinical_Data_Analysis/outputs/plots/treatment_by_primary_site.pdb",width=14,height=8)
-draw(treatment_complex_heatmap, heatmap_legend_side = "bottom", annotation_legend_side = "bottom")
+          grid.text(sprintf("%.0f", site_by_drug_table_ordered[i, j]), x, y, gp = gpar(fontsize = 10))
+        },
+        column_names_rot = 45
+        )
+pdf("01_Clinical_Data_Analysis/outputs/plots/treatment_by_primary_site.pdf",width=10,height=14)
+draw(treatment_complex_heatmap, heatmap_legend_side = "right", annotation_legend_side = "right")
 dev.off()
 
-
+treatment_complex_heatmap
 # Count occurences by treatment setting
 drug_by_mode_count = treatment_df_filtered_merged %>% group_by(DRUG,`MODE (FORMATTED)`) %>% summarize(ModeTotal = n()) %>% ungroup()
 drug_total_count = treatment_df_filtered_merged %>% group_by(DRUG) %>% summarize(OverallTotal = n()) %>% ungroup()
