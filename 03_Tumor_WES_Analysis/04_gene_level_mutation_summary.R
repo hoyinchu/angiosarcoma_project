@@ -4,6 +4,7 @@ library(tidyr)
 library(ggplot2)
 library(ggrepel)
 library(forcats)
+library(ggsci)
 
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
@@ -98,6 +99,7 @@ mutsig_plot = ggplot(mutsig_gene_sub,aes(x=mutated_percentage,y=neg_log_p,label=
   labs(color='Mutsig q-value', y = "-log(Mutsig p-value)", x="% of Samples with Mutation")
 mutsig_plot
 ggsave(mutsig_plot,file="03_Tumor_WES_Analysis/outputs/plots/04_MutSig_num_samples_by_significance_plot.png",width=10,height=6)
+ggsave(mutsig_plot,file="03_Tumor_WES_Analysis/outputs/plots/04_MutSig_num_samples_by_significance_plot.pdf",width=10,height=6)
 
 ## Identify recurrently mutated genes with nominal MutSig significance
 asc_maf_onehot = table(asc_maf@data$Tumor_Sample_Barcode,asc_maf@data$Hugo_Symbol)
@@ -230,6 +232,7 @@ driver_fisher_plot = ggplot(fisher_plot_data, aes(x = fct_reorder(Gene, -Max_Per
 
 
 ggsave(filename = "03_Tumor_WES_Analysis/outputs/plots/04_driver_gene_prop_by_cutaenous_fisher.png",driver_fisher_plot,dpi=300,width=16,height=6)
+ggsave(filename = "03_Tumor_WES_Analysis/outputs/plots/04_driver_gene_prop_by_cutaenous_fisher.pdf",driver_fisher_plot,dpi=300,width=16,height=6)
 
 
 # Plot genes that are enriched by a clinical attributes
@@ -342,6 +345,7 @@ mutsig_msigdb_bar = draw_enriched_bars(mutsig_enrich_res,"msigdb_c6", "MutSig Re
 # Plot the enrichment results
 mutsig_bars_combined =  cowplot::plot_grid(mutsig_go_bar,mutsig_kegg_bar,labels="AUTO",ncol=2)
 ggsave(mutsig_bars_combined,file="03_Tumor_WES_Analysis/outputs/plots/04_MutSig_recurrent_gene_enrichment_analysis.png",width=12)
+ggsave(mutsig_bars_combined,file="03_Tumor_WES_Analysis/outputs/plots/04_MutSig_recurrent_gene_enrichment_analysis.pdf",width=12)
 
 ## Make a onehot matrix for samples carrying recurrent mutations
 asc_maf_onehot = asc_maf_onehot[,recurrent_genes$Hugo_Symbol]

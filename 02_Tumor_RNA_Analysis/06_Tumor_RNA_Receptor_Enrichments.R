@@ -83,6 +83,7 @@ hclust_receptor_plot = plot_receptor_families(hclust_expr_df_subset_merged)
 hclust_receptor_plot
 #ggsave("02_Tumor_RNA_Analysis/outputs/plots/06_receptor_plots/receptor_enrichments_by_cluster.png",hclust_receptor_plot,dpi=300,height=10,width=8)
 ggsave("02_Tumor_RNA_Analysis/outputs/plots/06_receptor_plots/receptor_enrichments_by_cluster.png",hclust_receptor_plot,dpi=300,height=4,width=10)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/06_receptor_plots/receptor_enrichments_by_cluster.pdf",hclust_receptor_plot,dpi=300,height=4,width=10)
 
 
 ## Do the same for cluster by sites
@@ -97,5 +98,6 @@ site_receptor_plot = plot_receptor_families(site_expr_df_subset_merged)
 site_receptor_plot
 #ggsave("02_Tumor_RNA_Analysis/outputs/plots/06_receptor_plots/receptor_enrichments_by_site.png",site_receptor_plot,dpi=300,height=10,width=8)
 ggsave("02_Tumor_RNA_Analysis/outputs/plots/06_receptor_plots/receptor_enrichments_by_site.png",site_receptor_plot,dpi=300,height=4,width=10)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/06_receptor_plots/receptor_enrichments_by_site.pdf",site_receptor_plot,dpi=300,height=4,width=10)
 
 

@@ -227,6 +227,7 @@ deseq_volcanoes_combined = plot_grid(
   deseq_s4_volcano,deseq_s5_volcano,deseq_s6_volcano,ncol = 6
 )
 ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_DESEQ2_DEGs_nominal_site_cluster_volcanoes_combined.png",deseq_volcanoes_combined,dpi=300,width=32,height = 12)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_DESEQ2_DEGs_nominal_site_cluster_volcanoes_combined.pdf",deseq_volcanoes_combined,dpi=300,width=32,height = 12)
 
 
 ## Make marker and volcanoes for the unsupervised clusters
@@ -252,6 +253,7 @@ expr_cluster_volcanoes_combined = plot_grid(
   c1_volcano,c2_volcano,c3_volcano,c4_volcano,c5_volcano,ncol = 5
 )
 ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_DEGs_nominal_expr_cluster_volcanoes_combined.png",expr_cluster_volcanoes_combined,dpi=300,width=32,height = 12)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_DEGs_nominal_expr_cluster_volcanoes_combined.pdf",expr_cluster_volcanoes_combined,dpi=300,width=32,height = 12)
 
 
 ## Make marker and volcanoes for the primary site clusters
@@ -280,6 +282,7 @@ site_cluster_volcanoes_combined = plot_grid(
   s1_volcano,s2_volcano,s3_volcano,s4_volcano,s5_volcano,s6_volcano,ncol = 6
 )
 ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_nominal_DEGs_site_cluster_volcanoes_combined.png",site_cluster_volcanoes_combined,dpi=300,width=32,height=12)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_nominal_DEGs_site_cluster_volcanoes_combined.pdf",site_cluster_volcanoes_combined,dpi=300,width=32,height=12)
 
 
 ## Make marker and volcanoes for the unsupervised hierarchical clusters
@@ -300,6 +303,7 @@ hclust_expr_cluster_volcanoes_combined = plot_grid(
   hc1_volcano,hc2_volcano,hc3_volcano,hc4_volcano,hc5_volcano,ncol = 5
 )
 ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_hclust_DEGs_nominal_expr_cluster_volcanoes_combined.png",hclust_expr_cluster_volcanoes_combined,dpi=300,width=32,height = 12)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_hclust_DEGs_nominal_expr_cluster_volcanoes_combined.pdf",hclust_expr_cluster_volcanoes_combined,dpi=300,width=32,height = 12)
 
 
 
@@ -523,23 +527,38 @@ test_plot = ggplot(deseq2_combined_fora_C6, aes(x = cluster, y = pathway, size =
   ) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_fora_Hallmarks_pathway_enrichment_dot_plot.png",test_plot,dpi=300,height=10,width = 10)
+ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_fora_Hallmarks_pathway_enrichment_dot_plot.pdf",test_plot,dpi=300,height=10,width = 10)
 
 
 ## Run FORA analysis for a bunch of gene sets (expr clusters)
-run_fora_analysis(all_markers_by_expr_cluster,fgsea_hallmark_set,"Hallmarks","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_hallmark_fora_bar_by_expr_clusters.png")
-run_fora_analysis(all_markers_by_expr_cluster,fgsea_kegg_set,"KEGG","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_KEGG_fora_bar_by_expr_clusters.png")
-run_fora_analysis(all_markers_by_expr_cluster,fgsea_c1_set,"C1","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C1_fora_bar_by_expr_clusters.png")
-run_fora_analysis(all_markers_by_expr_cluster,fgsea_c5_set,"C5","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C5_fora_bar_by_expr_clusters.png")
-run_fora_analysis(all_markers_by_expr_cluster,fgsea_c6_set_up_only,"C6","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C6_fora_bar_by_expr_clusters.png")
-run_fora_analysis(all_markers_by_expr_cluster,fgsea_c8_set,"C8","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C8_fora_bar_by_expr_clusters.png")
+# run_fora_analysis(all_markers_by_expr_cluster,fgsea_hallmark_set,"Hallmarks","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_hallmark_fora_bar_by_expr_clusters.png")
+# run_fora_analysis(all_markers_by_expr_cluster,fgsea_kegg_set,"KEGG","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_KEGG_fora_bar_by_expr_clusters.png")
+# run_fora_analysis(all_markers_by_expr_cluster,fgsea_c1_set,"C1","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C1_fora_bar_by_expr_clusters.png")
+# run_fora_analysis(all_markers_by_expr_cluster,fgsea_c5_set,"C5","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C5_fora_bar_by_expr_clusters.png")
+# run_fora_analysis(all_markers_by_expr_cluster,fgsea_c6_set_up_only,"C6","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C6_fora_bar_by_expr_clusters.png")
+# run_fora_analysis(all_markers_by_expr_cluster,fgsea_c8_set,"C8","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C8_fora_bar_by_expr_clusters.png")
+
+run_fora_analysis(all_markers_by_expr_cluster,fgsea_hallmark_set,"Hallmarks","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_hallmark_fora_bar_by_expr_clusters.pdf")
+run_fora_analysis(all_markers_by_expr_cluster,fgsea_kegg_set,"KEGG","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_KEGG_fora_bar_by_expr_clusters.pdf")
+run_fora_analysis(all_markers_by_expr_cluster,fgsea_c1_set,"C1","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C1_fora_bar_by_expr_clusters.pdf")
+run_fora_analysis(all_markers_by_expr_cluster,fgsea_c5_set,"C5","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C5_fora_bar_by_expr_clusters.pdf")
+run_fora_analysis(all_markers_by_expr_cluster,fgsea_c6_set_up_only,"C6","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C6_fora_bar_by_expr_clusters.pdf")
+run_fora_analysis(all_markers_by_expr_cluster,fgsea_c8_set,"C8","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C8_fora_bar_by_expr_clusters.pdf")
 
 ## Run FORA analysis for a bunch of gene sets (site clusters)
-run_fora_analysis(all_markers_by_site_cluster,fgsea_hallmark_set,"Hallmarks","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_hallmark_fora_bar_by_site_clusters.png")
-run_fora_analysis(all_markers_by_site_cluster,fgsea_kegg_set,"KEGG","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_KEGG_fora_bar_by_site_clusters.png")
-run_fora_analysis(all_markers_by_site_cluster,fgsea_c1_set,"C1","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C1_fora_bar_by_site_clusters.png")
-run_fora_analysis(all_markers_by_site_cluster,fgsea_c5_set,"C5","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C5_fora_bar_by_site_clusters.png")
-run_fora_analysis(all_markers_by_site_cluster,fgsea_c6_set_up_only,"C6","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C6_fora_bar_by_site_clusters.png")
-run_fora_analysis(all_markers_by_site_cluster,fgsea_c8_set,"C8","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C8_fora_bar_by_site_clusters.png")
+# run_fora_analysis(all_markers_by_site_cluster,fgsea_hallmark_set,"Hallmarks","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_hallmark_fora_bar_by_site_clusters.png")
+# run_fora_analysis(all_markers_by_site_cluster,fgsea_kegg_set,"KEGG","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_KEGG_fora_bar_by_site_clusters.png")
+# run_fora_analysis(all_markers_by_site_cluster,fgsea_c1_set,"C1","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C1_fora_bar_by_site_clusters.png")
+# run_fora_analysis(all_markers_by_site_cluster,fgsea_c5_set,"C5","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C5_fora_bar_by_site_clusters.png")
+# run_fora_analysis(all_markers_by_site_cluster,fgsea_c6_set_up_only,"C6","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C6_fora_bar_by_site_clusters.png")
+# run_fora_analysis(all_markers_by_site_cluster,fgsea_c8_set,"C8","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C8_fora_bar_by_site_clusters.png")
+
+run_fora_analysis(all_markers_by_site_cluster,fgsea_hallmark_set,"Hallmarks","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_hallmark_fora_bar_by_site_clusters.pdf")
+run_fora_analysis(all_markers_by_site_cluster,fgsea_kegg_set,"KEGG","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_KEGG_fora_bar_by_site_clusters.pdf")
+run_fora_analysis(all_markers_by_site_cluster,fgsea_c1_set,"C1","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C1_fora_bar_by_site_clusters.pdf")
+run_fora_analysis(all_markers_by_site_cluster,fgsea_c5_set,"C5","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C5_fora_bar_by_site_clusters.pdf")
+run_fora_analysis(all_markers_by_site_cluster,fgsea_c6_set_up_only,"C6","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C6_fora_bar_by_site_clusters.pdf")
+run_fora_analysis(all_markers_by_site_cluster,fgsea_c8_set,"C8","02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_C8_fora_bar_by_site_clusters.pdf")
 
 
 ## For heatmap (Fig 2.) Highlight genes from top enriched sets

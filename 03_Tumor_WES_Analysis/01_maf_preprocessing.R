@@ -1,4 +1,5 @@
 library(dplyr)
+library(maftools)
 ## This script filters the MAF to only retain high confidence tumor variant calls
 
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")

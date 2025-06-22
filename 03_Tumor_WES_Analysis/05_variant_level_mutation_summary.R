@@ -81,6 +81,7 @@ recurrent_mutation_plot = ggplot(mut_by_site_table,aes(x=tumor_mutation_id_short
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),legend.position="top")
 recurrent_mutation_plot
 ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.png",height=4,width=6)
+ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.pdf",height=4,width=6)
 
 ## Also calculate the AlphaMissense scores for each of the variant
 ## Uniprot ID file = uniprot_to_gene_names.txt
@@ -124,6 +125,7 @@ mut_count_alphamissense_plot = ggplot(mut_freq_df_mut_recurrent_only_with_score,
   theme_minimal() +
   labs(x="# of Patients with Mutation",y="AlphaMissense Pathogenicity Score")
 ggsave("03_Tumor_WES_Analysis/outputs/plots/05_variant_patients_by_am_pathogenicity.png",mut_count_alphamissense_plot,dpi=300,height=6,width=12)
+ggsave("03_Tumor_WES_Analysis/outputs/plots/05_variant_patients_by_am_pathogenicity.pdf",mut_count_alphamissense_plot,dpi=300,height=6,width=12)
 
 ## Make a "representative somatic / germline mutation" per sample table that has somatic vs. germline mutation?
 ## Somatic Logic: Hotspot Mutation -> Mutation in Mutsig Significant Gene -> Mutation in COSMIC Cancer Tier 1 gene
