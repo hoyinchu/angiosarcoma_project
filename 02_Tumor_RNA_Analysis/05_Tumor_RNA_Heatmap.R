@@ -620,6 +620,12 @@ representative_somatic_muts_merged = representative_somatic_muts_merged %>% muta
 
 representative_somatic_muts_merged
 
+## Check if there is a purity bias by primary site
+ggplot(representative_somatic_muts_merged, aes(x = hcluster_by_expr_str, y = ESTIMATE_purity)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, alpha = 0.5) +
+  stat_compare_means(method = "kruskal.test") 
+
 ## Top Annotation
 age_col_annot = colorRamp2(c(20, 80), c("white", "purple"))
 purity_col_annot = colorRamp2(c(0.4,1), c("white", "pink"))
@@ -731,6 +737,18 @@ hclust_res_pos[hclust_res_pos$gene=="FLT4",]
 
 ## Check FORA results for cluster 5
 head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 5")&(hclust_combined_fora$term_set=="Hallmarks"),])
+head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 5")&(hclust_combined_fora$term_set=="C6"),])
+## Check expression of IL37 and CTLA4
+deseq2_combined_fora[deseq2_combined_fora$gene=="IL37",]
+all_deseq_res_pos[all_deseq_res_pos$gene=="CTLA4",]
 
+## Check the cluster assignments for HNFS angiosarcomas
+site_by_cluster_table
+## Check FORA results for cluster 4
+head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 2")&(hclust_combined_fora$term_set=="Hallmarks"),])
+head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 3")&(hclust_combined_fora$term_set=="Hallmarks"),])
+## Check expression of SRBF2
+all_deseq_res_pos[all_deseq_res_pos$gene=="SREBF2",]
+hclust_res_pos[hclust_res_pos$gene=="SREBF2",]
 
 

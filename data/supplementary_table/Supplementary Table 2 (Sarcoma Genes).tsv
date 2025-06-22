@@ -1,0 +1,249 @@
+Gene	in_Gillani_Table_S3	in_Ballinger_Table_S3	in_Mirabello_Gene_List	COSMIC_Tier	COSMIC_Somatic	COSMIC_Germline	COSMIC_Somatic_Tumour_Types	COSMIC_Germline_Tumour_Types	COSMIC_Cancer_Syndrome	COSMIC_Tissue_Type	COSMIC_Molecular_Genetics	COSMIC_Role_in_Cancer	COSMIC_Mutation_Types	num_studies_reporting	to_include
+APC	True	True	True	1.0	yes	yes	colorectal, pancreatic, desmoid, hepatoblastoma, glioma, other CNS	colorectal, pancreatic, desmoid, hepatoblastoma, glioma, other CNS	adenomatous polyposis coli; Turcot syndrome	E, M, O	Rec	TSG	D, Mis, N, F, S	3	True
+ATM	True	True	True	1.0	yes	yes	T-PLL	leukaemia, lymphoma, medulloblastoma, glioma	ataxia-telangiectasia	L, O	Rec	TSG	D, Mis, N, F, S	3	True
+ATR	True	True	True	1.0	yes	yes	endometrial, gastric, epithelial ovarian, myeloma	oropharyngeal	familial cutaneous telangiectasia and cancer syndrome	E, L	Dom	TSG	F, Mis	3	True
+BAP1	True	False	True	1.0	yes	yes	uveal melanoma, breast, NSCLC, RCC	mesothelioma, skin and uveal melanoma, kidney cancer	BAP1 tumor predisposition syndrome	E	Rec	TSG	N, Mis, F, S, O	2	True
+BARD1	True	True	True	1.0	yes	yes	breast cancer	ovarian cancer, breast cancer, endometrioid cancer		E		TSG	Mis	3	True
+BLM	True	True	True	1.0		yes		leukaemia, lymphoma, skin squamous cell, other tumour types	Bloom syndrome	L, E	Rec	TSG	Mis, N, F	3	True
+BMPR1A	True	False	True	1.0		yes		gastrointestinal polyps	juvenile polyposis	E	Rec	oncogene, TSG	Mis, N, F	2	True
+BRCA1	True	True	True	1.0	yes	yes	ovarian	breast, ovarian	hereditary breast/ovarian cancer	E	Rec	TSG	D, Mis, N, F, S	3	True
+BRCA2	True	True	True	1.0	yes	yes	breast, ovarian, pancreatic	breast, ovarian, pancreatic, leukaemia  (FANCB, FANCD1)	hereditary breast/ovarian cancer	L, E	Rec	TSG	D, Mis, N, F, S	3	True
+BRIP1	True	True	True	1.0		yes		AML, leukaemia, breast	Fanconi anaemia J, breast cancer susceptiblity	L, E	Rec	TSG	F, N, Mis	3	True
+CHEK1	False	True	False											1	False
+CHEK2	True	True	True	1.0		yes		breast	familial breast cancer	E	Rec	TSG	F	3	True
+DDB2	True	True	True	1.0		yes		skin basal cell, skin squamous cell, melanoma	xeroderma pigmentosum (E)	E	Rec	oncogene, TSG	Mis, N	3	True
+ERCC2	True	True	True	1.0		yes		skin basal cell, skin squamous cell, melanoma	xeroderma pigmentosum (D)	E	Rec	TSG	Mis, N, F, S	3	True
+ERCC3	True	True	True	1.0		yes		skin basal cell, skin squamous cell, melanoma	xeroderma pigmentosum (B)	E	Rec	TSG	Mis, S	3	True
+ERCC4	True	True	True	1.0		yes		skin basal cell, skin squamous cell, melanoma	xeroderma pigmentosum (F)	E	Rec	TSG	Mis, N, F	3	True
+ERCC5	True	True	True	1.0		yes		skin basal cell, skin squamous cell, melanoma	xeroderma pigmentosum (G)	E	Rec	TSG	Mis, N, F	3	True
+FANCA	True	True	True	1.0		yes		AML, leukaemia	Fanconi anaemia A	L	Rec	TSG	D, Mis, N, F, S	3	True
+FANCB	False	True	True											2	False
+FANCC	True	True	True	1.0		yes		AML, leukaemia	Fanconi anaemia C	L	Rec	TSG	D, Mis, N, F, S	3	True
+FANCD2	True	True	True	1.0		yes		AML, leukaemia	Fanconi anaemia D2	L	Rec	TSG	D, Mis, N, F	3	True
+FANCE	True	True	True	1.0		yes		AML, leukaemia	Fanconi anaemia E	L	Rec	TSG	N, F, S	3	True
+FANCF	True	True	True	1.0		yes		AML, leukaemia	Fanconi anaemia F	L	Rec	TSG	N, F	3	True
+FANCG	True	True	True	1.0		yes		AML, leukaemia	Fanconi anaemia G	L	Rec	TSG	Mis, N, F, S	3	True
+FANCI	True	True	True											3	False
+FANCL	True	True	True											3	False
+FANCM	True	True	True											3	False
+IDH1	False	True	True	1.0	yes		glioblastoma			O	Dom	oncogene	Mis	2	True
+IDH2	False	True	True	1.0	yes		glioblastoma			O	Dom	oncogene	Mis	2	True
+MLH1	True	True	True	1.0	yes	yes	colorectal, endometrial, ovarian, CNS tumours	colorectal, endometrial, ovarian, CNS	hereditary non-polyposis colorectal cancer, Turcot syndrome	E, O	Rec	TSG	D, Mis, N, F, S	3	True
+MLH3	False	True	False											1	False
+MRE11A	False	True	False											1	False
+MSH2	True	True	True	1.0	yes	yes	colorectal, endometrial, ovarian	colorectal, endometrial, ovarian	hereditary non-polyposis colorectal cancer	E	Rec	TSG	D, Mis, N, F, S	3	True
+MSH6	True	True	True	1.0	yes	yes	colorectal	colorectal, endometrial, ovarian	hereditary non-polyposis colorectal cancer	E	Rec	TSG	Mis, N, F, S	3	True
+MUTYH	True	True	True	1.0		yes		colorectal	adenomatous polyposis coli	E	Rec	TSG	Mis	3	True
+NBN	True	True	True	1.0		yes		NHL, glioma, medulloblastoma, rhabdomyosarcoma	Nijmegen breakage syndrome	L, E, M, O	Rec	TSG	Mis, N, F	3	True
+NTHL1	True	False	True	2.0		yes		CRC	Familial adenomatous polyposis	E		TSG	N, S	2	False
+PALB2	True	True	True	1.0		yes		Wilms tumour, medulloblastoma, AML ,breast	Fanconi anaemia N, breast cancer susceptibility	L, O, E	Rec	TSG	F, N, Mis	3	True
+PMS1	False	True	True	2.0		yes		colorectal, endometrial, ovarian	hereditary non-polyposis colorectal cancer	E	Rec		Mis, N	2	False
+PMS2	True	True	True	1.0		yes		colorectal, endometrial, ovarian, medulloblastoma, glioma	hereditary non-polyposis colorectal cancer, Turcot syndrome	E	Rec	TSG	Mis, N, F	3	True
+POLD1	True	False	True	1.0	yes	yes	CRC	CRC	Lynch syndrome	E		TSG	Mis	2	True
+POLE	True	False	True	1.0	yes	yes	colorectal carcinoma, endometrioid carcinoma, stomach carcinoma, skin cancer	colorectal cancer susceptibility		E	Rec	TSG	Mis	2	True
+POLH	True	False	True											2	False
+RAD51C	True	True	True											3	False
+RECQL4	True	True	True	1.0		yes		osteosarcoma, skin basal cell, skin sqamous cell	Rothmund-Thompson syndrome	M	Rec	oncogene, TSG	N, F, S	3	True
+SLX4	True	False	True											2	False
+SMAD4	True	False	True	1.0	yes	yes	colorectal, pancreatic, small intestine	gastrointestinal polyp	juvenile polyposis	E	Rec	TSG	D, Mis, N, F	2	True
+STK11	True	True	True	1.0	yes	yes	NSCLC, pancreatic	jejunal hamartoma, ovarian, testicular, pancreatic	Peutz-Jeghers syndrome	E, M, O	Rec	TSG	D, Mis, N, F, S	3	True
+TP53	True	True	True	1.0	yes	yes	breast, colorectal, lung, sarcoma, adrenocortical, glioma, Spitzoid tumour, multiple other tumour types	breast, sarcoma, adrenocortical carcinoma, glioma, multiple other tumour types	Li-Fraumeni syndrome	L, E, M, O	Rec	oncogene, TSG, fusion	Mis, N, F, T	3	True
+TP53BP1	False	True	False											1	False
+WRN	True	True	True	1.0		yes		osteosarcoma, meningioma, other tumour types	Werner syndrome	L, E, M, O	Rec	TSG	Mis, N, F, S	3	True
+ABCB11	True	False	True											2	False
+ACD	True	False	True											2	False
+AIP	True	False	True											2	False
+ALK	True	False	True	1.0	yes	yes	ALCL, NSCLC, neuroblastoma, inflammatory myofibroblastic tumour, Spitzoid tumour	neuroblastoma	familial neuroblastoma	L, E, M	Dom	oncogene, fusion	T, Mis, A	2	True
+AXIN1	False	True	False	1.0	yes		colorectal, endometrial, prostate, hepatocellular carcinoma, hepatoblastoma, sporadic medulloblastoma			E, O	Rec	TSG	D, Mis, N, F, S	1	False
+AXIN2	True	True	True	1.0	yes	yes	colorectal carcinoma, stomach carcinoma, hepatocellular carcinoma	colorectal carcinoma	oligodontia-colorectal cancer syndrome	E	Rec	TSG	Mis, F, N	3	True
+BRAF	True	False	True	1.0	yes		melanoma, colorectal, papillary thyroid, borderline ovarian, NSCLC, cholangiocarcinoma, pilocytic astrocytoma, Spitzoid tumour, pancreas acinar carcinoma, melanocytic nevus, prostate, gastric			E, O	Dom	oncogene, fusion	Mis, T, O	2	True
+BUB1B	True	True	True	1.0		yes		rhabdomyosarcoma	mosaic variegated aneuploidy	M	Rec	TSG	Mis, N, F, S	3	True
+CBL	True	False	True	1.0	yes		AML, JMML, MDS			L	Dom/Rec	oncogene, TSG, fusion	T, Mis, S, O	2	True
+CDC73	True	False	True	1.0	yes	yes	parathyroid adenoma	parathyroid adenoma, multiple ossifying jaw fibroma	hyperparathyroidism-jaw tumour syndrome	E, M	Rec	TSG	Mis, N, F	2	True
+CDH1	True	False	True	1.0	yes	yes	lobular breast, gastric	gastric	familial gastric carcinoma	E	Rec	TSG	Mis, N, F, S	2	True
+CDK4	True	False	True	1.0		yes		melanoma	familial malignant melanoma	E	Dom	oncogene	Mis	2	True
+CDKN1B	True	False	True	1.0	yes	yes	breast, small intestine neuroendocrine tumours	pituitary, parathyroid	multiple endocrine neoplasia type IV	E	Rec	TSG	F	2	True
+CDKN1C	True	False	True											2	False
+CDKN2A	True	True	True	1.0	yes	yes	melanoma, multiple other tumour types	melanoma, pancreatic	familial malignant melanoma	L, E, M, O	Rec	TSG	D, Mis, N, F, S	3	True
+CDKN2B	True	False	True											2	False
+CEBPA	True	False	True	1.0	yes		AML, MDS			L	Dom	TSG	Mis, N, F	2	True
+CYLD	True	False	True	1.0	yes	yes	cylindroma	cylindroma	familial cylindromatosis, familial trichoepithelioma, Brooke-Spiegler syndrome	E	Rec	TSG	Mis, N, F, S	2	True
+DDX41	True	False	True											2	False
+DICER1	True	False	True	1.0	yes	yes	sex cord-stromal tumour, TGCT, embryonal rhabdomyosarcoma, pleuropulmonary blastoma, pituitary blastoma, Wilms tumour, thyroid cancer, other tumour types	pleuropulmonary blastoma	familial pleuropulmonary blastoma or DICER1 syndrome	E, M, O	Rec	TSG	Mis, F, N	2	True
+DIS3L2	True	False	True											2	False
+DKC1	True	False	True											2	False
+EGFR	True	False	True	1.0	yes	yes	glioma, NSCLC	NSCLC	familial lung cancer	E, O	Dom	oncogene	A, O, Mis	2	True
+EPCAM	True	False	True											2	False
+ERCC1	True	False	True											2	False
+ETV6	True	False	True	1.0	yes		congenital fibrosarcoma, multiple different leukaemia and lymphoma tumour types including ALL, secretory breast, MDS			L, E, M	Dom	TSG, fusion	T	2	True
+EXT1	True	True	True	1.0		yes		exostoses, osteosarcoma	multiple exostoses type 1	M	Rec	TSG, fusion	Mis, N, F, S	3	True
+EXT2	True	True	True	1.0		yes		exostoses, osteosarcoma	multiple exostoses type 2	M	Rec	TSG	Mis, N, F, S	3	True
+FAH	True	False	True											2	False
+FAM175A	False	True	False											1	False
+FH	True	True	True	1.0		yes		leiomyomatosis, renal	hereditary leiomyomatosis and renal cell cancer	E, M	Rec	TSG	Mis, N, F	3	True
+FLCN	True	False	True	1.0		yes		renal, fibrofolliculomas, trichodiscomas	Birt-Hogg-Dube syndrome	E, M	Rec	TSG	Mis. N, F	2	True
+GATA2	True	False	True	1.0	yes		AML (CML blast transformation)			L	Dom	oncogene	Mis	2	True
+GPC3	True	False	True	1.0		yes		Wilms tumour	Simpson-Golabi-Behmel syndrome	O	Rec/X	oncogene, TSG	D, Mis, N, F, S	2	True
+HFE	True	False	True											2	False
+HMBS	True	False	True											2	False
+HNF1A	True	False	True	1.0	yes	yes	hepatic adenoma, hepatocellular	hepatic adenoma, hepatocellular carcinoma	familial hepatic adenoma	E	Rec	TSG	Mis, F	2	True
+HRAS	True	False	True	1.0	yes	yes	infrequent sarcomas, rare other tumour types	rhabdomyosarcoma, ganglioneuroblastoma, bladder	Costello syndrome	E, L, M	Dom	oncogene	Mis	2	True
+KIT	True	False	True	1.0	yes	yes	GIST, AML, TGCT, mastocytosis, mucosal melanoma	GIST, epithelioma	familial gastrointestinal stromal tumour	L, M, O, E	Dom	oncogene	Mis, O	2	True
+KRAS	True	False	True	1.0	yes		pancreatic, colorectal, lung, thyroid, AML, other tumour types			L, E, M, O	Dom	oncogene	Mis	2	True
+LZTR1	True	False	True	1.0	yes	yes	glioblastoma	glioblastoma, schwannoma	Schwannomatosis-2	E	Dom	TSG	Mis, F, N	2	True
+MAP2K1	True	False	True	1.0	yes		NSCLC, melanoma, colorectal			E	Dom	oncogene	Mis	2	True
+MAP2K2	True	False	True	1.0	yes		NSCLC, melanoma			E	Dom	oncogene	Mis	2	True
+MAX	True	False	True	1.0	yes	yes	pheochromocytoma, endometrioid carcinoma, colon carcinoma	pheochromocytoma		E, O	Rec	TSG	Mis, N, F	2	True
+MEN1	True	True	True	1.0	yes	yes	parathyroid tumours, pancreatic neuroendocrine tumour	parathyroid adenoma, pituitary adenoma, pancreatic islet cell, carcinoid	multiple endocrine neoplasia type 1	E	Rec	TSG	D, Mis, N, F, S	3	True
+MET	True	False	True	1.0	yes		papillary renal, head-neck squamous cell	papillary renal	familial papillary renal cancer	E	Dom	oncogene	Mis	2	True
+MITF	True	False	True	1.0	yes		melanoma			E	Dom	oncogene	A	2	True
+MPL	True	False	True	1.0	yes	yes	MPN	MPN	familial essential thrombocythemia	L	Dom	oncogene	Mis	2	True
+MTAP	True	False	True											2	False
+NF1	True	True	True	1.0	yes	yes	neurofibroma, glioma	neurofibroma, glioma	neurofibromatosis type 1	O	Rec	TSG, fusion	D, Mis, N, F, S, O	3	True
+NF2	True	True	True	1.0	yes	yes	meningioma, acoustic neuroma, renal	meningioma, acoustic neuroma	neurofibromatosis type 2	O	Rec	TSG	D, Mis, N, F, S, O	3	True
+NHP2	True	False	True											2	False
+NRAS	True	False	True	1.0	yes		melanoma, MM, AML, thyroid			L, E	Dom	oncogene	Mis	2	True
+PDGFRA	True	False	True	1.0	yes	yes	GIST, idiopathic hypereosinophilic syndrome, paediatric glioblastoma	GIST	familial gastrointestinal stromal tumour	L, M, O	Dom	oncogene, fusion	Mis, O, T	2	True
+PHOX2B	True	False	True	1.0	yes	yes	neuroblastoma	neuroblastoma	familial neuroblastoma	O	Rec	TSG	Mis, F	2	True
+POT1	True	False	True	1.0	yes		CLL			L	Dom	TSG	Mis, N	2	True
+PRF1	True	False	True	1.0		yes		various leukaemia, lymphoma		L	Rec	TSG	M	2	True
+PRKAR1A	True	False	True	1.0	yes	yes	papillary thyroid	myxoma, endocrine, papillary thyroid	Carney complex	E, M	Dom/Rec	oncogene, TSG, fusion	T, Mis, N, F, S	2	True
+PTCH1	True	True	True	1.0	yes	yes	skin basal cell, medulloblastoma	skin basal cell, medulloblastoma	nevoid basal cell carcinoma syndrome	E, M	Rec	TSG	Mis, N, F, S	3	True
+PTCH2	True	False	True											2	False
+PTEN	True	True	True	1.0	yes	yes	glioma, prostate, endometrial	harmartoma, glioma, prostate, endometrial	Cowden syndrome, Bannayan-Riley-Ruvalcaba syndrome	L, E, M, O	Dom	TSG	D, Mis, N, F, S	3	True
+PTPN11	True	False	True	1.0	yes		JMML, AML, MDS			L	Dom	oncogene	Mis	2	True
+RAD50	False	True	False											1	False
+RAD51D	True	False	True											2	False
+RAF1	True	False	True	1.0	yes		pilocytic astrocytoma, prostate			O, E	Dom	oncogene, fusion	T, A	2	True
+RB1	True	True	True	1.0	yes	yes	retinoblastoma, sarcoma, breast, small cell lung carcinoma	retinoblastoma, sarcoma, breast, small cell lung carcinoma	familial retinoblastoma	L, E, M, O	Rec	TSG	D, Mis, N, F, S	3	True
+RECQL	True	False	False											1	False
+RET	True	False	True	1.0	yes	yes	medullary thyroid, papillary thyroid, pheochromocytoma, NSCLC, Spitzoid tumour	medullary thyroid,  papillary thyroid, pheochromocytoma	multiple endocrine neoplasia 2A/2B	E, O	Dom	oncogene, fusion	T, Mis, N, F	2	True
+RFWD3	True	False	False	2.0	yes	yes	lung cancer		Fanconi anemia W	E		TSG	D	1	False
+RHBDF2	True	False	True											2	False
+RTEL1	True	False	True											2	False
+RUNX1	True	False	True	1.0	yes		AML, pre B-ALL, T-ALL			L	Dom	oncogene, TSG, fusion	T	2	True
+SBDS	True	False	True	1.0		yes		AML, MDS	Schwachman-Diamond syndrome	L	Rec	TSG	F, N, O	2	True
+SDHA	True	True	True	1.0	yes	yes	GIST, paraganglioma	paraganglioma	paragangliomas-5 (PGL5)	M, O	Rec	TSG	Mis, N	3	True
+SDHAF2	True	False	True	1.0		yes		paraganglioma	familial paraganglioma	M	Rec	TSG	M	2	True
+SDHB	True	True	True	1.0		yes		paraganglioma, pheochromocytoma	familial paraganglioma	O	Rec	TSG	Mis, N, F	3	True
+SDHC	True	True	True	1.0		yes		paraganglioma, pheochromocytoma	familial paraganglioma	O	Rec	TSG	Mis, N, F	3	True
+SDHD	True	True	True	1.0		yes		paraganglioma, pheochromocytoma	familial paraganglioma	O	Rec	TSG	Mis, N, F, S	3	True
+SETBP1	True	False	True	1.0	yes	yes	aCML, sAML, MDS/MPN-U, CMML, JMML	neuroepithelial tumours	Schinzel-Giedion syndrome	L	Dom	oncogene, fusion	Mis, T	2	True
+SH2D1A	True	False	True											2	False
+SLC25A13	True	False	True											2	False
+SMARCA4	True	False	True	1.0	yes		NSCLC, SCCOHT			E	Rec	TSG	F, N, Mis, S	2	True
+SMARCB1	True	False	True	1.0	yes	yes	malignant rhabdoid	malignant rhabdoid	rhabdoid predisposition syndrome	M	Rec	TSG	D, N, F, S	2	True
+SMARCE1	True	False	True	1.0		yes		meningioma		O	Rec	TSG	F, Mis, N	2	True
+SOS1	True	False	True											2	False
+SPRTN	True	False	True											2	False
+SRP72	True	False	True											2	False
+STAT3	True	False	True	1.0	yes	yes	T-cell large granular lymphocytic leukaemia	paediatric large granular lymphocytic leukaemia		L	Dom	oncogene	Mis,O	2	True
+SUFU	True	False	True	1.0	yes	yes	medulloblastoma	medulloblastoma	medulloblastoma predisposition	O	Rec	TSG	D, F, S	2	True
+TERT	True	False	True	1.0	yes	yes	melanoma, glioblastoma, hepatocellular carcinoma, bladder, skin basal cell, skin squamous cell, mesothelioma, medulloblastoma, other tumour types	melanoma		E, O	Dom	oncogene, TSG	Promoter Mis	2	True
+TGFBR1	True	False	True											2	False
+TINF2	True	False	True											2	False
+TMEM127	True	False	True	1.0		yes		pheochromocytoma, renal cell carcinoma		O, E	Rec	TSG	F, N	2	True
+TRIM37	True	False	True											2	False
+TSC1	True	True	True	1.0	yes	yes	renal cell carcinoma, bladder carcinoma	hamartoma, renal cell carcinoma, tuberous sclerosis tuber	Tuberous sclerosis 1	E, O	Rec	TSG	D, Mis, N, F, S	3	True
+TSC2	True	True	True	1.0	yes	yes	pulmonary lymphangioleiomyomatosis (LAM), renal angiomyolipoma, HNSCC	hamartoma, renal cell carcinoma, tuberous sclerosis tuber	Tuberous sclerosis 2	E, O	Rec	TSG	D, Mis, N, F, S	3	True
+TSHR	True	False	True	1.0	yes	yes	toxic thyroid adenoma	thyroid adenoma		E	Dom	oncogene	Mis	2	True
+UROD	True	False	True											2	False
+VHL	True	True	True	1.0	yes	yes	renal, haemangioma, pheochromocytoma	renal, haemangioma, pheochromocytoma	Von Hippel-Lindau syndrome	E, M, O	Rec	TSG	D, Mis, N, F, S	3	True
+WT1	True	True	True	1.0	yes	yes	Wilms tumour, desmoplastic small round cell tumour	Wilms tumour	Denys-Drash syndrome, Frasier syndrome, familial Wilms tumour	O	Rec	oncogene, TSG, fusion	D, Mis, N, F, S, T	3	True
+ATRX	True	False	False	1.0	yes		pancreatic neuroendocrine tumours, paediatric GBM			E	Rec	TSG	Mis, F, N	1	False
+XPA	False	True	True	1.0		yes		skin basal cell, skin squamous cell, melanoma	xeroderma pigmentosum (A)	E	Rec	TSG	Mis, N, F, S	2	True
+XPC	False	True	True	1.0		yes		skin basal cell, skin squamous cell, melanoma	xeroderma pigmentosum (C)	E	Rec	TSG	Mis, N, F, S	2	True
+XRCC2	False	True	False											1	False
+AGL	False	False	True											1	False
+ANKRD26	False	False	True											1	False
+APOBEC3B	False	False	True	1.0		yes		breast cancer		E	Rec	oncogene, TSG	D	1	False
+AR	False	False	True	1.0	yes	yes	prostate			E	Dom	oncogene	Mis	1	False
+ASXL1	False	False	True	1.0	yes		MDS, CMML			L	Rec	TSG	F, N, Mis	1	False
+ATG2B	False	False	True											1	False
+CEP57	False	False	True											1	False
+COL7A1	False	False	True											1	False
+CREBBP	False	False	True	1.0	yes		ALL, AML, DLBCL, B-NHL			L	Dom/Rec	oncogene, TSG, fusion	T, N, F, Mis, O	1	False
+CTC1	False	False	True											1	False
+CTR9	False	False	True											1	False
+CXCR4	False	False	True	1.0	yes	yes	WM			L	Dom	oncogene	Mis, N, F	1	False
+DHCR7	False	False	True											1	False
+DOCK8	False	False	True											1	False
+ELANE	False	False	True											1	False
+EP300	False	False	True	1.0	yes		colorectal, breast, pancreatic, AML, ALL, DLBCL			L, E	Rec	TSG, fusion	T,  N, F, Mis, O	1	False
+ERBB4	False	False	True	1.0	yes	yes	melanoma, gastric, NSCLC			E	Dom	oncogene, TSG	Mis, N	1	False
+EZH2	False	False	True	1.0	yes		DLBCL			L	Dom	oncogene, TSG	Mis	1	False
+FAS	False	False	True	1.0	yes		TGCT, nasal NK/T lymphoma, skin squamous cell carcinoma-burn scar related			L, E, O	Rec	TSG	Mis	1	False
+FAT1	False	False	True	1.0	yes	yes	oral squamous cell, chemorefractory CLL, head and neck, pancreatic acinar cell carcinoma	pancreatic		E, L		TSG	Mis, N, F, S	1	False
+FGFR2	False	False	True	1.0	yes		gastric, NSCLC, endometrial			E	Dom	oncogene, fusion	Mis	1	False
+FGFR3	False	False	True	1.0	yes		bladder, MM, T-cell lymphoma			L, E	Dom	oncogene, fusion	Mis, T	1	False
+FMR1	False	False	True											1	False
+FOXE1	False	False	True											1	False
+G6PC	False	False	True											1	False
+GALNT12	False	False	True											1	False
+GALNT14	False	False	True											1	False
+GATA1	False	False	True	1.0	yes		megakaryoblastic leukaemia of Downs syndrome			L	Dom	oncogene, TSG	Mis, F	1	False
+GBA	False	False	True											1	False
+GJB2	False	False	True											1	False
+GLI3	False	False	True											1	False
+GNAS	False	False	True	1.0	yes		pituitary adenoma, pancreatic intraductal papillary mucinous neoplasm, fibrous dysplasia			E, M	Dom	oncogene	Mis	1	False
+GPC4	False	False	True											1	False
+GREM1	False	False	True											1	False
+GSKIP	False	False	True											1	False
+HABP2	False	False	True											1	False
+HOXB13	False	False	True											1	False
+IKZF1	False	False	True	1.0	yes		ALL, DLBCL			L	Dom/Rec	TSG, fusion	D,T	1	False
+IPMK	False	False	True											1	False
+ITK	False	False	True	1.0	yes		peripheral T-cell lymphoma			L	Dom	fusion	T	1	False
+KMT2D	False	False	True	1.0	yes		medulloblastoma, renal			O, E	Rec	oncogene, TSG	N, F, Mis	1	False
+L2HGDH	False	False	True											1	False
+LMO1	False	False	True	1.0	yes	yes	T-ALL, neuroblastoma	neuroblastoma		L	Dom	oncogene, fusion	T, A	1	False
+MC1R	False	False	True											1	False
+MRE11	False	False	True											1	False
+MSH3	False	False	True											1	False
+NFIX	False	False	True											1	False
+NKX2-1	False	False	True	1.0	yes		NSCLC			E	Dom	oncogene, TSG	A	1	False
+NOTCH3	False	False	True											1	False
+NSD1	False	False	True	1.0	yes		AML			L	Dom	fusion	T	1	False
+NTRK1	False	False	True	1.0	yes		papillary thyroid, Spitzoid tumour			E	Dom	oncogene, TSG, fusion	T, A	1	False
+PARN	False	False	True											1	False
+PAX5	False	False	True	1.0	yes		NHL, ALL, B-ALL			L	Dom	oncogene, TSG, fusion	T, Mis, D, F, S	1	False
+PAX6	False	False	True											1	False
+PBRM1	False	False	True	1.0	yes		clear cell renal carcinoma, breast			E	Rec	TSG	Mis, N, F, S, D, O	1	False
+PDGFRB	False	False	True	1.0	yes		MPN, AML, CMML, CML			L	Dom	oncogene, fusion	T	1	False
+PHF6	False	False	True	1.0	yes		ETP ALL			L	Rec	TSG	F, N, S, Mis	1	False
+PPOX	False	False	True											1	False
+PRSS1	False	False	True											1	False
+PTPN13	False	False	True	1.0	yes	yes	lung, NSCLC, gastric, peritoneal carcinomatosis	hepatocellular	Familial Hepatocellular Carcinoma	E	Rec	TSG	Mis, N	1	False
+RAD51	False	False	True											1	False
+REST	False	False	True											1	False
+RPL11	False	False	True											1	False
+RPL15	False	False	True											1	False
+RPL26	False	False	True											1	False
+RPL27	False	False	True											1	False
+RPL31	False	False	True											1	False
+RPL35A	False	False	True											1	False
+RPL5	False	False	True	1.0	yes		T-ALL			L	Dom	TSG	Mis, N, F	1	False
+RPS10	False	False	True											1	False
+RPS19	False	False	True											1	False
+RPS24	False	False	True											1	False
+RPS26	False	False	True											1	False
+RPS27	False	False	True											1	False
+RPS29	False	False	True											1	False
+RPS7	False	False	True											1	False
+SAMD9	False	False	True											1	False
+SAMD9L	False	False	True											1	False
+SERPINA1	False	False	True											1	False
+SH2B3	False	False	True	1.0	yes		MPN, sAML, erythrocytosis, B-ALL			L	Rec	TSG	Mis, F, N	1	False
+SHOC2	False	False	True											1	False
+SMARCA2	False	False	True											1	False
+SMO	False	False	True	1.0	yes		skin basal cell			E	Dom	oncogene	Mis	1	False
+SOS2	False	False	True											1	False
+SPOP	False	False	True	1.0	yes	yes	prostate, endometrial	prostate cancer		E	Rec	TSG	Mis	1	False
+SRY	False	False	True											1	False
+TFAP2A	False	False	True											1	False
+TGFBR2	False	False	True	1.0	yes	yes	head and neck, colorectal	colorectal	Hereditary Nonpolyposis Colorectal Cancer type 6	E	Rec	TSG	Mis, F, N	1	False
+TP63	False	False	True	1.0	yes	yes	HNSCC, DLBCL	NSCLC		E		oncogene, TSG	Mis, N, T	1	False
+TSR2	False	False	True											1	False
+WAS	False	False	True	1.0		yes		lymphoma	Wiskott-Aldrich syndrome	L	Rec/X	oncogene	Mis, N, F, S	1	False
+WRAP53	False	False	True											1	False
+XRCC3	False	False	True											1	False

@@ -461,6 +461,10 @@ hclust_combined_fora$overlapGenes = sapply(hclust_combined_fora$overlapGenes,fun
 ## Write down FORA results
 write.table(hclust_combined_fora,file = "02_Tumor_RNA_Analysis/outputs/DEGs/02_expr_hclust_combined_FORA_results.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 
+## (Update May 12 2025)
+all_deseq_res_pos
+
+
 plot_combined_fora = function(fora_df,term_set_filter,pathway_col="pathway_minimized") {
   top_hallmark_foras = fora_df %>% filter(term_set==term_set_filter) %>%
     group_by(cluster) %>% 

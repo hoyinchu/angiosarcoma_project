@@ -94,8 +94,9 @@ tmb_by_site_plot = ggplot(sample_meta_df_added,aes(x=fct_reorder(`Primary Site (
   annotation_logticks(sides = 'l') +
   stat_compare_means(comparisons = list(
     c("Breast (Cutaneous)","Breast (Parenchymal)"),
-    c("HNFS","Breast (Cutaneous)")
-    ),label = after_stat("p.signif")) +
+    c("HNFS","Breast (Cutaneous)"),
+    c("HNFS","Breast (Parenchymal)")
+    ),label="p.format") +
   geom_jitter(width=0.25)
 tmb_by_site_plot
 ggsave(filename="03_Tumor_WES_Analysis/outputs/plots/03_TMB_by_primary_sites.png",tmb_by_site_plot,dpi=300,height = 4,width=12)

@@ -110,7 +110,7 @@ hclust_dist_matrix = dist(t(genes_to_use_for_hclust), method = "euclidean")
 hclust_res = hclust(hclust_dist_matrix, method = "ward.D2")
 
 ## Assign clusters via DynamicCut
-sample_clusters = cutreeDynamic(dendro = hclust_res,minClusterSize = 10)
+#sample_clusters = cutreeDynamic(dendro = hclust_res,minClusterSize = 10)
 ## Asign clusters via cut height
 sample_clusters = cutree(hclust_res, k = NULL, h = 200)
 
@@ -167,42 +167,42 @@ so@meta.data = so@meta.data %>% mutate(rna_inferred_female = ifelse(!is.na(`SEX 
 #so@meta.data$seurat_clusters_renamed = as.integer(so@meta.data$seurat_clusters_by_site)
 #so@meta.data$seurat_clusters_renamed_str = paste0("Cluster ",so@meta.data$seurat_clusters_renamed)
 
-### This section adds the module scores ###
-### Does not work at the current moment ###
-so = JoinLayers(so)
-## Add radioresistance score
-radioresistance_genes_df = read.csv("data/public/Marcone2021_Radioresistance_Geneset.csv",check.names = FALSE)
-radioresistance_genes = radioresistance_genes_df[radioresistance_genes_df$`Fold change` > 1,]$`Gene names`
-so = AddModuleScore(so, list(radioresistance_genes),name="radioresistance_score",slot="data")
-
-## Add radiation exposure score
-radiation_exposure_genes_df = read.csv("data/public/Paul2013_RadiationExposure_Geneset.csv",check.names = FALSE)
-radiation_exposure_genes = radiation_exposure_genes_df$Symbol
-so = AddModuleScore(so, list(radiation_exposure_genes),name="radiation_exposure_score",slot="data")
-
-## Add angiogenesis score
-## TODO: retrospectively add gene set here
-fgsea_hallmark_set = msigdbr(species = "Homo sapiens", category = "H") %>% split(x = .$gene_symbol, f = .$gs_name)
-so = AddModuleScore(so, list(fgsea_hallmark_set$HALLMARK_ANGIOGENESIS),name="angiogenesis_score",slot="data")
-
-## Add Lympoangiogenesis score
-fgsea_c2_set = msigdbr(species = "Homo sapiens", category = "C2")  %>% split(x = .$gene_symbol, f = .$gs_name)
-lymphoangiogenesis_set = fgsea_c2_set$KEGG_CHRONIC_MYELOID_LEUKEMIA #c("IL4", "CSF2", "PROX1", "TEK")
-so = AddModuleScore(so, list(lymphoangiogenesis_set),name="lymphangiogenesis_score",slot="data")
-
-## Add EndMT score
-## From Choi K. et al: Endothelial-to-mesenchymal transition in anticancer therapy and normal tissue damage
-EndMT_genes = c("TGFB1","TGFB2","AIFM2","SNAI1","SNAI2","ZEB1","ZEB2","ACTA2")
-so = AddModuleScore(so, list(EndMT_genes),name="endMT_score",slot="data")
-
-## Add fibroblast score
-fibroblast_genes = c("SCN1A","DPT","HSD11B1","CD34","CELF2","ENTPD2","COL5A1","GSN","SLC43A3","S100A16","S100A10","OLFM3","LPAR1","HTRA3","UGDH","PDGFRA","C1QTNF3-AMACR","MEDAG","COL1A2","FBLN2","MFAP5","MGST1","LSP1","MMP2","DPEP1","LOXL1","PCOLCE2","BICC1","DCN","LUM","GFPT2","ADAMTS2","MFAP4","SERPINF1","COL1A1","ABCA8","RNASE")
-so = AddModuleScore(so, list(fibroblast_genes),name="fibroblast_score",slot="data")
-
-## Add EMT score
-emt_score = read.csv("data/public/Chakravarthy2018_TGFB_ECM.tsv",sep="\t")
-emt_genes = emt_score$ID
-so = AddModuleScore(so, list(emt_genes),name="EMT_score",slot="data")
+# ### This section adds the module scores ###
+# ### Does not work at the current moment ###
+# so = JoinLayers(so)
+# ## Add radioresistance score
+# radioresistance_genes_df = read.csv("data/public/Marcone2021_Radioresistance_Geneset.csv",check.names = FALSE)
+# radioresistance_genes = radioresistance_genes_df[radioresistance_genes_df$`Fold change` > 1,]$`Gene names`
+# so = AddModuleScore(so, list(radioresistance_genes),name="radioresistance_score",slot="data")
+# 
+# ## Add radiation exposure score
+# radiation_exposure_genes_df = read.csv("data/public/Paul2013_RadiationExposure_Geneset.csv",check.names = FALSE)
+# radiation_exposure_genes = radiation_exposure_genes_df$Symbol
+# so = AddModuleScore(so, list(radiation_exposure_genes),name="radiation_exposure_score",slot="data")
+# 
+# ## Add angiogenesis score
+# ## TODO: retrospectively add gene set here
+# fgsea_hallmark_set = msigdbr(species = "Homo sapiens", category = "H") %>% split(x = .$gene_symbol, f = .$gs_name)
+# so = AddModuleScore(so, list(fgsea_hallmark_set$HALLMARK_ANGIOGENESIS),name="angiogenesis_score",slot="data")
+# 
+# ## Add Lympoangiogenesis score
+# fgsea_c2_set = msigdbr(species = "Homo sapiens", category = "C2")  %>% split(x = .$gene_symbol, f = .$gs_name)
+# lymphoangiogenesis_set = fgsea_c2_set$KEGG_CHRONIC_MYELOID_LEUKEMIA #c("IL4", "CSF2", "PROX1", "TEK")
+# so = AddModuleScore(so, list(lymphoangiogenesis_set),name="lymphangiogenesis_score",slot="data")
+# 
+# ## Add EndMT score
+# ## From Choi K. et al: Endothelial-to-mesenchymal transition in anticancer therapy and normal tissue damage
+# EndMT_genes = c("TGFB1","TGFB2","AIFM2","SNAI1","SNAI2","ZEB1","ZEB2","ACTA2")
+# so = AddModuleScore(so, list(EndMT_genes),name="endMT_score",slot="data")
+# 
+# ## Add fibroblast score
+# fibroblast_genes = c("SCN1A","DPT","HSD11B1","CD34","CELF2","ENTPD2","COL5A1","GSN","SLC43A3","S100A16","S100A10","OLFM3","LPAR1","HTRA3","UGDH","PDGFRA","C1QTNF3-AMACR","MEDAG","COL1A2","FBLN2","MFAP5","MGST1","LSP1","MMP2","DPEP1","LOXL1","PCOLCE2","BICC1","DCN","LUM","GFPT2","ADAMTS2","MFAP4","SERPINF1","COL1A1","ABCA8","RNASE")
+# so = AddModuleScore(so, list(fibroblast_genes),name="fibroblast_score",slot="data")
+# 
+# ## Add EMT score
+# emt_score = read.csv("data/public/Chakravarthy2018_TGFB_ECM.tsv",sep="\t")
+# emt_genes = emt_score$ID
+# so = AddModuleScore(so, list(emt_genes),name="EMT_score",slot="data")
 
 # ## Add fibrosis score
 # fibrosis_genes = c("LGALS3")
@@ -218,8 +218,21 @@ if (FALSE) {
 }
 
 ## Load Seurat Object for basic sumary statistics
-
 so = readRDS("data/processed/rna/ASCSeuratObj2025.rds")
+
+## Plot estimate purity by site
+library(ggpubr)
+ggboxplot(
+  data=so@meta.data,
+  x="seurat_clusters_by_site_str",
+  y="ESTIMATE_purity",
+  color="seurat_clusters_by_site_str",
+  add="jitter",
+  xlab = "Primary Sites",
+  ylab = "ESTIMATE Purity",
+  palette = 
+) + stat_compare_means()
+
 
 ## Number of parencymal breast samples by site
 site_by_cluster_table = table(so@meta.data$seurat_clusters_by_site_str,so@meta.data$hcluster_by_expr_str)
