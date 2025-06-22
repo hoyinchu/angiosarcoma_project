@@ -244,14 +244,22 @@ plot_pca_elbow_plot = function(so,filename) {
 # Plot PCA related figures:
 plot_pca_figs = function(so,dirname,prefix) {
   dir.create(file.path(dirname))
-  #plot_pca_dims(so,paste0(dirname,"/",prefix,"_pca_dims.png"))
-  plot_pca_by_clin(so,paste0(dirname,"/",prefix,"_pca_dims.png"))
-  plot_pca_by_cont(so,paste0(dirname,"/",prefix,"_pca_cont_meta.png"))
-  plot_pca_loadings(so,paste0(dirname,"/",prefix,"_pca_loadings.png"))
-  plot_pca_loading_dims(so,paste0(dirname,"/",prefix,"_pca_loading_dims.png"))
-  plot_top_loading_features(so,paste0(dirname,"/",prefix,"_pca_top_loading_features.png"))
-  plot_pca_elbow_plot(so,paste0(dirname,"/",prefix,"_pca_elbow_plot.png"))
-  plot_mean_variance(so,paste0(dirname,"/",prefix,"_mean_variance_plot.png"))
+  # #plot_pca_dims(so,paste0(dirname,"/",prefix,"_pca_dims.png"))
+  # plot_pca_by_clin(so,paste0(dirname,"/",prefix,"_pca_dims.png"))
+  # plot_pca_by_cont(so,paste0(dirname,"/",prefix,"_pca_cont_meta.png"))
+  # plot_pca_loadings(so,paste0(dirname,"/",prefix,"_pca_loadings.png"))
+  # plot_pca_loading_dims(so,paste0(dirname,"/",prefix,"_pca_loading_dims.png"))
+  # plot_top_loading_features(so,paste0(dirname,"/",prefix,"_pca_top_loading_features.png"))
+  # plot_pca_elbow_plot(so,paste0(dirname,"/",prefix,"_pca_elbow_plot.png"))
+  # plot_mean_variance(so,paste0(dirname,"/",prefix,"_mean_variance_plot.png"))
+  # 
+  plot_pca_by_clin(so,paste0(dirname,"/",prefix,"_pca_dims.pdf"))
+  plot_pca_by_cont(so,paste0(dirname,"/",prefix,"_pca_cont_meta.pdf"))
+  plot_pca_loadings(so,paste0(dirname,"/",prefix,"_pca_loadings.pdf"))
+  plot_pca_loading_dims(so,paste0(dirname,"/",prefix,"_pca_loading_dims.pdf"))
+  plot_top_loading_features(so,paste0(dirname,"/",prefix,"_pca_top_loading_features.pdf"))
+  plot_pca_elbow_plot(so,paste0(dirname,"/",prefix,"_pca_elbow_plot.pdf"))
+  plot_mean_variance(so,paste0(dirname,"/",prefix,"_mean_variance_plot.pdf"))
 }
 
 
@@ -265,10 +273,12 @@ plot_pca_figs(so_others,"02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_
 
 ## Make a special PCA plot with just the first two clinical groups
 plot_pca_by_clin(so,"02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_PCA_by_site_and_hclust.png",partial=TRUE)
+plot_pca_by_clin(so,"02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_PCA_by_site_and_hclust.pdf",partial=TRUE)
 
 ## FeaturePlot
 subset_feature_plot_cut_breast = FeaturePlot(so_cut_breast,c("FLT4","COL22A1","MYC","COL14A1","DSC3","FBN1","KRT1","CLEC2A","FOXN1","IL8","JUN","SCQ"),pt.size = 4)
 ggsave(subset_feature_plot_cut_breast,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_subset_feature_plot_cutaneous_breast.png",dpi=300,width=12,height=6)
+ggsave(subset_feature_plot_cut_breast,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_subset_feature_plot_cutaneous_breast.pdf",dpi=300,width=12,height=6)
 
 
 

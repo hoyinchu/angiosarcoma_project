@@ -222,17 +222,20 @@ so = readRDS("data/processed/rna/ASCSeuratObj2025.rds")
 
 ## Plot estimate purity by site
 library(ggpubr)
-ggboxplot(
+estimate_purity_boxplot = ggboxplot(
   data=so@meta.data,
+  #x="hcluster_by_expr_str",
   x="seurat_clusters_by_site_str",
   y="ESTIMATE_purity",
   color="seurat_clusters_by_site_str",
+  #color="hcluster_by_expr_str",
   add="jitter",
   xlab = "Primary Sites",
   ylab = "ESTIMATE Purity",
-  palette = 
+  palette = "npg"
 ) + stat_compare_means()
-
+estimate_purity_boxplot = ggpar(estimate_purity_boxplot,legend.title="Primary Sites")
+ggsave("./02_Tumor_RNA_Analysis/outputs/plots/07_specificity_plots/ESTIMATE_purity_barplot_by_sites.pdf",estimate_purity_boxplot,dpi=300,width=12,height=4)
 
 ## Number of parencymal breast samples by site
 site_by_cluster_table = table(so@meta.data$seurat_clusters_by_site_str,so@meta.data$hcluster_by_expr_str)
