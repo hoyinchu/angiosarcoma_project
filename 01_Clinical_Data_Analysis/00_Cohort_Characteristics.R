@@ -73,6 +73,7 @@ primary_site_count_plot = ggplot(clin_df,aes(x=fct_rev(fct_infreq(`Primary Site 
 
 primary_site_count_plot
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_num_patients_by_primary_site.png",primary_site_count_plot,dpi=300, width=6,height=4)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_num_patients_by_primary_site.pdf",primary_site_count_plot,dpi=300, width=6,height=4)
 
 ## Check statistics for other cancers
 other_cancer_df = read.csv("data/processed/other_cancer_data.tsv",sep="\t",check.names = FALSE)
@@ -92,10 +93,12 @@ prior_cancer_only_counts$`Prior Cancer`[prior_cancer_only_counts$`Prior Cancer`=
 #   )
 # )
 
-prior_history_count_plot = ggplot(data=prior_cancer_only_counts,aes(axis1=`Prior Cancer`,axis2=`Primary Site`,y=n)) +
+prior_cancer_only_counts_filtered = prior_cancer_only_counts %>% filter(`Prior Cancer` != "NO PRIOR CANCER")
+
+prior_history_count_plot = ggplot(data=prior_cancer_only_counts_filtered,aes(axis1=`Prior Cancer`,axis2=`Primary Site`,y=n)) +
   geom_alluvium(aes(fill = `Primary Site`)) +
   geom_stratum() +
-  geom_text(stat = "stratum",size=8,
+  geom_text(stat = "stratum",size=5,
             aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Prior Cancer", "AS Primary Site"),
                    expand = c(0.15, 0.05)) +
@@ -107,6 +110,7 @@ prior_history_count_plot = ggplot(data=prior_cancer_only_counts,aes(axis1=`Prior
 
 prior_history_count_plot
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_prior_cancer_to_primary_alluvial_plot.png",prior_history_count_plot,dpi=300,width=20,height=12)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_prior_cancer_to_primary_alluvial_plot_no_no_prior.pdf",prior_history_count_plot,dpi=300,width=20,height=14)
 
 # Total number of patients with other cancers
 num_with_other_cancers = sum(clin_df$`OTHER_CANCER (PRD)` == "YES")
@@ -152,6 +156,8 @@ age_count_plot = ggplot(clin_df,aes(x=fct_reorder(`Primary Site (Recombined)`,`A
   #scale_fill_npg()
 age_count_plot
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_age_at_diagnosis_by_primary_site.png",plot=age_count_plot,dpi=300, width=12,height=5)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_age_at_diagnosis_by_primary_site.pdf",plot=age_count_plot,dpi=300, width=12,height=5)
+
 
 # Get the actual medians of each group
 clin_df %>% group_by(`Primary Site (Recombined)`) %>% summarise(median(`Age (Combined)`,na.rm = TRUE))
@@ -212,6 +218,8 @@ met_percentage_data_plot = ggplot(met_percentage_data_filtered, aes(x = fct_rev(
 met_percentage_data_plot
 
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_primary_site_met_percentages.png",met_percentage_data_plot,dpi=300,width=12,height=4)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_primary_site_met_percentages.pdf",met_percentage_data_plot,dpi=300,width=12,height=4)
+
 met_percentage_data_filtered
 
 # Convert to long form to visualize the most common metastatic events
@@ -283,6 +291,7 @@ common_met_plot = ggplot(met_cooccurence_merged,aes(y=fct_reorder(`Metastatic Si
   labs(x="# of events",y="Metastatic Site")
 common_met_plot
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_metastatic_site_counts.png",common_met_plot,dpi=300,width=5,height=4)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_metastatic_site_counts.pdf",common_met_plot,dpi=300,width=5,height=4)
 
 met_cooccurence_merged
 
@@ -305,6 +314,7 @@ met_site_plot = ggplot(data = met_cooccurence,
 met_site_plot
 met_cooccurence_totals
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_metastatic_event_alluvial_plot.png",met_site_plot,dpi=300,width=20,height=12)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_metastatic_event_alluvial_plot.pdf",met_site_plot,dpi=300,width=20,height=18)
 
 ## Metastatic Site co-occurence
 make_cooccurence_matrix = function(met_site_list) {
@@ -371,6 +381,7 @@ met_site_co_occurrence_plot = ggplot(data = met_site_co_occurrence_matrix_lower_
   labs(x="",y="")
 met_site_co_occurrence_plot
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_metastatic_site_cooccurence_matrix.png",met_site_co_occurrence_plot,dpi=300,width=6,height=6)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_metastatic_site_cooccurence_matrix.pdf",met_site_co_occurrence_plot,dpi=300,width=6,height=6)
 
 ## Which originating sites had bone and liver co-occurence
 clin_df_with_bone_liver_met = subset(
@@ -416,6 +427,7 @@ treatment_records_per_patient_plot = ggplot(treatment_records_per_patient,aes(x=
 
 treatment_records_per_patient_plot
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient_histo.png",treatment_records_per_patient_plot,dpi=300,width=6,height=4)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient_histo.pdf",treatment_records_per_patient_plot,dpi=300,width=6,height=4)
 
 treatment_records_per_patient
 
@@ -427,7 +439,7 @@ treatment_records_per_patient_per_primary_site_plot = ggplot(treatment_records_p
   theme_minimal() +
   labs(y="Primary Site",x="Number of Treatment Records per Patient")
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient_per_primary_site_boxplot.png",treatment_records_per_patient_per_primary_site_plot,dpi=300,width=4,height=8)
-
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient_per_primary_site_boxplot.pdf",treatment_records_per_patient_per_primary_site_plot,dpi=300,width=4,height=8)
 
 # Treatment by Primary Sites
 met_treatment_only = treatment_df_filtered_merged[treatment_df_filtered_merged$MODE=="METS",]
@@ -484,6 +496,7 @@ treatment_plot
 
 drug_count_df_top_only
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_top_treatment_received_barplot.png",treatment_plot,dpi=300,width=6,height=4)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_top_treatment_received_barplot.pdf",treatment_plot,dpi=300,width=6,height=4)
 
 ## Which drug was the most common prescribed in mets setting?
 drug_count_df_met_only = drug_count_df %>%
@@ -510,3 +523,4 @@ top_5_prop_test
 
 drug_count_df_met_only %>% filter(ModeTotal >= 10) %>%select(-c("MODE (FORMATTED)"))
 drug_count_df_met_only
+
