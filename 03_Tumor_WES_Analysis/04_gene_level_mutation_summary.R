@@ -8,37 +8,53 @@ library(ggsci)
 
 setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
+source("util_scripts/project_palettes.R")
 # Load processed MAF file and clinical metadata
 asc_maf_path = "data/processed/tumor_WES/ASC_mutations.maf"
 asc_maf_metadata_path = "data/processed/tumor_WES/ASC_mutations_metadata.tsv"
 asc_maf = read.maf(maf=asc_maf_path,clinicalData=asc_maf_metadata_path)
 
+asc_maf@clinical.data$`Primary Site` = asc_maf@clinical.data$`Primary_Site_(Recombined)`
+asc_maf@clinical.data$`Is Cutaneous` = asc_maf@clinical.data$`CUTANEOUS_AS_(EHR_EXTRACTED)`
+asc_maf@clinical.data$`Is Cutaneous`[asc_maf@clinical.data$`Is Cutaneous` == 1] = "Cutaneous AS"
+asc_maf@clinical.data$`Is Cutaneous`[asc_maf@clinical.data$`Is Cutaneous` == 0] = "Non-cutaneous AS"
+asc_maf@clinical.data$`Is Cutaneous`[is.na(asc_maf@clinical.data$`Is Cutaneous`)] = "Unknown"
+asc_maf@clinical.data$`TMB` = asc_maf@clinical.data$`TMB_all_mutations`
+
+primary_site_palette_temp = c(
+  "Other Visceral Organs"=pal_npg("nrc")(9)[1],
+  "Hepatobiliary"=pal_npg("nrc")(9)[2],
+  "Breast (Cutaneous)"=pal_npg("nrc")(9)[3],
+  "HNFS"=pal_npg("nrc")(9)[4],
+  "Extremities"=pal_npg("nrc")(9)[5],
+  "Heart"=pal_npg("nrc")(9)[6],
+  "Musculoskeletal"=pal_npg("nrc")(9)[7],
+  "Breast (Parenchymal)"=pal_npg("nrc")(9)[8],
+  #"NA"=pal_npg("nrc")(9)[9],
+  "Other Rare Sites"=pal_npg("nrc")(9)[9]
+)
+
 make_oncoplot = function(maf,save_path="",top_n=15) {
   if (save_path!="") {
-    pdf(file=save_path,height=10,width=12)
+    pdf(file=save_path,height=8,width=12)
     #pdf(file = "Tumor_WES_Analysis/outputs/01_oncoplot_all_by_pathways.pdf",height=6)
   }
-  maf@clinical.data$`Primary Site` = maf@clinical.data$`Primary_Site_(Recombined)`
-  maf@clinical.data$`Is Cutaneous` = maf@clinical.data$`CUTANEOUS_AS_(EHR_EXTRACTED)`
-  maf@clinical.data$`Is Cutaneous`[maf@clinical.data$`Is Cutaneous` == 1] = "Cutaneous"
-  maf@clinical.data$`Is Cutaneous`[maf@clinical.data$`Is Cutaneous` == 0] = "Non-cutaneous"
-  maf@clinical.data$`TMB` = maf@clinical.data$`TMB_all_mutations`
   oncoplot(maf = maf,
            top = top_n,
-           clinicalFeatures=c("Primary Site","Is Cutaneous"),#,"LOCAL_RECURRENCE_(EHR_EXTRACTED)"),
+           clinicalFeatures=c("Is Cutaneous","Primary Site"),#,"LOCAL_RECURRENCE_(EHR_EXTRACTED)"),
            #clinicalFeatures=c("PRIMARY_SITE_(Combined)","CUTANEOUS_AS_(EHR_EXTRACTED)"),#,"LOCAL_RECURRENCE_(EHR_EXTRACTED)"),
            topBarData="TMB",
            draw_titv = TRUE,
            sortByAnnotation = TRUE,
            fontSize = 0.8,
+           annotationColor = list(`Is Cutaneous`=cutaneous_palette)#,`Primary Site`=primary_site_palette_temp)
   )
   if (save_path!="") {
     dev.off()
   }
 }
-
-# Overall oncoplot
 make_oncoplot(asc_maf,save_path = "03_Tumor_WES_Analysis/outputs/plots/04_oncoplot_all.pdf")
+
 
 ## Subset to specific samples
 ## Non-HNFS

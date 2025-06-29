@@ -1,5 +1,7 @@
 library(ggsci)
 library(RColorBrewer)
+library(circlize)
+
 
 primary_site_palette = c(
   "Other Visceral Organs"=pal_npg("nrc")(9)[1],
@@ -10,7 +12,8 @@ primary_site_palette = c(
   "Heart"=pal_npg("nrc")(9)[6],
   "Musculoskeletal"=pal_npg("nrc")(9)[7],
   "Breast (Parenchymal)"=pal_npg("nrc")(9)[8],
-  "NA"=pal_npg("nrc")(9)[9]
+  "NA"=pal_npg("nrc")(9)[9],
+  "Other Rare Sites"=pal_npg("nrc")(9)[9]
 )
 
 cluster_by_primary_site_palette = c(
@@ -41,8 +44,10 @@ seurart_cluster_by_expression_palette =c(
 
 cutaneous_palette = c(
   "Non-cutaneous AS"=pal_npg("nrc")(5)[1],
-  "Cutaneous AS"=pal_npg("nrc")(5)[2]
+  "Cutaneous AS"=pal_npg("nrc")(5)[2],
+  "Unknown"="gray80"
 )
+
 sex_clin_palette = c(
   "Female"=pal_npg("nrc")(5)[1],
   "Male"=pal_npg("nrc")(5)[2]

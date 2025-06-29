@@ -110,6 +110,8 @@ case_filtered_gene_burden_results[case_filtered_gene_burden_results$gene=="POT1"
 
 
 ggsave(case_filtered_enrichment_plot,filename = "05_Germline_WES_Analysis/outputs/plots/01_germline_PV_gene_enrichment_min_2_in_case.png",dpi=300,width=16,height=5)
+ggsave(case_filtered_enrichment_plot,filename = "05_Germline_WES_Analysis/outputs/plots/01_germline_PV_gene_enrichment_min_2_in_case.pdf",dpi=300,width=16,height=5)
+
 write.table(case_filtered_gene_burden_results,file="05_Germline_WES_Analysis/outputs/germline_PV_gene_enrichment_min_2_in_case.tsv",sep="\t",row.names=FALSE)
 
 
