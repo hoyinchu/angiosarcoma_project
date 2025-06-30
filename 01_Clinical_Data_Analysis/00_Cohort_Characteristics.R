@@ -74,6 +74,7 @@ primary_site_count_plot = ggplot(clin_df,aes(x=fct_rev(fct_infreq(`Primary Site 
 primary_site_count_plot
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_num_patients_by_primary_site.png",primary_site_count_plot,dpi=300, width=6,height=4)
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_num_patients_by_primary_site.pdf",primary_site_count_plot,dpi=300, width=6,height=4)
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_num_patients_by_primary_site_tall.pdf",primary_site_count_plot,dpi=300, width=6,height=12)
 
 ## Check statistics for other cancers
 other_cancer_df = read.csv("data/processed/other_cancer_data.tsv",sep="\t",check.names = FALSE)
@@ -92,6 +93,54 @@ prior_cancer_only_counts$`Prior Cancer`[prior_cancer_only_counts$`Prior Cancer`=
 #     `Prior Cancer` == "NOT FOUND" ~ "NO PRIOR CANCER"
 #   )
 # )
+
+## Just for the count plot we adjust it
+prior_cancer_only_counts_adjusted = prior_cancer_only_counts
+prior_cancer_only_counts_adjusted$`Prior Cancer`[prior_cancer_only_counts_adjusted$`Prior Cancer`=="NO PRIOR CANCER"] = "NOT FOUND"
+
+# Step 1: Reorder Primary Site factor by descending total n
+site_order <- prior_cancer_only_counts_adjusted %>%
+  group_by(`Primary Site`) %>%
+  summarise(total_n = sum(n), .groups = "drop") %>%
+  arrange(desc(total_n)) %>%
+  pull(`Primary Site`)
+
+# Step 2: Apply factor level ordering (reversed so most is at top)
+prior_cancer_only_counts_adjusted$`Primary Site` <- factor(
+  prior_cancer_only_counts_adjusted$`Primary Site`, 
+  levels = rev(site_order)
+)
+
+prior_cancer_only_counts_adjusted$`Prior Cancer` <- factor(
+  prior_cancer_only_counts_adjusted$`Prior Cancer`,
+  levels = c("NOT FOUND", setdiff(unique(prior_cancer_only_counts_adjusted$`Prior Cancer`), "NOT FOUND"))
+)
+
+# Get unique Prior Cancer categories
+prior_cancer_levels <- unique(prior_cancer_only_counts_adjusted$`Prior Cancer`)
+prior_count_colors <- pal_npg("nrc")(length(prior_cancer_levels) - 1)
+names(prior_count_colors) <- setdiff(prior_cancer_levels, "NOT FOUND")
+prior_count_palette <- c(prior_count_colors, "NOT FOUND" = "gray80")
+
+# Step 3: Plot
+prior_cancer_only_counts_plot <- ggplot(prior_cancer_only_counts_adjusted, 
+                                        aes(x = `Primary Site`, y = n, fill = `Prior Cancer`)) + 
+  geom_bar(stat = "identity") +
+  theme_minimal() +
+  coord_flip() +
+  labs(x = "Primary Sites", y = "# of Patients", fill = "Prior Cancer") +
+  theme(axis.text.y = element_text(hjust = 0.5)) +
+  scale_x_discrete(labels = c(
+    "Breast (Cutaneous)" = "Breast\n(Cutaneous)",
+    "Breast (Parenchymal)" = "Breast\n(Parenchymal)",
+    "Other Visceral Organs" = "Other\nVisceral Organs"
+  )) +
+  scale_fill_manual(values = prior_count_palette)
+
+# Step 4: Save
+ggsave("01_Clinical_Data_Analysis/outputs/plots/00_prior_cancer_count_plot.pdf", 
+       prior_cancer_only_counts_plot, dpi = 300, width = 6, height = 4)
+  
 
 prior_cancer_only_counts_filtered = prior_cancer_only_counts %>% filter(`Prior Cancer` != "NO PRIOR CANCER")
 
