@@ -78,12 +78,24 @@ ggsave("01_Clinical_Data_Analysis/outputs/plots/00_num_patients_by_primary_site_
 
 ## Check statistics for other cancers
 other_cancer_df = read.csv("data/processed/other_cancer_data.tsv",sep="\t",check.names = FALSE)
-clin_other_cancer_df_merged = merge(clin_df,other_cancer_df,by="STUDY ID",all.x=TRUE)
+
+# Filter to only cancers that occurred before diagnosis (negative or zero days from DX)
+prior_cancers_only = other_cancer_df %>%
+  filter(!is.na(`DATE OTHER CANCERS (DAYS FROM DX)`) & `DATE OTHER CANCERS (DAYS FROM DX)` <= 0)
+# For each patient, keep the cancer with the most recent date before DX (i.e., max among negative days)
+most_recent_prior_cancer = prior_cancers_only %>%
+  group_by(`STUDY ID`) %>%
+  slice_max(`DATE OTHER CANCERS (DAYS FROM DX)`, n = 1, with_ties = FALSE) %>%
+  ungroup()
+
+clin_other_cancer_df_merged <- merge(clin_df, most_recent_prior_cancer, by = "STUDY ID", all.x = TRUE)
 clin_other_cancer_df_merged$`OTHER CANCERS REMAPPED`[is.na(clin_other_cancer_df_merged$`OTHER CANCERS REMAPPED`)] = "NOT FOUND"
 prior_cancer_only = clin_other_cancer_df_merged %>% filter(
   (`DATE OTHER CANCERS (DAYS FROM DX)` <= 0) | (`OTHER CANCERS REMAPPED` == "NOT FOUND")
 )
 prior_cancer_only
+
+
 prior_cancer_only_counts = as.data.frame(table(prior_cancer_only$`OTHER CANCERS REMAPPED`,prior_cancer_only$`Primary Site (Recombined)`),stringsAsFactors = FALSE)
 colnames(prior_cancer_only_counts) = c("Prior Cancer", "Primary Site", "n")
 # prior_cancer_only_counts = as.data.frame(prior_cancer_only_counts)
