@@ -1,12 +1,12 @@
 library(ggplot2)
 library(dplyr)
 library(tidyr)
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
 ## Show expression of Receptor Tyrosine Kinase families Per Cluster
-receptor_family_table = read.csv("data/curated/receptor_family_tables_modified.csv")
-all_hclust_deseq_res_all = read.csv("02_Tumor_RNA_Analysis/outputs/DEGs/02_DESEQ2_hclust_expr_sites_combined_results_all.tsv",sep="\t")
-all_deseq_res_all = read.csv("02_Tumor_RNA_Analysis/outputs/DEGs/02_DESEQ2_sites_combined_results_all.tsv",sep="\t")
+receptor_family_table = read.csv("../data/curated/receptor_family_tables_modified.csv")
+
+all_hclust_deseq_res_all = read.csv("./outputs/DEGs/02_DESEQ2_hclust_expr_sites_combined_results_all.tsv",sep="\t")
+all_deseq_res_all = read.csv("./outputs/DEGs/02_DESEQ2_sites_combined_results_all.tsv",sep="\t")
 
 
 plot_receptor_families = function(expr_df_subset_merged) {

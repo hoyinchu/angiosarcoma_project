@@ -7,10 +7,8 @@ library(ggbeeswarm)
 library(ggpubr)
 library(RColorBrewer)
 
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
-
 # Preprocessing
-gistic_outdir = "data/processed/tumor_WES/GISTIC/Feb2024/call-tumor_gistic/"
+gistic_outdir = "../data/processed/tumor_WES/GISTIC/Feb2024/call-tumor_gistic/"
 
 ## TODO: clustering based on significance bands only
 gistic_broad_values_by_arm = read.csv(paste0(gistic_outdir,"broad_values_by_arm.txt"),sep="\t",check.names = FALSE)

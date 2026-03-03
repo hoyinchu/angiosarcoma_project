@@ -3,12 +3,12 @@ library(tidyr)
 library(ggplot2)
 library(maftools)
 library(ComplexHeatmap)
-library(ggtree)
+#library(ggtree)
 library(scales)
 
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
-maf_path = "data/processed/tumor_WES/ASC_mutations.maf"
-maf_meta_path = "data/processed/tumor_WES/ASC_mutations_metadata.tsv"
+#setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
+maf_path = "../data/processed/tumor_WES/ASC_mutations.maf"
+maf_meta_path = "../data/processed/tumor_WES/ASC_mutations_metadata.tsv"
 maf_df = read.csv(maf_path,sep="\t",check.names=FALSE)
 maf_meta = read.csv(maf_meta_path,sep="\t",check.names=FALSE)
 maf_merged = merge(maf_df,maf_meta,by="Tumor_Sample_Barcode",all.x=TRUE)
@@ -25,8 +25,8 @@ nonsilent_maf = maf_merged %>% filter(
 )
 
 # Load processed MAF file and clinical metadata
-asc_maf_path = "data/processed/tumor_WES/ASC_mutations.maf"
-asc_maf_metadata_path = "data/processed/tumor_WES/ASC_mutations_metadata.tsv"
+asc_maf_path = "../data/processed/tumor_WES/ASC_mutations.maf"
+asc_maf_metadata_path = "../data/processed/tumor_WES/ASC_mutations_metadata.tsv"
 asc_maf = read.maf(maf=asc_maf_path,clinicalData=asc_maf_metadata_path)
 
 ## Verify that the total number of variants are the same between the two
@@ -67,7 +67,7 @@ mut_freq_df_mut_recurrent_only = mut_freq_df[mut_freq_df$mut_count_unique > 1,]
 ## Subset MAF to only these entries
 maf_subset = maf_merged[maf_merged$tumor_mutation_id %in% mut_freq_df_mut_recurrent_only$tumor_mutation_id,]
 maf_subset_unique = maf_subset[!duplicated(maf_subset[c("STUDY ID","tumor_mutation_id_short")]),]
-mut_by_site_table = as.data.frame(table(maf_subset_unique$tumor_mutation_id_short,maf_subset_unique$`PRIMARY SITE (Combined)`),check.names=FALSE)
+mut_by_site_table = as.data.frame(table(maf_subset_unique$tumor_mutation_id_short,maf_subset_unique$`Primary Site (Recombined)`),check.names=FALSE)
 colnames(mut_by_site_table) = c("tumor_mutation_id_short","primary_site","count")
 
 # Set level by total count
@@ -78,18 +78,24 @@ recurrent_mutation_plot = ggplot(mut_by_site_table,aes(x=tumor_mutation_id_short
   theme_minimal() +
   scale_y_continuous(breaks= pretty_breaks()) + 
   labs(x="Gene",y="Number of Patients with Mutation",fill="Primary Site") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),legend.position="top")
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),legend.position="top") +
+  scale_fill_manual(values=primary_site_palette) +
+  pretty_plot() + L_border()
 recurrent_mutation_plot
-ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.png",height=4,width=6)
-ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.pdf",height=4,width=6)
+ggsave(recurrent_mutation_plot,file="./outputs/plots/05_recurrent_mutation_plot.png",height=4,width=6)
+ggsave(recurrent_mutation_plot,file="./outputs/plots/05_recurrent_mutation_plot.pdf",height=4,width=6)
 
 ## Also calculate the AlphaMissense scores for each of the variant
 ## Uniprot ID file = uniprot_to_gene_names.txt
 ## AlphaMissenese file is grep to only include entries with uniprot ids of interest
-uniprot_map = read.csv("data/public/uniprot_to_gene_names.txt",sep="\t",header=FALSE)
+uniprot_map = read.csv("../data/public/uniprot_to_gene_names.txt",sep="\t",header=FALSE)
 colnames(uniprot_map) = c("uniprot_id","id_type","gene_name")
 mut_freq_df_mut_recurrent_only_merged = merge(mut_freq_df_mut_recurrent_only,
                                               uniprot_map,by.x="Hugo_Symbol",by.y="gene_name",how="left")
+
+## This requires downloading the AlphaMissense csv
+## You can get it from here:
+##
 alpha_missense_df = read.csv("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/reference_data/AlphaMissense/AlphaMissense_hg19_subset.tsv",sep="\t")
 alpha_missense_df_subset = alpha_missense_df %>% filter(
   uniprot_id %in% uniprot_genes$uniprot_id,
@@ -134,17 +140,21 @@ ggsave("03_Tumor_WES_Analysis/outputs/plots/05_variant_patients_by_am_pathogenic
 # Indicate whether a mutation is recurrent across patients (hotspots)
 recurrent_mutations_short_ids = tumor_mutation_id_short_order
 # or is in a MutSig significant gene
-mutsig_output_path = "data/processed/tumor_WES/mutsig/Apr16_2024_sig_genes.txt"
+mutsig_output_path = "../data/processed/tumor_WES/Apr16_2024_sig_genes.txt"
 mutsig_gene = read.csv(mutsig_output_path,sep="\t")
 mutsig_q10_genes = mutsig_gene[mutsig_gene$q < 0.1,]$gene
 # Or if it is a COSMIC tier 1 gene
-cosmic_path = "data/public/cosmic_cancer_gene_census.csv"
+cosmic_path = "../data/public/cosmic_cancer_gene_census.csv"
 cosmic_df = read.csv(cosmic_path)
 cosmic_tier1_genes = cosmic_df[cosmic_df$Tier==1,]$Gene.Symbol
+
 # Or if germline pathogenic variant was also detected in the gene
-# Getting this table requires running a script from a later step (00_two_hit_scan.R)
+# Getting this table requires running a script from a later step
+## First run through the germline scripts (04)
+## Then run the germline somatic integration scripts (05/00_two_hit_scan.R)
 # So skip this step if it's the first time running this
-somatic_germline_mut_table = read.csv("06_Germline_WES_Tumor_WES_Analysis/outputs/tables/germline_vs_tumor_gene_counts.csv")
+
+somatic_germline_mut_table = read.csv("../06_Germline_WES_Tumor_WES_Analysis/outputs/tables/germline_vs_tumor_gene_counts.csv")
 somatic_gerline_mut_genes = somatic_germline_mut_table %>%
   filter(germline_pv_carrier_count > 0, somatic_nonsyn_carrier_count>0) %>%
   pull(Hugo_Symbol)

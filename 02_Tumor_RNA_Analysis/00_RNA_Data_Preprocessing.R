@@ -6,11 +6,8 @@ library(cowplot)
 library(DESeq2)
 
 ## Load data
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
-
-
-count_data = read.csv("data/raw/rna/All_Oct2023samples_159bxs.gene_reads.gct",sep="\t",skip=2,check.names = FALSE)
-tpm_data = read.csv("data/raw/rna/All_Oct2023samples_159bxs.gene_tpm.gct",sep="\t",skip=2,check.names = FALSE)
+count_data = read.csv("../data/raw/rna/All_Oct2023samples_159bxs.gene_reads.gct",sep="\t",skip=2,check.names = FALSE)
+tpm_data = read.csv("../data/raw/rna/All_Oct2023samples_159bxs.gene_tpm.gct",sep="\t",skip=2,check.names = FALSE)
 
 ## Perform filtering based on sequencing metrics
 ## Script based on QC RNA metrics provided by Jorge
@@ -72,7 +69,7 @@ collapse_count_data = function(count_data) {
 
 
 ## We first filter out samples that failed QC
-metrics_df = read.csv("data/raw/sample_tables/RNA_sample_Feb19_2024.tsv",sep="\t",check.names = FALSE)
+metrics_df = read.csv("../data/raw/sample_tables/RNA_sample_Feb19_2024.tsv",sep="\t",check.names = FALSE)
 sample_qc_summary_df = sample_qc_summary(metrics_df,count_data) 
 sample_qc_summary_df["BATCH"] = sapply(strsplit(sample_qc_summary_df[["LC-SET"]], ","), `[`,1)
 sample_qc_summary_df[["individual_alias"]] = paste0("ASCProject_",sapply(strsplit(sample_qc_summary_df$`entity:sample_id`, "_"), `[`, 3))
@@ -80,20 +77,20 @@ sample_qc_summary_df[["sample_alias"]] = paste0(sample_qc_summary_df[["individua
 
 ## We then filter out samples that do not have clinical metadata
 #clin_data = read.csv("data/processed/sample_clin_data.tsv",sep="\t",check.names = FALSE)
-clin_data = read.csv("data/processed/sample_clin_data.tsv",sep="\t",check.names = FALSE)
+clin_data = read.csv("../data/processed/sample_clin_data.tsv",sep="\t",check.names = FALSE)
 
 sample_qc_summary_df[["HAS_METADATA"]] = sample_qc_summary_df$individual_alias %in% clin_data$individual_alias
 sample_qc_summary_df[["ALL_FILTERS_PASSED"]] = (sample_qc_summary_df[["QC_FLAG"]]=="PASS") & (sample_qc_summary_df[["HAS_METADATA"]]==TRUE)
 sample_qc_summary_df[["SAMPLE_DATA_TYPE"]] = "tumor_RNA"
 ## For record keeping, write a list outlining the pass / fail status of each sample and the reason
-write.table(sample_qc_summary_df,file="data/processed/qc_tables/rna_sample_filter_status.tsv",sep="\t",row.names = FALSE)
+write.table(sample_qc_summary_df,file="../data/processed/qc_tables/rna_sample_filter_status.tsv",sep="\t",row.names = FALSE)
 
 
 # Save filtered samples
 pass_qc_samples = sample_qc_summary_df[sample_qc_summary_df$ALL_FILTERS_PASSED==TRUE,"entity:sample_id"]
 count_data_filtered = count_data[,c("Name","Description",pass_qc_samples)]
 
-sample_meta_data = read.csv("data/processed/sample_clin_data.tsv",sep="\t",check.names = FALSE)
+sample_meta_data = read.csv("../data/processed/sample_clin_data.tsv",sep="\t",check.names = FALSE)
 # sample_meta_data_merged = merge(sample_qc_summary_df,clin_data,by.x="individual_alias",by.y="individual_alias",all.x=TRUE)
 
 common_ids = intersect(sample_meta_data$`entity:sample_id`, colnames(count_data_filtered))
@@ -108,43 +105,44 @@ collapsed_filtered_counts = collapse_count_data(count_data_filtered)
 
 ### 2025-05-04
 ## Check if we do a z-score normalization against GTEX breast tissues whether that would change the outcome
-gtex_breast_rna_counts = read.csv("data/raw/rna/GTEx/gene_reads_v10_breast_mammary_tissue.gct",sep="\t",skip=2,check.names = FALSE)
-#gtex_breast_rna_counts = read.csv("data/raw/rna/GTEx/gene_reads_v10_skin_sun_exposed_lower_leg.gct",sep="\t",skip=2,check.names = FALSE)
+## Spoiler: it did not
+# gtex_breast_rna_counts = read.csv("../data/raw/rna/GTEx/gene_reads_v10_breast_mammary_tissue.gct",sep="\t",skip=2,check.names = FALSE)
+# #gtex_breast_rna_counts = read.csv("data/raw/rna/GTEx/gene_reads_v10_skin_sun_exposed_lower_leg.gct",sep="\t",skip=2,check.names = FALSE)
+# 
+# gtex_breast_rna_counts_collapsed = collapse_count_data(gtex_breast_rna_counts)
+# gtex_breast_rna_shared_name = intersect(gtex_breast_rna_counts$Description,count_data_filtered$Description)
+# 
+# 
+# asc_breast_samples = sample_meta_data %>% filter(`Primary Site (Recombined)`=="Breast (Cutaneous)" | `Primary Site (Recombined)`=="Breast (Parenchymal)") %>% pull(`entity:sample_id`)
+# asc_breast_samples_with_rna = intersect(asc_breast_samples,colnames(collapsed_filtered_counts))
+# collapsed_filtered_counts_breast = collapsed_filtered_counts[,asc_breast_samples_with_rna]
+# gtex_asc_shared_genes = intersect(rownames(gtex_breast_rna_counts_collapsed),rownames(collapsed_filtered_counts_breast))
+# gtex_asc_breast_merged = cbind(collpased_filtered_counts_breast[gtex_asc_shared_genes,],gtex_breast_rna_counts_collapsed[gtex_asc_shared_genes,])
 
-gtex_breast_rna_counts_collapsed = collapse_count_data(gtex_breast_rna_counts)
-gtex_breast_rna_shared_name = intersect(gtex_breast_rna_counts$Description,count_data_filtered$Description)
-
-
-asc_breast_samples = sample_meta_data %>% filter(`Primary Site (Recombined)`=="Breast (Cutaneous)" | `Primary Site (Recombined)`=="Breast (Parenchymal)") %>% pull(`entity:sample_id`)
-asc_breast_samples_with_rna = intersect(asc_breast_samples,colnames(collapsed_filtered_counts))
-collapsed_filtered_counts_breast = collapsed_filtered_counts[,asc_breast_samples_with_rna]
-gtex_asc_shared_genes = intersect(rownames(gtex_breast_rna_counts_collapsed),rownames(collapsed_filtered_counts_breast))
-gtex_asc_breast_merged = cbind(collpased_filtered_counts_breast[gtex_asc_shared_genes,],gtex_breast_rna_counts_collapsed[gtex_asc_shared_genes,])
-
-## Write the merged version for purity calculation
-library(estimate)
-asc_gtex_collapsed_count_path="/Users/hoyin/Downloads/gene_tpm_v10_bladder_processed.tsv"
-#asc_gtex_collapsed_count_path="data/processed/rna/asc_merged_with_gtex.txt"
-
-write.table(gtex_asc_breast_merged,asc_gtex_collapsed_count_path,sep="\t",quote = FALSE)
-write.table(t(gtex_asc_breast_merged),asc_gtex_collapsed_count_path,sep="\t",quote = FALSE)
-
-filterCommonGenes(input.f=asc_gtex_collapsed_count_path, output.f="data/processed/rna/asc_merged_with_gtex_collapsed_counts.gct", id="GeneSymbol")
-estimateScore(input.ds = "data/processed/rna/asc_merged_with_gtex_collapsed_counts.gct",output.ds = "data/processed/rna/asc_merged_with_gtex_estimate_score.gct")#,platform = "illumina"
-asc_tex_merged_estimate_score_table = read.csv("data/processed/rna/asc_merged_with_gtex_estimate_score.gct",sep="\t",skip=2,check.names = FALSE)
-asc_tex_merged_estimate_scores = asc_tex_merged_estimate_score_table[asc_tex_merged_estimate_score_table$NAME == "ESTIMATEScore", -c(1,2)]
-## Using the equation indicated in the original publication
-asc_tex_merged_purity_estimates = cos(0.6049872018+0.0001467884*asc_tex_merged_estimate_scores)
-asc_tex_merged_purity_estimates_table = as.data.frame(t(asc_tex_merged_purity_estimates))
-colnames(asc_tex_merged_purity_estimates_table) = c("ESTIMATE_purity")
-rownames(asc_tex_merged_purity_estimates_table) <- gsub("\\.", "-", rownames(asc_tex_merged_purity_estimates_table))
-asc_tex_merged_purity_estimates_table = cbind("entity:sample_id" = rownames(asc_tex_merged_purity_estimates_table),asc_tex_merged_purity_estimates_table)
-write.table(asc_tex_merged_purity_estimates_table,  # Add row names as a new column
-            file = "data/processed/rna/asc_merged_with_gtex_estimate_score.tsv",  # Change to .csv if needed
-            sep = "\t",  # Use "," for CSV files
-            quote = FALSE,
-            row.names = FALSE  # Prevent duplicate row names
-)
+# ## Write the merged version for purity calculation
+# library(estimate)
+# asc_gtex_collapsed_count_path="/Users/hoyin/Downloads/gene_tpm_v10_bladder_processed.tsv"
+# #asc_gtex_collapsed_count_path="data/processed/rna/asc_merged_with_gtex.txt"
+# 
+# write.table(gtex_asc_breast_merged,asc_gtex_collapsed_count_path,sep="\t",quote = FALSE)
+# write.table(t(gtex_asc_breast_merged),asc_gtex_collapsed_count_path,sep="\t",quote = FALSE)
+# 
+# filterCommonGenes(input.f=asc_gtex_collapsed_count_path, output.f="data/processed/rna/asc_merged_with_gtex_collapsed_counts.gct", id="GeneSymbol")
+# estimateScore(input.ds = "data/processed/rna/asc_merged_with_gtex_collapsed_counts.gct",output.ds = "data/processed/rna/asc_merged_with_gtex_estimate_score.gct")#,platform = "illumina"
+# asc_tex_merged_estimate_score_table = read.csv("data/processed/rna/asc_merged_with_gtex_estimate_score.gct",sep="\t",skip=2,check.names = FALSE)
+# asc_tex_merged_estimate_scores = asc_tex_merged_estimate_score_table[asc_tex_merged_estimate_score_table$NAME == "ESTIMATEScore", -c(1,2)]
+# ## Using the equation indicated in the original publication
+# asc_tex_merged_purity_estimates = cos(0.6049872018+0.0001467884*asc_tex_merged_estimate_scores)
+# asc_tex_merged_purity_estimates_table = as.data.frame(t(asc_tex_merged_purity_estimates))
+# colnames(asc_tex_merged_purity_estimates_table) = c("ESTIMATE_purity")
+# rownames(asc_tex_merged_purity_estimates_table) <- gsub("\\.", "-", rownames(asc_tex_merged_purity_estimates_table))
+# asc_tex_merged_purity_estimates_table = cbind("entity:sample_id" = rownames(asc_tex_merged_purity_estimates_table),asc_tex_merged_purity_estimates_table)
+# write.table(asc_tex_merged_purity_estimates_table,  # Add row names as a new column
+#             file = "data/processed/rna/asc_merged_with_gtex_estimate_score.tsv",  # Change to .csv if needed
+#             sep = "\t",  # Use "," for CSV files
+#             quote = FALSE,
+#             row.names = FALSE  # Prevent duplicate row names
+# )
 
 
 #
@@ -223,11 +221,11 @@ write.table(asc_tex_merged_purity_estimates_table,  # Add row names as a new col
 
 ## Estimate Tumor Purity using ESTIMATE (Yoshihara K., 2013)
 library(estimate)
-collapsed_count_path="data/processed/rna/collapsed_counts.txt"
+collapsed_count_path="../data/processed/rna/collapsed_counts.txt"
 write.table(collapsed_filtered_counts,collapsed_count_path,sep="\t",quote = FALSE)
-filterCommonGenes(input.f=collapsed_count_path, output.f="data/processed/rna/collapsed_counts.gct", id="GeneSymbol")
-estimateScore(input.ds = "data/processed/rna/collapsed_counts.gct",output.ds = "data/processed/rna/estimate_score.gct",platform = "illumina")
-estimate_score_table = read.csv("data/processed/rna/estimate_score.gct",sep="\t",skip=2,check.names = FALSE)
+filterCommonGenes(input.f=collapsed_count_path, output.f="../data/processed/rna/collapsed_counts.gct", id="GeneSymbol")
+estimateScore(input.ds = "../data/processed/rna/collapsed_counts.gct",output.ds = "../data/processed/rna/estimate_score.gct",platform = "illumina")
+estimate_score_table = read.csv("../data/processed/rna/estimate_score.gct",sep="\t",skip=2,check.names = FALSE)
 estimate_scores = estimate_score_table[estimate_score_table$NAME == "ESTIMATEScore", -c(1,2)]
 ## Using the equation indicated in the original publication
 purity_estimates = cos(0.6049872018+0.0001467884*estimate_scores)
@@ -236,7 +234,7 @@ colnames(purity_estimates_table) = c("ESTIMATE_purity")
 rownames(purity_estimates_table) <- gsub("\\.", "-", rownames(purity_estimates_table))
 purity_estimates_table = cbind("entity:sample_id" = rownames(purity_estimates_table),purity_estimates_table)
 write.table(purity_estimates_table,  # Add row names as a new column
-  file = "data/processed/rna/estimate_score.tsv",  # Change to .csv if needed
+  file = "../data/processed/rna/estimate_score.tsv",  # Change to .csv if needed
   sep = "\t",  # Use "," for CSV files
   quote = FALSE,
   row.names = FALSE  # Prevent duplicate row names
@@ -261,7 +259,7 @@ expression_by_sample_plot_prefilter = ggplot(expression_by_sample_long, aes(x = 
   theme_minimal() +
   theme(axis.text.x=element_blank())
 expression_by_sample_plot_prefilter
-ggsave("02_Tumor_RNA_Analysis/outputs/plots/00_qc_plots/00_expression_by_sample_plot_raw_counts.png",expression_by_sample_plot_prefilter,width=10,height=3)
+ggsave("./outputs/plots/00_qc_plots/00_expression_by_sample_plot_raw_counts.png",expression_by_sample_plot_prefilter,width=10,height=3)
 
 
 ## Applying similar filtering and transformation to tpm data
@@ -294,7 +292,7 @@ expression_by_sample_plot = ggplot(long_df, aes(x = Sample, y = VSTcount)) +
   theme_minimal() +
   theme(axis.text.x=element_blank())
 expression_by_sample_plot
-ggsave("02_Tumor_RNA_Analysis/outputs/plots/00_qc_plots/00_expression_by_sample_plot_post_vst.png",expression_by_sample_plot,width=10,height=3)
+ggsave("./outputs/plots/00_qc_plots/00_expression_by_sample_plot_post_vst.png",expression_by_sample_plot,width=10,height=3)
 
 ## Add library size to meta data
 total_library_sizes = data.frame("library_size"=colSums(count_data[,-c(1,2)]))
@@ -303,11 +301,11 @@ sample_meta_data_filtered = merge(sample_meta_data_filtered,total_library_sizes,
 
 ## Write the data
 if(FALSE){
-  write.csv(collapsed_filtered_counts,file="data/processed/rna/00_filtered_gene_counts.csv")
-  write.csv(collpased_filtered_vst,file="data/processed/rna/00_filtered_gene_counts.vst.csv")
-  write.csv(collpased_tpm_data, file="data/processed/rna/00_filtered_gene_tpm.csv")
+  write.csv(collapsed_filtered_counts,file="../data/processed/rna/00_filtered_gene_counts.csv")
+  write.csv(collpased_filtered_vst,file="../data/processed/rna/00_filtered_gene_counts.vst.csv")
+  write.csv(collpased_tpm_data, file="../data/processed/rna/00_filtered_gene_tpm.csv")
   #write.csv(meta_data_filtered_merged,file="reference_data/RNA_Seq/outputs/filtered_metadata.csv")
-  write.csv(sample_meta_data_filtered,file="data/processed/rna/00_filtered_sample_metadata.csv")
+  write.csv(sample_meta_data_filtered,file="../data/processed/rna/00_filtered_sample_metadata.csv")
 }
 
 

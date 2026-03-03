@@ -6,30 +6,181 @@ library(dplyr)
 library(ggrepel)
 library(EnhancedVolcano)
 
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
+## Load MAF 
+asc_maf_path = "../data/processed/tumor_WES/ASC_mutations.maf"
+asc_maf_metadata_path = "../data/processed/tumor_WES/ASC_mutations_metadata.tsv"
+asc_cn_call_path = "../data/processed/tumor_WES/combined_cnvkit_calls.csv"
+
+asc_cn_df = read.csv(asc_cn_call_path)
+asc_cn_df_filtered = asc_cn_df %>% filter(CN == "Amp" | CN == "DeepDel")
+asc_maf = read.maf(maf=asc_maf_path,clinicalData=asc_maf_metadata_path,cnTable = asc_cn_df_filtered)
 
 ## Load SeuratObject
-so = LoadSeuratRds("data/processed/rna/ASCSeuratObj.rds")
-
-## Load tumor sample metadata
-tumor_WES_meta = read.csv("data/processed/tumor_WES/ASC_mutations_metadata.tsv",sep="\t",check.names = FALSE)
-tumor_WES_meta
+so = LoadSeuratRds("../data/processed/rna/ASCSeuratObj.rds")
 
 ## Look for intersecting samples
-intersect_samples = intersect(so@meta.data$sample_alias,tumor_WES_meta$sample_alias)
+intersect_samples = intersect(so@meta.data$sample_alias,unique(asc_maf@clinical.data$sample_alias))
+
+# 2. Create a metadata slice from MAF containing the Tumor_Sample_Barcode and the sample alias
+so@meta.data$seurat_id = row.names(so@meta.data)
+so_meta_short = so@meta.data[,c("seurat_id","sample_alias_cleaned")] %>% rename("sample_alias_cleaned" = "sample_alias")
+maf_metadata = asc_maf@clinical.data[, .(Tumor_Sample_Barcode, sample_alias)]
+mapping_df = merge(so_meta_short, maf_metadata, by = "sample_alias", all.x = FALSE)
 
 ## Subset to intersecting samples
 so_subset = subset(so, subset = sample_alias %in% intersect_samples)
 
-## Adding metadata
-mutation_cols = c("Total_Mutations","TMB_all_mutations","Total_Nonsyn_Mutations","TMB_nonsyn")
-sbs_cols = names(tumor_WES_meta)[grepl("SBS",names(tumor_WES_meta))]
-one_hot_cols = names(tumor_WES_onehot_data)
-mutation_subset_cols_to_keep = c("Tumor_Sample_Barcode","sample_alias",mutation_cols,sbs_cols)
-tumor_WES_meta_subset = tumor_WES_meta[,mutation_subset_cols_to_keep]
+asc_maf_subset_tsb = unique(asc_maf@clinical.data[asc_maf@clinical.data$sample_alias %in% intersect_samples,] %>% pull(Tumor_Sample_Barcode))
+asc_maf_subset = subsetMaf(asc_maf,tsb=asc_maf_subset_tsb)
+
+## Get recurrently mutated genes
+asc_subset_gene_summary = getGeneSummary(asc_maf_subset)
+asc_subset_gene_summary
+
+high_freq_genes = asc_subset_gene_summary %>% filter(AlteredSamples >= 5) %>% pull(Hugo_Symbol)
+
+## Quick inspection of top mutated genes
+oncoplot(maf = asc_maf_subset,
+         genes = high_freq_genes,
+         clinicalFeatures = c("Primary_Site_(Recombined)", "CUTANEOUS_AS_(EHR_EXTRACTED)"),
+         #topBarData = "TMB",
+         draw_titv = TRUE,
+         sortByAnnotation = TRUE,
+         fontSize = 0.8)
+
+
+genes_to_check = c("POT1","TP53","KDR","MYC","PLCG1")
+samples_with_muts = genesToBarcodes(maf = asc_maf_subset, genes = genes_to_check, justNames = TRUE)
+mut_sample_barcodes = unique(unname(unlist(samples_with_muts)))
+asc_maf_non_driver_subset = subsetMaf(
+  maf = asc_maf_subset, 
+  tsb = setdiff(unique(asc_maf_subset@clinical.data$Tumor_Sample_Barcode), mut_sample_barcodes)
+)
+
+oncoplot(maf = asc_maf_non_driver_subset,
+         genes = high_freq_genes,
+         clinicalFeatures = c("Primary_Site_(Recombined)", "CUTANEOUS_AS_(EHR_EXTRACTED)"),
+         #topBarData = "TMB",
+         draw_titv = TRUE,
+         sortByAnnotation = TRUE,
+         fontSize = 0.8)
+
+## Add this as metadata to the seurat object
+gene_mut_matrix = genesToBarcodes(maf = asc_maf_subset, genes = high_freq_genes, justNames = TRUE)
+for(gene in high_freq_genes){
+  mut_samples <- gene_mut_matrix[[gene]]
+  mut_seurat_ids <- mapping_df$seurat_id[mapping_df$Tumor_Sample_Barcode %in% mut_samples]
+  so[[gene]] <- ifelse(colnames(so) %in% mut_seurat_ids, "Mutant", "WT")
+}
+
+table(so@meta.data$PLCG1)
+
+VlnPlot(so,features = c("rna_MYC","rna_MYCN","rna_POT1","rna_KDR","rna_ERBB2"),group.by = "MYC")
+
+# Identify signature
+Idents(so) = "POT1"
+pot1_signature <- FindMarkers(
+  object = so,
+  ident.1 = "Mutant",
+  ident.2 = "WT",
+  group.by = "POT1",
+  test.use = "LR",           # Logistic Regression
+  latent.vars = "ESTIMATE_purity", # The adjustment variable
+  logfc.threshold = 0
+)
+
+## Make volcano plot
+pot1_signature$padj_significant = pot1_signature$p_val_adj < 0.05
+pot1_signature$gene = rownames(pot1_signature)
+pot1_sig_volcano = ggplot(pot1_signature,aes(x=avg_log2FC,y=-log2(p_val),color=padj_significant)) +
+  geom_point() + pretty_plot() + L_border() + scale_color_manual(values=c("TRUE"="firebrick","FALSE"="black")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  geom_vline(xintercept = 0,linetype="dashed") +
+  #geom_text_repel(data=pot1_signature %>% filter(padj_significant),aes(label=gene)) +
+  theme(legend.position = "none",axis.title = element_blank())
+
+pot1_sig_volcano
+cowplot::ggsave2("./outputs/plots/POT1_volcano.png",pot1_sig_volcano,dpi=600,width=1.6,height=1.3)
+write.csv(pot1_signature,"./outputs/tables/POT1_volcano.csv")
+
+pot1_signature
+
+myc_signature <- FindMarkers(
+  object = so,
+  ident.1 = "Mutant",
+  ident.2 = "WT",
+  group.by = "MYC",
+  test.use = "LR",           # Logistic Regression
+  latent.vars = "ESTIMATE_purity", # The adjustment variable
+  logfc.threshold = 0
+)
+
+myc_signature$gene = rownames(myc_signature)
+myc_signature$to_highlight = myc_signature$gene %in% c("MYC")
+myc_sig_volcano = ggplot(myc_signature %>% arrange(to_highlight),aes(x=avg_log2FC,y=-log2(p_val),color=to_highlight)) +
+  geom_point() + pretty_plot() + L_border() +
+  geom_vline(xintercept=0,linetype="dashed") +
+  geom_hline(yintercept=-log2(0.05),linetype="dashed") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
+myc_sig_volcano
+
+write.csv(myc_signature,"./outputs/tables/MYC_volcano.csv")
+
+myc_signature_filtered = myc_signature %>% filter(p_val < 0.05,avg_log2FC > 0.5) %>% arrange(-avg_log2FC)
+
+
+tp53_signature <- FindMarkers(
+  object = so,
+  ident.1 = "Mutant",
+  ident.2 = "WT",
+  group.by = "TP53",
+  test.use = "LR",           # Logistic Regression
+  latent.vars = "ESTIMATE_purity", # The adjustment variable
+  logfc.threshold = 0.25
+)
+
+tp53_signature_filtered = tp53_signature %>% filter(p_val_adj < 0.05)
+write.csv(tp53_signature,"../unused/tp53_padj_sig.csv")
+
+kdr_signature <- FindMarkers(
+  object = so,
+  ident.1 = "Mutant",
+  ident.2 = "WT",
+  group.by = "KDR",
+  test.use = "LR",           # Logistic Regression
+  latent.vars = "ESTIMATE_purity", # The adjustment variable
+  logfc.threshold = 0.25
+)
+
+plcg1_signature <- FindMarkers(
+  object = so,
+  ident.1 = "Mutant",
+  ident.2 = "WT",
+  group.by = "PLCG1",
+  test.use = "LR",           # Logistic Regression
+  latent.vars = "ESTIMATE_purity", # The adjustment variable
+  logfc.threshold = 0.1
+)
+
+ptprb_signature <- FindMarkers(
+  object = so,
+  ident.1 = "Mutant",
+  ident.2 = "WT",
+  group.by = "PTPRB",
+  test.use = "LR",           # Logistic Regression
+  latent.vars = "ESTIMATE_purity", # The adjustment variable
+  logfc.threshold = 0.1
+)
+
+# ## Adding metadata
+# mutation_cols = c("Total_Mutations","TMB_all_mutations","Total_Nonsyn_Mutations","TMB_nonsyn")
+# sbs_cols = names(tumor_WES_meta)[grepl("SBS",names(tumor_WES_meta))]
+# one_hot_cols = names(tumor_WES_onehot_data)
+# mutation_subset_cols_to_keep = c("Tumor_Sample_Barcode","sample_alias",mutation_cols,sbs_cols)
+# tumor_WES_meta_subset = tumor_WES_meta[,mutation_subset_cols_to_keep]
 
 ## Add one-hot somatic mutations
-tumor_WES_onehot_data = read.csv("data/processed/tumor_WES/ASC_mutations_MutSig_Recurrent_Gene_One_Hot.tsv",sep="\t",check.names = FALSE)
+tumor_WES_onehot_data = read.csv("../data/processed/tumor_WES/ASC_mutations_MutSig_Recurrent_Gene_One_Hot.tsv",sep="\t",check.names = FALSE)
 ## Change column names to disambiguate
 colnames(tumor_WES_onehot_data) = paste(colnames(tumor_WES_onehot_data),"mutation", sep = "_")
 names(tumor_WES_onehot_data)[names(tumor_WES_onehot_data) == 'Tumor_Sample_Barcode_mutation'] = 'Tumor_Sample_Barcode'
@@ -45,6 +196,8 @@ rownames(so_subset@meta.data) = so_subset@meta.data$og_id
 vst_rescaled = so_subset@assays$RNA$counts
 vst_rescaled = as.data.frame(t(scale(t(vst_rescaled))),check.names=FALSE)
 so_subset@assays$RNA$vst_rescaled = vst_rescaled
+
+FeaturePlot(so,features = c("rna_PLCG1"))
 
 ## Check SBS by cluster
 VlnPlot(so_subset,features = c("SBS6","SBS7","SBS15","SBS87"))

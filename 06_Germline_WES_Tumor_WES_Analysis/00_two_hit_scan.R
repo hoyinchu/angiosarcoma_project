@@ -2,17 +2,20 @@ library(dplyr)
 library(tidyverse)
 library(ggrepel)
 library(ggpubr)
-
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
-
+library(stringr)
 ## Load the preprocessed one-hot encoded sample by pathogenic variant carrier status dataframe. 
-germline_df = read.csv("../reference_data/ClinicalTables/Jun2023_ASC_Case_Control_Sample_Merged_Germline.tsv",sep="\t",check.names=FALSE)
+germline_df = read.csv("../data/processed/germline/Jun2023_ASC_Case_Control_Sample_Merged_Germline.tsv",sep="\t",check.names=FALSE)
 germline_case_subset = germline_df[germline_df$is_ASC=="True",]
+
+## Alternatively load the QC table
+#qc_table = read_tsv("../05_Germline_WES_Analysis/germline_sample_status.tsv")
+#germline_case_sample_ids = qc_table %>% filter(passed_germline_filter) %>% pull(sample_alias)
+#germline_case_alias_ids = word(germline_case_sample_ids, 1, 2, sep = "_")
 
 ## Load the preprocessed somatic variant table 
 # Load processed MAF file and clinical metadata
-asc_maf_path = "data/processed/tumor_WES/ASC_mutations.maf"
-asc_maf_metadata_path = "data/processed/tumor_WES/ASC_mutations_metadata.tsv"
+asc_maf_path = "../data/processed/tumor_WES/ASC_mutations.maf"
+asc_maf_metadata_path = "../data/processed/tumor_WES/ASC_mutations_metadata.tsv"
 asc_maf = read.maf(maf=asc_maf_path,clinicalData=asc_maf_metadata_path)
 
 ## Make a long format dataframe that lists all the patients 
@@ -33,7 +36,7 @@ maf_symbol_by_patient$somatic_nonsyn_carrier = 1
 
 # Merge the two
 germline_somatic_merged = merge(germline_subset_long,maf_symbol_by_patient,by=c("individual_alias","Hugo_Symbol"),all.x=TRUE,all.y=TRUE)
-germline_somatic_merged = germline_somatic_merged %>% select(individual_alias,Hugo_Symbol,germline_pv_carrier,somatic_nonsyn_carrier,Tumor_Sample_Barcode)
+germline_somatic_merged = germline_somatic_merged %>% dplyr::select(individual_alias,Hugo_Symbol,germline_pv_carrier,somatic_nonsyn_carrier,Tumor_Sample_Barcode)
 germline_somatic_merged[is.na(germline_somatic_merged$germline_pv_carrier),"germline_pv_carrier"] = 0
 germline_somatic_merged[is.na(germline_somatic_merged$somatic_nonsyn_carrier),"somatic_nonsyn_carrier"] = 0
 
@@ -83,15 +86,43 @@ germline_versus_tumor_gene_plot = ggplot(
 
 germline_versus_tumor_gene_plot
   
-ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/00_germline_versus_tumor_gene_plot.png",germline_versus_tumor_gene_plot,dpi=300,width=10,height=8)
+#ggsave("./outputs/plots/00_germline_versus_tumor_gene_plot.png",germline_versus_tumor_gene_plot,dpi=300,width=10,height=8)
+
+germline_versus_tumor_mut_counts
+## Make a rank plot of total number of patients with both germline and somatic variants in the same gene
+germline_versus_tumor_mut_counts$bicarrier_category_rank = rank(-as.numeric(germline_versus_tumor_mut_counts$bicarrier_category),ties.method = "first")
+rank_range = range(germline_versus_tumor_mut_counts$bicarrier_category_rank, na.rm = TRUE)
+biallelic_rank_plot = ggplot(data=germline_versus_tumor_mut_counts,aes(x=bicarrier_category_rank,y=bicarrier_category,color=bicarrier_category>1)) +
+  geom_point() + pretty_plot() + L_border() + scale_color_manual(values = c("TRUE"="firebrick","FALSE"="black")) +
+  scale_x_continuous(breaks = rank_range) +
+  theme(legend.position = "none", axis.title = element_blank())
+biallelic_rank_plot
+cowplot::ggsave2("./outputs/plots/biallelic_rank_plot.pdf",biallelic_rank_plot,dpi=300,width=1.6,height=1.3)
+
+## Alternatively plot it this way
+highlight_genes = c("TP53","KDR","PKHD1","USH2A","CFTR","FLG","PAH","POT1","TTN","CYP21A2","GJB2")
+germline_versus_tumor_mut_counts$to_highlight = germline_versus_tumor_mut_counts$Hugo_Symbol %in% highlight_genes
+germline_versus_tumor_gene_plot = ggplot(
+  germline_versus_tumor_mut_counts %>% arrange(to_highlight),aes(x=germline_pv_carrier_count,y=somatic_nonsyn_carrier_count,color=to_highlight)
+) + geom_point() + pretty_plot() + L_border() + scale_color_manual(values=c("TRUE"="firebrick","FALSE"="black")) +
+  geom_text_repel(data=germline_versus_tumor_mut_counts %>% filter(to_highlight),aes(label=Hugo_Symbol),size=2) +
+  theme(legend.position = "none", axis.title = element_blank())
+germline_versus_tumor_gene_plot
+cowplot::ggsave2("./outputs/plots/germline_versus_tumor_gene_plot.pdf",germline_versus_tumor_gene_plot,dpi=300,width=1.6,height=1.3)
+
 
 ## Write the count table 
-write.csv(germline_versus_tumor_mut_counts,"06_Germline_WES_Tumor_WES_Analysis/outputs/tables/germline_vs_tumor_gene_counts.csv",row.names = FALSE)
+write.csv(germline_versus_tumor_mut_counts,"./outputs/tables/germline_vs_tumor_gene_counts.csv",row.names = FALSE)
+
+## Load the count table
+germline_versus_tumor_mut_counts = read.csv("./outputs/tables/germline_vs_tumor_gene_counts.csv")
 
 ## Also add other clinically relevant information
-clin_data = read.csv("data/processed/clinical_data.tsv",sep="\t",check.names = FALSE)
+clin_data = read.csv("../data/processed/clinical_data.tsv",sep="\t",check.names = FALSE)
 clin_data$individual_alias = clin_data$`STUDY ID`
 clin_data$germline_avail = as.numeric(clin_data$individual_alias %in% germline_case_subset$individual_alias)
+#clin_data$germline_avail = as.numeric(clin_data$individual_alias %in% germline_case_alias_ids)
+
 clin_data$somatic_avail = as.numeric(clin_data$individual_alias %in% unique(maf_symbol_by_patient$individual_alias))
 clin_data$germline_somatic_avail = clin_data$germline_avail * clin_data$somatic_avail
 clin_data = clin_data %>% mutate(
@@ -130,8 +161,28 @@ clin_data = clin_data %>% mutate(
   )
 )  %>% mutate(pot1_mutation_status = factor(
   pot1_mutation_status,
-  levels = c("Somatic + Germline","Somatic Only","Germline Only","None Detected")
+  #levels = c("Somatic + Germline","Somatic Only","Germline Only","None Detected"),
+  levels = c("None Detected","Somatic Only","Germline Only","Somatic + Germline")
   ))
+
+clin_data
+
+
+## Make the age plot
+pot1_age_plot = ggplot(clin_data,aes(x=pot1_mutation_status,y=`Age (Combined)`)) +
+  pretty_plot() + L_border() +
+  geom_jitter(width = 0.1,color="gray",size=1) +
+  geom_boxplot(width = 0.4, fill = "white",outlier.shape = NA) +
+  stat_compare_means(comparisons = list(
+    c("Somatic Only","None Detected"),
+    c("Germline Only","None Detected"),
+    c("Somatic + Germline","None Detected")
+  )) +
+  theme(axis.title = element_blank(),axis.text.x=element_blank())
+
+pot1_age_plot
+cowplot::ggsave2("./outputs/plots/pot1_age_of_onset.pdf",pot1_age_plot,dpi=300,width=1.8,height=1.2)
+
 
 pot1_age_plot = ggplot(clin_data,aes(
   x=pot1_mutation_status,

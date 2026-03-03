@@ -4,12 +4,11 @@ library(ggrepel)
 library(tidyr)
 
 ## Load filtered data and GSVA data
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
-count_data = read.csv("data/processed/rna/00_filtered_gene_counts.csv",row.names = 1,check.names = FALSE)
-vst_data = read.csv("data/processed/rna/00_filtered_gene_counts.vst.csv",row.names = 1,check.names = FALSE)
-tpm_data = read.csv("data/processed/rna/00_filtered_gene_tpm.csv",row.names = 1,check.names = FALSE)
+count_data = read.csv("../data/processed/rna/00_filtered_gene_counts.csv",row.names = 1,check.names = FALSE)
+vst_data = read.csv("../data/processed/rna/00_filtered_gene_counts.vst.csv",row.names = 1,check.names = FALSE)
+tpm_data = read.csv("../data/processed/rna/00_filtered_gene_tpm.csv",row.names = 1,check.names = FALSE)
 #meta_data = read.csv("reference_data/RNA_Seq/outputs/filtered_metadata.csv",check.names = FALSE)
-meta_data = read.csv("data/processed/rna/00_filtered_sample_metadata.csv",check.names = FALSE)
+meta_data = read.csv("../data/processed/rna/00_filtered_sample_metadata.csv",check.names = FALSE)
 
 # 
 # gsva_vst_go_bp_data = read.csv("reference_data/RNA_Seq/outputs/gsva/gsva_ssGSEA_score_vst_GO_BP_set.csv",row.names = 1,check.names = FALSE)
@@ -32,7 +31,7 @@ lib_size_plot = ggplot(meta_data, aes(x=library_size,fill=LC_BATCH)) +
   xlab("Library Size") +
   ylab("# of Samples")
 lib_size_plot
-ggsave("RNA_Analysis/outputs/plots/00_qc_plots/01_library_size_histogram.png",lib_size_plot)
+#ggsave("RNA_Analysis/outputs/plots/00_qc_plots/01_library_size_histogram.png",lib_size_plot)
 
 ## Plot logged gene count distribution
 total_gene_counts = rowSums(count_data)
@@ -42,7 +41,7 @@ gene_counts_plot = ggplot(total_gene_counts, aes(x=log_count)) +
   xlab("Log Gene Read Counts") +
   ylab("# of Genes")
 gene_counts_plot
-ggsave("RNA_Analysis/outputs/plots/00_qc_plots/01_gene_read_counts_histogram.png",gene_counts_plot)
+#ggsave("RNA_Analysis/outputs/plots/00_qc_plots/01_gene_read_counts_histogram.png",gene_counts_plot)
 
 ## Plot VST transformed library size and gene size
 vst_library_sizes = as.data.frame(colSums(vst_data))
@@ -52,7 +51,7 @@ vst_library_sizes_plot = ggplot(vst_library_sizes, aes(x=library_size)) +
   xlab("VST-transformed Library Sizes") +
   ylab("# of Samples")
 vst_library_sizes_plot
-ggsave("RNA_Analysis/outputs/plots/00_qc_plots/01_vst_transformed_library_size_histogram.png",vst_library_sizes_plot)
+#ggsave("RNA_Analysis/outputs/plots/00_qc_plots/01_vst_transformed_library_size_histogram.png",vst_library_sizes_plot)
 
 vst_gene_counts = as.data.frame(rowSums(vst_data))
 colnames(vst_gene_counts) = "gene_counts"
@@ -61,7 +60,7 @@ vst_gene_counts_plot = ggplot(vst_gene_counts, aes(x=gene_counts)) +
   xlab("VST-transformed Gene Counts") +
   ylab("# of Genes with Read Count")
 vst_gene_counts_plot
-ggsave("RNA_Analysis/outputs/plots/00_qc_plots/01_vst_transformed_gene_counts_histogram.png",vst_gene_counts_plot)
+#ggsave("RNA_Analysis/outputs/plots/00_qc_plots/01_vst_transformed_gene_counts_histogram.png",vst_gene_counts_plot)
 
 ## Plot mean-variance relationship between genes
 mean_var_plot = function(gene_data) {
@@ -84,11 +83,11 @@ mean_var_plot = function(gene_data) {
 
 log_tom_mean_var_plot = mean_var_plot(log(tpm_data+1))
 log_tom_mean_var_plot
-ggsave(log_tom_mean_var_plot,file="RNA_Analysis/outputs/plots/00_qc_plots/01_filtered_log_tpm_mean_var.png")
+#ggsave(log_tom_mean_var_plot,file="RNA_Analysis/outputs/plots/00_qc_plots/01_filtered_log_tpm_mean_var.png")
 
 vst_mean_var_plot = mean_var_plot(vst_data)
 vst_mean_var_plot
-ggsave(log_tom_mean_var_plot,file="RNA_Analysis/outputs/plots/00_qc_plots/01_filtered_vst_mean_var.png")
+#ggsave(log_tom_mean_var_plot,file="RNA_Analysis/outputs/plots/00_qc_plots/01_filtered_vst_mean_var.png")
 
 # singscore_mean_var_plot = mean_var_plot(singscore_tpm_paired_cancer_data)
 # ggsave(singscore_mean_var_plot,file="reference_data/RNA_Seq/outputs/plots/01_singscore_paired_cancer_mean_var.png")

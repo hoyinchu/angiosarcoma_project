@@ -2,11 +2,10 @@ library(dplyr)
 library(tidyverse)
 library(broom)
 library(ggrepel)
-
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
+library(BuenColors)
 
 ## Load the preprocessed one-hot encoded sample by pathogenic variant carrier status dataframe. 
-germline_df = read.csv("../reference_data/ClinicalTables/Jun2023_ASC_Case_Control_Sample_Merged_Germline.tsv",sep="\t",check.names=FALSE)
+germline_df = read.csv("../data/processed/germline/Jun2023_ASC_Case_Control_Sample_Merged_Germline.tsv",sep="\t",check.names=FALSE)
 
 ## Define columns to use as covariate
 pc_columns = paste0("PCA",1:10)
@@ -72,6 +71,10 @@ gene_burden_testing = function(df,burden_cols) {
 
 ## Visualize the results
 case_filtered_gene_burden_results = gene_burden_testing(germline_df,case_germline_cols_case_enirched)
+
+## Alternatively, read in the results
+case_filtered_gene_burden_results = read_tsv("./outputs/germline_PV_gene_enrichment_min_2_in_case.tsv")
+
 ## Get gene names
 case_filtered_gene_burden_results_pos_only = case_filtered_gene_burden_results[case_filtered_gene_burden_results$estimate > 0,]
 case_filtered_gene_burden_results_pos_only = case_filtered_gene_burden_results_pos_only %>% mutate(
@@ -90,28 +93,49 @@ case_filtered_gene_burden_results_pos_only = case_filtered_gene_burden_results_p
 show_text_subset = case_filtered_gene_burden_results_pos_only[
   (case_filtered_gene_burden_results_pos_only$p.value < 0.01)|(case_filtered_gene_burden_results_pos_only$carrier_in_case >=10),
   ]
-case_filtered_enrichment_plot = ggplot(case_filtered_gene_burden_results_pos_only,aes(x=estimate,y=neg_log_adjusted_pval,label=gene,color=case_num_bin)) + 
-  geom_hline(yintercept = -log(0.05),linetype="dashed",color="black") + 
-  geom_point(aes(size=carrier_in_case)) +
-  scale_size_continuous(range = c(2, 10)) +
-  xlim(0,6) +
-  theme_minimal() +
-  labs(size="# of PV Carriers in patients",
-       color="# of PV Carriers in patients",
-       y="-log(adjusted p-values)",
-       x="log odds\n(ancestry, sex-adjusted)"
-       ) +
-  geom_label_repel(data=show_text_subset,max.overlaps =20,box.padding = 1, size=5,fill="white")
 
-case_filtered_enrichment_plot
+
+case_filtered_gene_burden_results_pos_only
+
+viz_genes = c("POT1","CHEK2","BRCA1","BRCA2","MUTYH","ERCC3","ERCC4","MSH2","TP53")
+case_filtered_gene_burden_results_pos_only$highlight = case_filtered_gene_burden_results_pos_only$gene %in% viz_genes
+
+case_enrichment_plot_clean = ggplot(case_filtered_gene_burden_results_pos_only %>% filter(estimate < 5) %>% arrange(highlight), 
+       aes(x = exp(estimate), y = neg_log_adjusted_pval, color = highlight)) +
+  geom_point() +
+  geom_hline(yintercept = -log(0.05), linetype = "dashed", color = "gray") + 
+  scale_color_manual(values = c("TRUE" = "firebrick", "FALSE" = "black")) +
+  pretty_plot() + 
+  L_border() + 
+  scale_x_log10() +
+  geom_text_repel(data=case_filtered_gene_burden_results_pos_only %>% filter(highlight),aes(label=gene),size=2) +
+  theme(legend.position = "none",axis.title.x=element_blank(),axis.title.y = element_blank())
+case_enrichment_plot_clean
+
+cowplot::ggsave2("./outputs/plots/case_enrichment_plot_clean.pdf",case_enrichment_plot_clean,dpi=300,height = 1.3,width=3.5)
+
+# case_filtered_enrichment_plot = ggplot(case_filtered_gene_burden_results_pos_only,aes(x=estimate,y=neg_log_adjusted_pval,label=gene,color=case_num_bin)) + 
+#   geom_hline(yintercept = -log(0.05),linetype="dashed",color="black") + 
+#   geom_point(aes(size=carrier_in_case)) +
+#   scale_size_continuous(range = c(2, 10)) +
+#   xlim(0,6) +
+#   theme_minimal() +
+#   labs(size="# of PV Carriers in patients",
+#        color="# of PV Carriers in patients",
+#        y="-log(adjusted p-values)",
+#        x="log odds\n(ancestry, sex-adjusted)"
+#        ) +
+#   geom_label_repel(data=show_text_subset,max.overlaps =20,box.padding = 1, size=5,fill="white")
+# 
+# case_filtered_enrichment_plot
 
 ## Check POT1 effect size, dont forget to exponentiate
 case_filtered_gene_burden_results[case_filtered_gene_burden_results$gene=="POT1",]
 
 
-ggsave(case_filtered_enrichment_plot,filename = "05_Germline_WES_Analysis/outputs/plots/01_germline_PV_gene_enrichment_min_2_in_case.png",dpi=300,width=16,height=5)
-ggsave(case_filtered_enrichment_plot,filename = "05_Germline_WES_Analysis/outputs/plots/01_germline_PV_gene_enrichment_min_2_in_case.pdf",dpi=300,width=16,height=5)
+ggsave(case_filtered_enrichment_plot,filename = "./outputs/plots/01_germline_PV_gene_enrichment_min_2_in_case.png",dpi=300,width=16,height=5)
+ggsave(case_filtered_enrichment_plot,filename = "./outputs/plots/01_germline_PV_gene_enrichment_min_2_in_case.pdf",dpi=300,width=16,height=5)
 
-write.table(case_filtered_gene_burden_results,file="05_Germline_WES_Analysis/outputs/germline_PV_gene_enrichment_min_2_in_case.tsv",sep="\t",row.names=FALSE)
+write.table(case_filtered_gene_burden_results,file="./outputs/germline_PV_gene_enrichment_min_2_in_case.tsv",sep="\t",row.names=FALSE)
 
 

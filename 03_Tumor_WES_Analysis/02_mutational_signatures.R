@@ -4,7 +4,8 @@ library(ggplot2)
 library(GenomicRanges)
 library(BSgenome.Hsapiens.UCSC.hg19)
 
-maf_df = read.csv(file="data/processed/tumor_WES/ASC_mutations.maf",sep="\t",check.names=FALSE)
+maf_df = read.csv(file="../data/processed/tumor_WES/ASC_mutations.maf",sep="\t",check.names=FALSE)
+#maf_df = read.csv(file="../data/processed/tumor_WES/ASC_mutations_new.maf",sep="\t",check.names=FALSE)
 
 ## Calculate tri-nucleotide frequency 
 mut_genomic_ranges = GRanges(
@@ -25,7 +26,8 @@ tri_nuc_mat_to_write = as.data.frame(t(tri_nuc_mat),check.names=FALSE)
 tri_nuc_mat_to_write = cbind(Tumor_Sample_Barcode = rownames(tri_nuc_mat_to_write), tri_nuc_mat_to_write)
 
 if(FALSE) {
-  write.table(tri_nuc_mat_to_write,file="data/processed/tumor_WES/mutational_signatures/ASC_trinucleotide_mutation_counts.tsv",sep="\t",quote = FALSE,row.names = FALSE)
+  write.table(tri_nuc_mat_to_write,file="../data/processed/tumor_WES/ASC_trinucleotide_mutation_counts.tsv",sep="\t",quote = FALSE,row.names = FALSE)
+  #write.table(tri_nuc_mat_to_write,file="../data/processed/tumor_WES/ASC_trinucleotide_mutation_counts_new.tsv",sep="\t",quote = FALSE,row.names = FALSE)
 }
 
 # Fit to existing signatures
@@ -65,17 +67,48 @@ sig_dotplot = ggplot(strict_decomp_res_rel_long_no_zero,aes(x=SBS,y=sample,size=
   theme_minimal() +
   labs(x="Signature",y="Sample",size="Signature Proportion",color="Proportion Bin")
 sig_dotplot
-ggsave(sig_dotplot,file="03_Tumor_WES_Analysis/outputs/plots/02_mutationa_signature_dot_plot.png",height=16,width=16)
+
+ggsave(sig_dotplot,file="./outputs/plots/02_mutationa_signature_dot_plot.png",height=16,width=16)
+
+majority_only = strict_decomp_res_rel_long_no_zero %>% arrange(-value) %>% distinct(sample,.keep_all = TRUE)
+table(majority_only$SBS)
+
+sample_meta_with_sbs = merge(sample_meta_df,majority_only,
+                             by.x="entity:sample_id",by.y="sample",all.x=TRUE)
+keep_sigs = c("SBS1", "SBS7a", "SBS7b", "SBS15", "SBS87")
+sample_meta_with_sbs = sample_meta_with_sbs %>%
+  mutate(SBS_grouped = fct_other(SBS, keep = keep_sigs, other_level = "Other SBS"))
+sample_meta_with_sbs_stats = sample_meta_with_sbs %>% group_by(`Primary Site (Recombined)`) %>% summarise() 
+
+signature_proportion_plot <- ggplot(sample_meta_with_sbs, aes(x = `Primary Site (Recombined)`, y = value, fill = SBS_grouped)) +
+  # position = "fill" turns the counts/sums into proportions (0 to 1)
+  geom_bar(stat = "identity", position = "fill") +
+  # Flip coordinates if you have many primary sites to keep labels readable
+  coord_flip() +
+  # Use a color scale that can handle many signatures (like viridis or expanded palette)
+  scale_fill_viridis_d(option = "mako", name = "Signature") +
+  labs(
+    title = "Proportion of SBS Signatures by Primary Site",
+    x = "Primary Site",
+    y = "Proportion of Total Signature Value"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    panel.grid.major.y = element_blank()
+  )
+
+print(signature_proportion_plot)
 
 # Inspect reconstruction quality
 reconstruction_plot = plot_original_vs_reconstructed(tri_nuc_mat,strict_decomp$fit_res$reconstructed)
 
 ## Proportion of samples by primary site with sig7b proportion > 0.2?
 # Load metadata
-sample_meta_df = read.csv("data/processed/sample_clin_data.tsv",check.names = FALSE,sep="\t") %>% filter(
+sample_meta_df = read.csv("../data/processed/sample_clin_data.tsv",check.names = FALSE,sep="\t") %>% filter(
   `entity:sample_id` %in% maf_df$Tumor_Sample_Barcode
 )
-strict_decomp_res_rel_long_no_zero_sbs7_only = strict_decomp_res_rel_long_no_zero %>% filter(SBS=="SBS7b" | SBS=="SBS7a")
+strict_decomp_res_rel_long_no_zero_sbs7_only = strict_decomp_res_rel_long_no_zero %>% filter(SBS=="SBS1")#filter(SBS=="SBS7b" | SBS=="SBS7a")
 #strict_decomp_res_rel_long_no_zero_sbs7_only = strict_decomp_res_rel_long_no_zero %>% filter(SBS=="SBS1")
 
 sample_meta_with_sbs7 = merge(sample_meta_df,strict_decomp_res_rel_long_no_zero_sbs7_only,
@@ -91,16 +124,18 @@ sbs7_prop_plot = ggplot(sample_meta_with_sbs7_stats,aes(y=fct_reorder(`Primary S
   theme_minimal() +
   scale_x_continuous(labels = scales::percent)
 sbs7_prop_plot
-ggsave(sbs7_prop_plot,file="03_Tumor_WES_Analysis/outputs/plots/02_over_050_SBS7_proportion_by_site_plot.png",dpi=300,height=4,width=4)
+ggsave(sbs7_prop_plot,file="./outputs/plots/02_over_050_SBS7_proportion_by_site_plot.png",dpi=300,height=4,width=4)
 
 
 if (FALSE) {
-  write.table(strict_decomp_res_rel,file="data/processed/tumor_WES/mutational_signatures/ASC_mutational_signature_relative.tsv",sep="\t",quote = FALSE,row.names = FALSE)
+  write.table(strict_decomp_res_rel,file="../data/processed/tumor_WES/ASC_mutational_signature_relative.tsv",sep="\t",quote = FALSE,row.names = FALSE)
+  write.table(strict_decomp_res_rel,file="../data/processed/tumor_WES/ASC_mutational_signature_relative_new.tsv",sep="\t",quote = FALSE,row.names = FALSE)
 }
 
 
 # Obtain primary sites
-sample_meta_df = read.csv("data/processed/sample_clin_data.tsv",check.names = FALSE,sep="\t")
+sample_meta_df = read.csv("../data/processed/sample_clin_data.tsv",check.names = FALSE,sep="\t")
+#primary_sites = sample_meta_df_subset %>% filter(`entity:sample_id` %in% rownames(mut_type_occurrences)) %>% pull(`Primary Site (Recombined)`)
 primary_sites = sample_meta_df_subset[sample_meta_df_subset$`entity:sample_id` %in% rownames(mut_type_occurrences),]$`Primary Site (Recombined)`
 # Obtain mutation type counts by samples
 mut_type_occurrences = mut_type_occurrences(snv_grl, ref_genome = BSgenome.Hsapiens.UCSC.hg19)
@@ -113,5 +148,5 @@ point_mutation_spectrum_plot = plot_spectrum(
   legend = TRUE
 ) + theme_bw()
 point_mutation_spectrum_plot
-ggsave(point_mutation_spectrum_plot,file="03_Tumor_WES_Analysis/outputs/plots/02_tri_nucleotide_spectrum_plot.png",width=12,height = 8)
+ggsave(point_mutation_spectrum_plot,file="./outputs/plots/02_tri_nucleotide_spectrum_plot.png",width=12,height = 8)
 

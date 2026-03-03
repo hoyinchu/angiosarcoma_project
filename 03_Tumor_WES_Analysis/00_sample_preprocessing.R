@@ -2,11 +2,9 @@ library(dplyr)
 library(tidyr)
 ## This scripts identify all the samples that passed/failed quality control
 
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
-
 # Load all tumor normal pairs available
-pair_df = read.csv("data/raw/sample_tables/pair_Jan13_2024.tsv",sep="\t",check.names = FALSE)
-pair_set_df = read.csv("data/raw/sample_tables/pair_set_membership.tsv",sep="\t",check.names = FALSE)
+pair_df = read.csv("../data/raw/sample_tables/pair_Jan13_2024.tsv",sep="\t",check.names = FALSE)
+pair_set_df = read.csv("../data/raw/sample_tables/pair_set_membership.tsv",sep="\t",check.names = FALSE)
 
 # Format names
 pair_df["case_sample"] = sub('.*entityName:([^,}]*)[},].*', '\\1', pair_df$case_sample)
@@ -54,9 +52,9 @@ pair_df_subset = pair_df[,c(
 )]
 
 pair_df_subset["data_type"] = "tumor_WES"
-write.table(pair_df_subset,"data/processed/qc_tables/tumor_WES_pair_status.tsv",sep="\t",row.names = FALSE)
+write.table(pair_df_subset,"../data/processed/qc_tables/tumor_WES_pair_status.tsv",sep="\t",row.names = FALSE)
 
 pair_df_subset_filtered = pair_df_subset %>% filter(pass_final_filter==TRUE)
-write.csv(pair_df_subset_filtered,"./scripts/Tumor_WES_Analysis/outputs/preprocessing/all_filter_passed_pairs.csv")
+write.csv(pair_df_subset_filtered,"../data/processed/qc_tables/all_filter_passed_pairs.csv")
 
 

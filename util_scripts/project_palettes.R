@@ -12,9 +12,23 @@ primary_site_palette = c(
   "Heart"=pal_npg("nrc")(9)[6],
   "Musculoskeletal"=pal_npg("nrc")(9)[7],
   "Breast (Parenchymal)"=pal_npg("nrc")(9)[8],
-  "NA"=pal_npg("nrc")(9)[9],
-  "Other Rare Sites"=pal_npg("nrc")(9)[9]
+  "NA"=pal_npg("nrc")(9)[9]
 )
+
+primary_site_palette_maftools = c(
+  "Other Visceral Organs"=pal_npg("nrc")(9)[1],
+  "Hepatobiliary"=pal_npg("nrc")(9)[2],
+  "Breast (Cutaneous)"=pal_npg("nrc")(9)[3],
+  "HNFS"=pal_npg("nrc")(9)[4],
+  "Extremities"=pal_npg("nrc")(9)[5],
+  "Heart"=pal_npg("nrc")(9)[6],
+  "Musculoskeletal"=pal_npg("nrc")(9)[7],
+  "Breast (Parenchymal)"=pal_npg("nrc")(9)[8],
+  "Other Rare Sites"=pal_npg("nrc")(9)[9],
+  "Missing or Unknown"="gray",
+  "Breast (NOS)"= "pink"
+)
+
 
 cluster_by_primary_site_palette = c(
   "Others"=pal_npg("nrc")(9)[1],
@@ -149,3 +163,18 @@ mets_dx_palette = c(
   "YES" = "darkblue",
   "NO" = "lightblue"
 )
+
+variant_palette = c(
+  "Missense_Mutation" = "#33A02C",
+  "Frame_Shift_Del"   = "#1F78B4",
+  "Frame_Shift_Ins"   = "#6A3D9A",  
+  "Nonsense_Mutation" = "#E31A1C",   # Red
+  "Splice_Site"       = "#FF7F00",  
+  "In_Frame_Del"      = "brown",   # Purple
+  "In_Frame_Ins"      = "brown",   # Purple
+  "Multi_Hit"         = "#000000",   # Orange
+  "Amp"               = "pink",   # Dark Red (for CNV)
+  "DeepDel"           = "#000080",    # Dark Blue (for CNV),
+  "Complex_Event"     = "yellow"
+)
+

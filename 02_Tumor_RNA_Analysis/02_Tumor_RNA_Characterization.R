@@ -18,12 +18,10 @@ library(dendextend)
 #library(ggpubr)
 #library(ggbeeswarm)
 
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
-
 ## Load count data and reformat IDs for downstream compatibility
-count_data = read.csv("data/processed/rna/00_filtered_gene_counts.csv",row.names = 1,check.names = FALSE)
-vst_data = read.csv("data/processed/rna/00_filtered_gene_counts.vst.csv",row.names = 1,check.names = FALSE)
-tpm_data = read.csv("data/processed/rna/00_filtered_gene_tpm.csv",row.names = 1,check.names = FALSE)
+count_data = read.csv("../data/processed/rna/00_filtered_gene_counts.csv",row.names = 1,check.names = FALSE)
+vst_data = read.csv("../data/processed/rna/00_filtered_gene_counts.vst.csv",row.names = 1,check.names = FALSE)
+tpm_data = read.csv("../data/processed/rna/00_filtered_gene_tpm.csv",row.names = 1,check.names = FALSE)
   
 colnames(count_data) = gsub("-", ".", colnames(count_data))
 colnames(count_data) = gsub("_", ".", colnames(count_data))
@@ -42,7 +40,7 @@ vst_data_unscaled = as.data.frame((vst_data),check.names=FALSE)
 #colnames(vst_data_scaled) =  vst_data_scaled_pretty_names
 
 ## Apply same formatting to metadata and reorder it
-meta_data = read.csv("data/processed/rna/00_filtered_sample_metadata.csv",check.names = FALSE)
+meta_data = read.csv("../data/processed/rna/00_filtered_sample_metadata.csv",check.names = FALSE)
 meta_data$seurat_id = meta_data$`entity:sample_id`
 meta_data$seurat_id = gsub("_", ".", meta_data$seurat_id)
 meta_data$seurat_id = gsub("-", ".", meta_data$seurat_id)
@@ -103,6 +101,59 @@ so@meta.data = so@meta.data %>% mutate(
   ),
 )
 
+
+# ## Also compute hierarchical clusters based on vst data (Using variable genes)
+# genes_to_use_for_hclust = so@assays$RNA$vst_data[VariableFeatures(so,nfeatures = 2000),]
+# #genes_to_use_for_hclust = so@assays$RNA$vst_data#[VariableFeatures(so),]
+# hclust_dist_matrix = dist(t(genes_to_use_for_hclust), method = "euclidean")
+# hclust_res = hclust(hclust_dist_matrix, method = "ward.D2")
+# 
+# ## Assign clusters via DynamicCut
+# #sample_clusters = cutreeDynamic(dendro = hclust_res,minClusterSize = 10)
+# ## Asign clusters via cut height
+# sample_clusters = cutree(hclust_res, k = NULL, h = 200)
+# 
+# # Get sample labels and primary site information
+# sample_labels = colnames(genes_to_use_for_hclust)
+# primary_sites = so@meta.data[sample_labels, ]$seurat_clusters_by_site_str#`Primary Site (Recombined)`
+# unique_clusters = unique(sample_clusters)
+# 
+# # Convert hclust object to dendrogram
+# dend = as.dendrogram(hclust_res)
+# dend = color_branches(dend, k = length(unique_clusters), groupLabels = as.character(unique_clusters), labels_cex = 0.2)
+# 
+# # Color the leaves by primary site
+# # Match primary site colors to the corresponding sample labels
+# dend_order = order.dendrogram(dend)
+# ordered_labels = primary_sites[dend_order]
+# leaf_colors = cluster_by_primary_site_palette[ordered_labels]
+# names(leaf_colors) = sample_labels
+# dend = set(dend, "labels_col", leaf_colors)
+# dend = set(dend, "labels_cex", 0.1)
+# dend = set(dend, "labels", ordered_labels)  # Label by primary site
+# 
+# dend
+# # Plot colored dendrogram
+# pdf("./outputs/plots/02_seurat_plots/02_gene_expression_cluster_dendrogram.pdf",width=3.6,height=3.6)
+# plot(dend, main = "dend", ylab = "Height")
+# # Add legend for primary sites
+# # legend("topright", legend = unique(primary_sites), 
+# #        fill = cluster_by_primary_site_palette, 
+# #        title = "Primary Site",
+# #        cex = 0.8)
+# dev.off()
+# 
+# # Add cluster assignments to metadata
+# so@meta.data$hcluster_by_expr = as.factor(sample_clusters)
+# so@meta.data$hcluster_by_expr_str = paste0("Cluster ",so@meta.data$hcluster_by_expr)
+# 
+# ## Plot cluster membership by site
+# cluster_membership_table = table(so@meta.data$hcluster_by_expr_str,so@meta.data$seurat_clusters_by_site_str)
+# #cluster_membership_table_hmap = pheatmap(cluster_membership_table, display_numbers = T)
+# pdf("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_gene_set_heatmap_dendro_table.pdf",width=10,height=10)
+# plot(cluster_membership_table_hmap)
+# dev.off()
+
 ## Also compute hierarchical clusters based on vst data (Using variable genes)
 genes_to_use_for_hclust = so@assays$RNA$vst_data[VariableFeatures(so,nfeatures = 2000),]
 #genes_to_use_for_hclust = so@assays$RNA$vst_data#[VariableFeatures(so),]
@@ -121,29 +172,51 @@ unique_clusters = unique(sample_clusters)
 
 # Convert hclust object to dendrogram
 dend = as.dendrogram(hclust_res)
-dend = color_branches(dend, k = length(unique_clusters), groupLabels = as.character(unique_clusters))
+# Set branch/group label size to a legible value (e.g., 0.8)
+dend = color_branches(dend, k = length(unique_clusters), groupLabels = as.character(unique_clusters), labels_cex = 0.1)
 
 # Color the leaves by primary site
-# Match primary site colors to the corresponding sample labels
 dend_order = order.dendrogram(dend)
 ordered_labels = primary_sites[dend_order]
 leaf_colors = cluster_by_primary_site_palette[ordered_labels]
 names(leaf_colors) = sample_labels
-dend = set(dend, "labels_col", leaf_colors)
-dend = set(dend, "labels_cex", 0.8)
-dend = set(dend, "labels", ordered_labels)  # Label by primary site
 
+# --- UPDATES TO SHOW SQUARES INSTEAD OF TEXT ---
+# 1. Hide the leaf text labels (replace with empty strings)
+dend = set(dend, "labels", rep("", length(ordered_labels))) 
+
+# 2. Set the leaf shape to a filled square (pch=22)
+dend = set(dend, "leaves_pch", 22) 
+
+#plot(dend, main = "Sample Clustering Dendrogram by Primary Site", ylab = "Height")
+
+
+# 3. Set the leaf fill color to the primary site color
+dend = set(dend, "leaves_bg", leaf_colors)
+# 4. Set the size of the square markers 
+dend = set(dend, "leaves_cex", 0.5)
+# 5. Set the marker border color
+dend = set(dend, "leaves_col", "black") # Using black for border contrast
+
+dend = set(dend, "hang_leaves", -2)
+
+dend
 # Plot colored dendrogram
-pdf("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_gene_expression_cluster_dendrogram.pdf",width=18,height=14)
-plot(dend, main = "Sample Clustering Dendrogram by Primary Site", ylab = "Height")
+#pdf("./outputs/plots/02_seurat_plots/02_gene_expression_cluster_dendrogram.pdf",width=6,height=3)
+pdf("./outputs/plots/02_seurat_plots/02_gene_expression_cluster_dendrogram_with_legend.pdf",width=6,height=3)
+
+par(mar=c(0, 3, 0, 0.5))
+plot(dend,ylab = "Height")
 # Add legend for primary sites
-legend("topright", legend = unique(primary_sites), 
-       fill = cluster_by_primary_site_palette, 
+legend("topright",
+       legend = unique(primary_sites),
+       fill = cluster_by_primary_site_palette,
+       pch = 22, # Ensure the legend key is a square
        title = "Primary Site",
        cex = 0.8)
 dev.off()
 
-# Add cluster assignments to metadata
+# Add cluster assignments to metadata (rest of your code is unchanged)
 so@meta.data$hcluster_by_expr = as.factor(sample_clusters)
 so@meta.data$hcluster_by_expr_str = paste0("Cluster ",so@meta.data$hcluster_by_expr)
 
@@ -155,7 +228,6 @@ plot(cluster_membership_table_hmap)
 dev.off()
 
 
-
 ## Infer sample sex by XIST expression
 #VlnPlot(so,c("XIST"),group.by = "SEX (EHR_EXTRACTED)",slot = "count")
 xist_expression = FetchData(so,vars="XIST",slot = "counts")
@@ -163,9 +235,9 @@ so@meta.data$xist_inferred_female = ifelse(xist_expression >= 1000, 1, 0)
 so = AddMetaData(so, metadata = so$xist_inferred_female, col.name = "xist_inferred_female")
 so@meta.data = so@meta.data %>% mutate(rna_inferred_female = ifelse(!is.na(`SEX (EHR_EXTRACTED)`), ifelse(`SEX (EHR_EXTRACTED)` == "F", 1, 0), xist_inferred_female))
 ## For cluster names start index at 1 instead of 0 for easier reading
-#so@meta.data$seurat_clusters_renamed = as.integer(so@meta.data$seurat_clusters)
-#so@meta.data$seurat_clusters_renamed = as.integer(so@meta.data$seurat_clusters_by_site)
-#so@meta.data$seurat_clusters_renamed_str = paste0("Cluster ",so@meta.data$seurat_clusters_renamed)
+so@meta.data$seurat_clusters_renamed = as.integer(so@meta.data$seurat_clusters)
+so@meta.data$seurat_clusters_renamed = as.integer(so@meta.data$seurat_clusters_by_site)
+so@meta.data$seurat_clusters_renamed_str = paste0("Cluster ",so@meta.data$seurat_clusters_renamed)
 
 # ### This section adds the module scores ###
 # ### Does not work at the current moment ###
@@ -213,72 +285,98 @@ so@meta.data = so@meta.data %>% mutate(rna_inferred_female = ifelse(!is.na(`SEX 
 
 ## Save Seurat Object
 if (FALSE) {
-  SaveSeuratRds(so,file = "data/processed/rna/ASCSeuratObj2025.rds")
+  SaveSeuratRds(so,file = "../data/processed/rna/ASCSeuratObj2025.rds")
   #SaveSeuratRds(so,file = "data/processed/rna/ASCSeuratObj2025_Purity.rds")
 }
 
 ## Load Seurat Object for basic sumary statistics
-so = readRDS("data/processed/rna/ASCSeuratObj2025.rds")
+so = readRDS("../data/processed/rna/ASCSeuratObj2025.rds")
 
-## Plot estimate purity by site
-library(ggpubr)
-estimate_purity_boxplot = ggboxplot(
-  data=so@meta.data,
-  #x="hcluster_by_expr_str",
-  x="seurat_clusters_by_site_str",
-  y="ESTIMATE_purity",
-  color="seurat_clusters_by_site_str",
-  #color="hcluster_by_expr_str",
-  add="jitter",
-  xlab = "Primary Sites",
-  ylab = "ESTIMATE Purity",
-  palette = "npg"
-) + stat_compare_means()
-estimate_purity_boxplot = ggpar(estimate_purity_boxplot,legend.title="Primary Sites")
-ggsave("./02_Tumor_RNA_Analysis/outputs/plots/07_specificity_plots/ESTIMATE_purity_barplot_by_sites.pdf",estimate_purity_boxplot,dpi=300,width=12,height=4)
+# ## Plot estimate purity by site
+# library(ggpubr)
+# estimate_purity_boxplot = ggboxplot(
+#   data=so@meta.data,
+#   #x="hcluster_by_expr_str",
+#   x="seurat_clusters_by_site_str",
+#   y="ESTIMATE_purity",
+#   color="seurat_clusters_by_site_str",
+#   #color="hcluster_by_expr_str",
+#   add="jitter",
+#   xlab = "Primary Sites",
+#   ylab = "ESTIMATE Purity",
+#   palette = "npg"
+# ) + stat_compare_means()
+# estimate_purity_boxplot = ggpar(estimate_purity_boxplot,legend.title="Primary Sites")
+# estimate_purity_boxplot
+# ggsave("./outputs/plots/07_specificity_plots/ESTIMATE_purity_barplot_by_sites.pdf",estimate_purity_boxplot,dpi=300,width=12,height=4)
+
+estimate_purity_boxplot = ggplot(
+  data=so@meta.data,aes(x=seurat_clusters_by_site_str,y=ESTIMATE_purity,color=seurat_clusters_by_site_str)
+) + geom_boxplot() + pretty_plot() + L_border() + scale_color_npg() +
+  geom_jitter(size=0.5)
+
+estimate_purity_boxplot_clean = estimate_purity_boxplot + 
+  theme(legend.position = "none",axis.title = element_blank(),
+        axis.text.x = element_text(size=5), axis.ticks.x = element_line())
+estimate_purity_boxplot_clean
+
+cowplot::ggsave2("./outputs/plots/07_specificity_plots/ESTIMATE_purity_barplot_by_sites_with_legend.pdf",estimate_purity_boxplot,dpi=300,width=3.3,height=1.5)
+cowplot::ggsave2("./outputs/plots/07_specificity_plots/ESTIMATE_purity_barplot_by_sites.pdf",estimate_purity_boxplot_clean,dpi=300,width=3.3,height=1.5)
+
+## Plot cluster membership
+clust_mem_df = table(so@meta.data$hcluster_by_expr_str,so@meta.data$`Primary Site (Recombined)`) %>% as.data.frame()
+clust_mem_df_plot = ggplot(clust_mem_df,aes(x=Var1,y=Freq,fill=Var2)) + geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values=primary_site_palette) + pretty_plot() + L_border() +
+  scale_y_continuous(expand=c(0,Inf)) +
+  labs(x="Cluster",y="# of Samples")
+clust_mem_df_plot_clean = clust_mem_df_plot + theme(legend.position = "none",axis.title = element_blank(),
+        axis.text.x = element_text(size=5), axis.ticks.x = element_line())
+cowplot::ggsave2("./outputs/plots/02_seurat_plots/cluster_membership_clean.pdf",clust_mem_df_plot_clean,dpi=300,width=1.85,height=1.5)
+cowplot::ggsave2("./outputs/plots/02_seurat_plots/cluster_membership.pdf",clust_mem_df_plot,dpi=300,width=1.8,height=1.5)
+
 
 ## Number of parencymal breast samples by site
 site_by_cluster_table = table(so@meta.data$seurat_clusters_by_site_str,so@meta.data$hcluster_by_expr_str)
 site_totals = rowSums(site_by_cluster_table)
 cluster_totals = colSums(site_by_cluster_table)
 
-
-## Plot scores by clusters
-score_subset = so@meta.data[,c("radioresistance_score1","radiation_exposure_score1",
-                               "angiogenesis_score1","endMT_score1","fibroblast_score1",
-                               "EMT_score1"
-                               )]
-score_subset$og_id = rownames(score_subset)
-score_subset_long = pivot_longer(score_subset,cols = -c("og_id"))
-score_subset_merged = merge(score_subset_long,so@meta.data,by="og_id",all.x=TRUE)
-
-score_labeller = labeller(name=c("radioresistance_score1"="Radioresistance (Marcone 2021)",
-                                 "radiation_exposure_score1"="Radiation Exposure (Paul 2011)",
-                                 "angiogenesis_score1"="Angiogenesis (MSigDB Hallmark)",
-                                 "endMT_score1"="EndMT Score (Choi 2020)",
-                                 "fibroblast_score1"="Fibroblast Score (Muhl 2020)",
-                                 "EMT_score1"="ECM Score (Chakravarthy 2018)"
-                                 ))
-## Wrap as two rows
-scores_boxplot = ggplot(score_subset_merged, 
-                        aes(x = `seurat_clusters_renamed_str`, y = value)) +
-  geom_violin(width = 1.2) +
-  geom_boxplot(width = 0.1, outlier.shape = NA) +
-  facet_wrap(facets = vars(name),nrow=2,labeller=score_labeller) +
-  #facet_grid(cols = vars(name),labeller=score_labeller) +
-  # stat_compare_means(comparisons = list(c("Cluster 1", "Cluster 2"),
-  #                                       c("Cluster 1", "Cluster 3"),
-  #                                       c("Cluster 2", "Cluster 3"),
-  #                                       c("Cluster 2", "Cluster 4")
-  # ),
-  # na.rm = TRUE, label = "p.format") +
-  stat_compare_means(method = "anova", label.y = 2.2) +
-  geom_quasirandom(aes(color = `Primary Site (Recombined)`)) +
-  theme_minimal() +
-  theme(strip.text.y = element_text(angle = 0),text = element_text(size=22)) + # Adjust facet label orientation
-  labs(x = "Cluster", y = "Normalized Expression Level", color = "Cluster") +
-  guides(color=guide_legend(title="Primary Site"))
-ggsave(scores_boxplot,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_scores_boxplot_with_endMT_fibroblast_ECM.png",dpi=300,width=20,height=16)
+# 
+# ## Plot scores by clusters
+# score_subset = so@meta.data[,c("radioresistance_score1","radiation_exposure_score1",
+#                                "angiogenesis_score1","endMT_score1","fibroblast_score1",
+#                                "EMT_score1"
+#                                )]
+# score_subset$og_id = rownames(score_subset)
+# score_subset_long = pivot_longer(score_subset,cols = -c("og_id"))
+# score_subset_merged = merge(score_subset_long,so@meta.data,by="og_id",all.x=TRUE)
+# 
+# score_labeller = labeller(name=c("radioresistance_score1"="Radioresistance (Marcone 2021)",
+#                                  "radiation_exposure_score1"="Radiation Exposure (Paul 2011)",
+#                                  "angiogenesis_score1"="Angiogenesis (MSigDB Hallmark)",
+#                                  "endMT_score1"="EndMT Score (Choi 2020)",
+#                                  "fibroblast_score1"="Fibroblast Score (Muhl 2020)",
+#                                  "EMT_score1"="ECM Score (Chakravarthy 2018)"
+#                                  ))
+# ## Wrap as two rows
+# scores_boxplot = ggplot(score_subset_merged, 
+#                         aes(x = `seurat_clusters_renamed_str`, y = value)) +
+#   geom_violin(width = 1.2) +
+#   geom_boxplot(width = 0.1, outlier.shape = NA) +
+#   facet_wrap(facets = vars(name),nrow=2,labeller=score_labeller) +
+#   #facet_grid(cols = vars(name),labeller=score_labeller) +
+#   # stat_compare_means(comparisons = list(c("Cluster 1", "Cluster 2"),
+#   #                                       c("Cluster 1", "Cluster 3"),
+#   #                                       c("Cluster 2", "Cluster 3"),
+#   #                                       c("Cluster 2", "Cluster 4")
+#   # ),
+#   # na.rm = TRUE, label = "p.format") +
+#   stat_compare_means(method = "anova", label.y = 2.2) +
+#   geom_quasirandom(aes(color = `Primary Site (Recombined)`)) +
+#   theme_minimal() +
+#   theme(strip.text.y = element_text(angle = 0),text = element_text(size=22)) + # Adjust facet label orientation
+#   labs(x = "Cluster", y = "Normalized Expression Level", color = "Cluster") +
+#   guides(color=guide_legend(title="Primary Site"))
+# ggsave(scores_boxplot,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_scores_boxplot_with_endMT_fibroblast_ECM.png",dpi=300,width=20,height=16)
 
 
 #VlnPlot(so,features = c("angiogenesis_score1","lymphangiogenesis_score1","radioresistance_score1","radiation_exposure_score1"), pt.size =1,group.by = "seurat_clusters_renamed")
@@ -347,37 +445,37 @@ ggsave(top_markers_dimplot,filename = "02_Tumor_RNA_Analysis/outputs/plots/02_se
 
 ## Save the Seurat Object
 if (FALSE) {
-  saveRDS(so, "data/processed/rna/ASCSeuratObj.rds")
+  saveRDS(so, "../data/processed/rna/ASCSeuratObj.rds")
 }
 
-## Check genes that are shared between cluster 3 and 4
-clust3_samples = rownames(so@meta.data[so@meta.data$seurat_clusters_renamed==3,])
-clust4_samples = rownames(so@meta.data[so@meta.data$seurat_clusters_renamed==4,])
-clust34_subset = subset(x = so, subset = seurat_clusters_renamed == 3 | seurat_clusters_renamed == 4)
-clust34_markers = FindMarkers(
-  clust34_subset,ident.1 = 3,ident.2 = 4,
-  slot="counts",
-  test.use = "wilcox"
-)
-clust34_marker_df_sig = clust34_markers %>% filter(p_val_adj < 0.1)
-top_clust34_fc_pos_genes = clust34_marker_df_sig %>% arrange(-avg_log2FC) %>% head(10) %>% rownames()
-top_clust34_fc_neg_genes = clust34_marker_df_sig %>% arrange(avg_log2FC) %>% head(10) %>% rownames()
-top_clust34_pval_genes = clust34_marker_df_sig %>% arrange(p_val_adj) %>% head(10) %>% rownames()
-clust34_genes_to_highlight = c(top_clust34_fc_pos_genes,top_clust34_fc_neg_genes,top_clust34_pval_genes,c("FLT3","MYCL","KRT17"))
-clust34_vol_plot = EnhancedVolcano(
-  clust34_markers,
-  lab=rownames(clust34_markers),
-  x="avg_log2FC",
-  y="p_val_adj",
-  selectLab = clust34_genes_to_highlight,
-  pCutoff = 10e-2,
-  FCcutoff = 0.5,
-  boxedLabels = TRUE,
-  drawConnectors = TRUE,
-  title = "Cluster 3 vs. Cluster 4",
-  subtitle = "Differential Expression"
-) + xlab("log2(Cluster 3/Cluster 4)")
-ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_clust3_vs_clust4_volcano.png",clust34_vol_plot,width = 12,height = 8)
+# ## Check genes that are shared between cluster 3 and 4
+# clust3_samples = rownames(so@meta.data[so@meta.data$seurat_clusters_renamed==3,])
+# clust4_samples = rownames(so@meta.data[so@meta.data$seurat_clusters_renamed==4,])
+# clust34_subset = subset(x = so, subset = seurat_clusters_renamed == 3 | seurat_clusters_renamed == 4)
+# clust34_markers = FindMarkers(
+#   clust34_subset,ident.1 = 3,ident.2 = 4,
+#   slot="counts",
+#   test.use = "wilcox"
+# )
+# clust34_marker_df_sig = clust34_markers %>% filter(p_val_adj < 0.1)
+# top_clust34_fc_pos_genes = clust34_marker_df_sig %>% arrange(-avg_log2FC) %>% head(10) %>% rownames()
+# top_clust34_fc_neg_genes = clust34_marker_df_sig %>% arrange(avg_log2FC) %>% head(10) %>% rownames()
+# top_clust34_pval_genes = clust34_marker_df_sig %>% arrange(p_val_adj) %>% head(10) %>% rownames()
+# clust34_genes_to_highlight = c(top_clust34_fc_pos_genes,top_clust34_fc_neg_genes,top_clust34_pval_genes,c("FLT3","MYCL","KRT17"))
+# clust34_vol_plot = EnhancedVolcano(
+#   clust34_markers,
+#   lab=rownames(clust34_markers),
+#   x="avg_log2FC",
+#   y="p_val_adj",
+#   selectLab = clust34_genes_to_highlight,
+#   pCutoff = 10e-2,
+#   FCcutoff = 0.5,
+#   boxedLabels = TRUE,
+#   drawConnectors = TRUE,
+#   title = "Cluster 3 vs. Cluster 4",
+#   subtitle = "Differential Expression"
+# ) + xlab("log2(Cluster 3/Cluster 4)")
+# ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_clust3_vs_clust4_volcano.png",clust34_vol_plot,width = 12,height = 8)
 
   # 
 # all_markers %>% filter(cluster == 0, grepl("CD", gene))
