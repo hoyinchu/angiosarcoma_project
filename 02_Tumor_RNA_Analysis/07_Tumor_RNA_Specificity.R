@@ -8,7 +8,7 @@ library(fgsea)
 library(ggrepel)
 #library(scSigR)
 
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
+#setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
 ## Load Seurat object from 10x format and save
 ## Takes a quite a bit of time so only do this once
@@ -57,7 +57,6 @@ if (FALSE) {
 # write.table(gtex_extremities_signature_out, file = "/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts/data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421_sig_matrices/extremities_signature.txt", sep = "\t", quote = FALSE, row.names = FALSE)
 
 ## Set the working directory back to the project directory
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
 #gtex_so
 
@@ -195,9 +194,10 @@ setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_a
 
 
 # Calculate per-tissue specificity score
-so = readRDS("data/processed/rna/ASCSeuratObj2025.rds")
+so = readRDS("../data/processed/rna/ASCSeuratObj2025.rds")
 
-gtex_df = read.csv("./data/public/rna_tissue_gtex.tsv",sep="\t")
+
+gtex_df = read.csv("../data/public/rna_tissue_gtex.tsv",sep="\t")
 
 calculate_tissue_specificity = function(df) {
   df %>%
@@ -221,7 +221,7 @@ calculate_tissue_specificity = function(df) {
     ungroup() %>%
     
     # Final columns
-    select(
+    dplyr::select(
       Gene, Gene.name, Tissue, nTPM, tissue_specificity, tissue_specificity_rank,
       nTPM_rank_within_tissue, nTPM_zscore
     )
@@ -233,7 +233,7 @@ gtex_specificity_df_dedupped = gtex_specificity_df %>%
   distinct(Gene.name,Tissue,.keep_all = TRUE)
 
 gtex_specificity_table = gtex_specificity_df_dedupped %>%
-  select(Gene.name, Tissue, tissue_specificity) %>%
+  dplyr::select(Gene.name, Tissue, tissue_specificity) %>%
   pivot_wider(
     names_from = Tissue,
     values_from = tissue_specificity
@@ -255,19 +255,32 @@ gtex_specificity_table = gtex_specificity_df_dedupped %>%
 #heatmap(gtex_specificity_mat)
 
 ## Load the DEG results
-hclust_deg_table = read.csv("./02_Tumor_RNA_Analysis/outputs/DEGs/02_DESEQ2_hclust_expr_sites_combined_results_all.tsv",sep="\t")
-sites_deg_table = read.csv("./02_Tumor_RNA_Analysis/outputs/DEGs/02_DESEQ2_sites_combined_results_all.tsv",sep="\t")
+#hclust_deg_table = read.csv("./outputs/DEGs/02_DESEQ2_hclust_expr_sites_combined_results_all.tsv",sep="\t")
+#sites_deg_table = read.csv("./outputs/DEGs/02_DESEQ2_sites_combined_results_all.csv")
+
+hclust_deg_table = read.csv("./outputs/DEGs/02_DESEQ2_hclust_expr_sites_combined_results_all.csv")
+sites_deg_table = read.csv("./outputs/DEGs/02_DESEQ2_sites_combined_results_all.csv")
+
+hallmark_deg_outputs = read.csv("./outputs/DEGs/deg_hallmark_c6_combined.csv")
 
 hclust_deg_table_merged = hclust_deg_table %>% left_join(gtex_specificity_table,by = c("gene"="Gene.name"))
 sites_deg_table_merged = sites_deg_table %>% left_join(gtex_specificity_table,by = c("gene"="Gene.name"))
 
 ## Helper function to run fast-ORA
-run_fora = function(degs,fgsea_sets,pval_col="p_val") {
-  #genes = degs[degs$p_val_adj < 0.1,]$gene
+# run_fora = function(degs,fgsea_sets,pval_col="p_val") {
+#   #genes = degs[degs$p_val_adj < 0.1,]$gene
+#   genes = degs[degs[[pval_col]] < 0.05,]$gene
+#   #print(genes)
+#   universe = rownames(so@assays$RNA$counts)
+#   fora_res = fora(fgsea_sets, genes, universe, minSize = 5, maxSize = 500)
+#   return(fora_res)
+# }
+
+
+run_fora = function(degs, fgsea_sets, pval_col="p_val") {
   genes = degs[degs[[pval_col]] < 0.05,]$gene
-  #print(genes)
   universe = rownames(so@assays$RNA$counts)
-  fora_res = fora(fgsea_sets, genes, universe, minSize = 5, maxSize = 500)
+  fora_res = fora(fgsea_sets, genes, universe)
   return(fora_res)
 }
 
@@ -330,7 +343,7 @@ combined_sites_deg_df <- bind_rows(
   sites_deg_table_merged_extremities %>%
     transmute(neg_log_pval, specificity = `skeletal muscle`, Tissue = "Extremities")
 ) %>%
-  left_join(specificity_thresholds %>% select(Tissue, specificity_threshold), by = "Tissue") %>%
+  left_join(specificity_thresholds %>% dplyr::select(Tissue, specificity_threshold), by = "Tissue") %>%
   mutate(
     Significant = neg_log_pval > -log10(0.05),
     Tissue_Specific = specificity > specificity_threshold,
@@ -347,14 +360,21 @@ median_df <- combined_sites_deg_df %>%
   group_by(Tissue) %>%
   summarize(median_specificity = median(specificity, na.rm = TRUE), .groups = "drop")
 
+scatter_palette = c(
+  "Significant + Tissue-specific" = "firebrick",
+  "Significant only" = "steelblue",
+  "Tissue-specific only" = "darkgreen",
+  "Not significant" = "gray"
+)
+
 # Step 7: Scatter plot
 combined_sites_deg_df_plot <- ggplot(combined_sites_deg_df, aes(x = neg_log_pval, y = specificity, color = Group)) +
   geom_point(alpha = 0.6) +
   geom_vline(xintercept = -log10(0.05), linetype = "dashed", color = "black") +
   geom_hline(data = median_df, aes(yintercept = median_specificity), linetype = "dotted", color = "gray30") +
   facet_wrap(~ Tissue, ncol = 5) +
-  theme_minimal() +
-  theme(legend.position = "top") +
+  pretty_plot()+ #+ L_border() +
+  scale_y_continuous(expand = c(0,Inf)) +
   scale_color_manual(
     values = c(
       "Significant + Tissue-specific" = "firebrick",
@@ -367,23 +387,101 @@ combined_sites_deg_df_plot <- ggplot(combined_sites_deg_df, aes(x = neg_log_pval
     x = "Gene -log10(DEG p-values)",
     y = "Gene Tissue Specificity Score",
     color = "Annotation"
-  )
+  ) +
+  theme(legend.position = "top") + theme(legend.position = "none")
 
-ggsave(
-  "./02_Tumor_RNA_Analysis/outputs/plots/07_specificity_plots/combined_specificity_annotated_plot.png",
-  combined_sites_deg_df_plot,
-  dpi = 300,
-  width = 10,
-  height = 4
+combined_sites_deg_df_plot
+
+parenchymal_breast_tissue_specificity_plot = ggplot(combined_sites_deg_df %>% filter(Tissue=="Parenchymal (breast)"), aes(x = neg_log_pval, y = specificity, color = Group)) +
+  geom_point(alpha = 0.6) +
+  geom_vline(xintercept = -log10(0.05), linetype = "dashed", color = "black") +
+  geom_hline(data = median_df, aes(yintercept = median_specificity), linetype = "dotted", color = "gray30") +
+  pretty_plot()+ L_border() +
+  #scale_y_continuous(expand = c(0,Inf)) +
+  ylim(0,1) +
+  scale_color_manual(values=scatter_palette) +
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(),legend.position = "none")
+parenchymal_breast_tissue_specificity_plot
+
+ggsave("./outputs/plots/07_specificity_plots/parenchymal_breast_tissue_specificity_plot.png",parenchymal_breast_tissue_specificity_plot,dpi=600,width=1.2,height=3)
+
+cut_breast_tissue_specificity_plot = ggplot(combined_sites_deg_df %>% filter(Tissue=="Cutaneous (breast)"), aes(x = neg_log_pval, y = specificity, color = Group)) +
+  geom_point(alpha = 0.6) +
+  geom_vline(xintercept = -log10(0.05), linetype = "dashed", color = "black") +
+  geom_hline(data = median_df, aes(yintercept = median_specificity), linetype = "dotted", color = "gray30") +
+  pretty_plot()+ L_border() +
+  #scale_y_continuous(expand = c(0,Inf)) +
+  ylim(0,1) +
+  scale_color_manual(values=scatter_palette) +
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(),legend.position = "none")
+cut_breast_tissue_specificity_plot
+
+ggsave("./outputs/plots/07_specificity_plots/cut_breast_tissue_specificity_plot.png",cut_breast_tissue_specificity_plot,dpi=600,width=1.2,height=3)
+
+hnfs_tissue_specificity_plot = ggplot(combined_sites_deg_df %>% filter(Tissue=="HNFS (skin)"), aes(x = neg_log_pval, y = specificity, color = Group)) +
+  geom_point(alpha = 0.6) +
+  geom_vline(xintercept = -log10(0.05), linetype = "dashed", color = "black") +
+  geom_hline(data = median_df, aes(yintercept = median_specificity), linetype = "dotted", color = "gray30") +
+  pretty_plot()+ L_border() +
+  #scale_y_continuous(expand = c(0,Inf)) +
+  ylim(0,1) +
+  scale_color_manual(values=scatter_palette) +
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(),legend.position = "none")
+hnfs_tissue_specificity_plot
+
+ggsave("./outputs/plots/07_specificity_plots/hnfs_tissue_specificity_plot.png",hnfs_tissue_specificity_plot,dpi=600,width=1.2,height=3)
+
+heart_tissue_specificity_plot = ggplot(combined_sites_deg_df %>% filter(Tissue=="Heart"), aes(x = neg_log_pval, y = specificity, color = Group)) +
+  geom_point(alpha = 0.6) +
+  geom_vline(xintercept = -log10(0.05), linetype = "dashed", color = "black") +
+  geom_hline(data = median_df, aes(yintercept = median_specificity), linetype = "dotted", color = "gray30") +
+  pretty_plot()+ L_border() +
+  #scale_y_continuous(expand = c(0,Inf)) +
+  ylim(0,1) +
+  scale_color_manual(values=scatter_palette) +
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(),legend.position = "none")
+heart_tissue_specificity_plot
+
+ggsave("./outputs/plots/07_specificity_plots/heart_tissue_specificity_plot.png",heart_tissue_specificity_plot,dpi=600,width=1.2,height=3)
+
+extremities_tissue_specificity_plot = ggplot(combined_sites_deg_df %>% filter(Tissue=="Extremities"), aes(x = neg_log_pval, y = specificity, color = Group)) +
+  geom_point(alpha = 0.6) +
+  geom_vline(xintercept = -log10(0.05), linetype = "dashed", color = "black") +
+  geom_hline(data = median_df, aes(yintercept = median_specificity), linetype = "dotted", color = "gray30") +
+  pretty_plot()+ L_border() +
+  #scale_y_continuous(expand = c(0,Inf)) +
+  ylim(0,1) +
+  scale_color_manual(values=scatter_palette) +
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(),legend.position = "top")
+extremities_tissue_specificity_plot
+
+ggsave("./outputs/plots/07_specificity_plots/extremities_tissue_specificity_plot.png",extremities_tissue_specificity_plot,dpi=600,width=1.2,height=3)
+ggsave("./outputs/plots/07_specificity_plots/extremities_tissue_specificity_plot_with_text.pdf",extremities_tissue_specificity_plot,dpi=600,width=1.2,height=3)
+
+
+combined_specificity_plot = cowplot::plot_grid(
+  cut_breast_tissue_specificity_plot,extremities_tissue_specificity_plot,heart_tissue_specificity_plot,hnfs_tissue_specificity_plot,parenchymal_breast_tissue_specificity_plot,
+  ncol=5
 )
 
-ggsave(
-  "./02_Tumor_RNA_Analysis/outputs/plots/07_specificity_plots/combined_specificity_annotated_plot.pdf",
-  combined_sites_deg_df_plot,
-  dpi = 300,
-  width = 10,
-  height = 4
-)
+combined_specificity_plot
+ggsave("./outputs/plots/07_specificity_plots/combined_specificity_plot.png",combined_specificity_plot,dpi = 600,width = 6,height = 1.6)
+
+# ggsave(
+#   "./outputs/plots/07_specificity_plots/2026_03_04_combined_specificity_annotated_plot.png",
+#   combined_sites_deg_df_plot,
+#   dpi = 300,
+#   width = 6,
+#   height = 4
+# )
+# 
+# ggsave(
+#   "./outputs/plots/07_specificity_plots/2026_03_04_combined_specificity_annotated_plot.pdf",
+#   combined_sites_deg_df_plot,
+#   dpi = 300,
+#   width = 10,
+#   height = 4
+# )
 
 # Step 8: Barplot of tissue specificity among significant vs not
 tissue_specificity_summary_v2 <- combined_sites_deg_df %>%
@@ -398,22 +496,29 @@ tissue_specificity_summary_v2 <- combined_sites_deg_df %>%
 
 tissue_specificity_barplot_v2 <- ggplot(tissue_specificity_summary_v2, aes(x = Tissue, y = proportion_tissue_specific, fill = Significance)) +
   geom_bar(stat = "identity", position = position_dodge(width = 0.9)) +
-  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1),expand = c(0,Inf)) +
   scale_fill_manual(values = c("DEG Significant (p < 0.05)" = "firebrick", "DEG Non-Significant (p >= 0.05)" = "gray60")) +
   labs(
     x = "Tissue",
     y = "Proportion of Tissue-Specific Genes\n(Tissue-specificity score quantile > 50%)",
     fill = NULL
   ) +
-  theme_minimal() +
+  pretty_plot() + L_border() +
+  #theme_minimal() +
   theme(
     #axis.text.x = element_text(hjust = 1),
     plot.title = element_text(size = 14, face = "bold"),
-    legend.position = "top"
-  )
+    #legend.position = "top",
+    legend.position = "none",
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank()
+  ) 
+
+tissue_specificity_barplot_v2
+
 
 ggsave(
-  "./02_Tumor_RNA_Analysis/outputs/plots/07_specificity_plots/tissue_specificity_proportions_sig_vs_nonsig.png",
+  "./outputs/plots/07_specificity_plots/tissue_specificity_proportions_sig_vs_nonsig.png",
   tissue_specificity_barplot_v2,
   dpi = 300,
   width = 10,
@@ -421,11 +526,11 @@ ggsave(
 )
 
 ggsave(
-  "./02_Tumor_RNA_Analysis/outputs/plots/07_specificity_plots/tissue_specificity_proportions_sig_vs_nonsig.pdf",
+  "./outputs/plots/07_specificity_plots/tissue_specificity_proportions_sig_vs_nonsig.pdf",
   tissue_specificity_barplot_v2,
   dpi = 300,
-  width = 10,
-  height = 4
+  width = 6,
+  height = 1
 )
 
 ## Among gene used to perform ORA, what are the proportion of those that are specific to the tissue?
@@ -448,19 +553,19 @@ heart_thresh <- specificity_thresholds %>% filter(cluster == "Heart") %>% pull(s
 
 # Filter genes below median specificity for each tissue
 parenchymal_ora_set_new <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, breast < parenchymal_thresh, cluster == "ParenchymalBreast")
+  filter(padj < 0.05, breast < parenchymal_thresh, cluster == "ParenchymalBreast", baseMean > 100)
 
 cutaneous_ora_set_new <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, breast < cutaneous_thresh, cluster == "CutaneousBreast")
+  filter(padj < 0.05, breast < cutaneous_thresh, cluster == "CutaneousBreast", baseMean > 100)
 
 hnfs_ora_set_new <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, skin < hnfs_thresh, cluster == "HNFS")
+  filter(padj < 0.05, skin < hnfs_thresh, cluster == "HNFS", baseMean > 100)
 
 extremities_ora_set_new <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, `skeletal muscle` < extremities_thresh, cluster == "Extremities")
+  filter(padj < 0.05, `skeletal muscle` < extremities_thresh, cluster == "Extremities", baseMean > 100)
 
 heart_ora_set_new <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, `heart muscle` < heart_thresh, cluster == "Heart")
+  filter(padj < 0.05, `heart muscle` < heart_thresh, cluster == "Heart", baseMean > 100)
 
 
 parenchymal_fora = run_fora(parenchymal_ora_set_new,fgsea_hallmark_set,pval_col="pvalue")
@@ -477,19 +582,19 @@ heart_c6_fora = run_fora(heart_ora_set_new,fgsea_c6_set_up_only,pval_col="pvalue
 
 # DEGs (p < 0.05, log2FC > 0) — without specificity filter
 parenchymal_ora_set_all <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, cluster == "ParenchymalBreast")
+  filter(padj < 0.05, cluster == "ParenchymalBreast", baseMean > 100)
 
 cutaneous_ora_set_all <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, cluster == "CutaneousBreast")
+  filter(padj < 0.05, cluster == "CutaneousBreast", baseMean > 100)
 
 hnfs_ora_set_all <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, cluster == "HNFS")
+  filter(padj < 0.05, cluster == "HNFS", baseMean > 100)
 
 extremities_ora_set_all <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, cluster == "Extremities")
+  filter(padj < 0.05, cluster == "Extremities", baseMean > 100)
 
 heart_ora_set_all <- sites_deg_table_merged %>%
-  filter(pvalue < 0.05, cluster == "Heart")
+  filter(padj < 0.05, cluster == "Heart", baseMean > 100)
 
 # Run FORA on unfiltered DEG sets (Hallmark)
 parenchymal_fora_all <- run_fora(parenchymal_ora_set_all, fgsea_hallmark_set, pval_col = "pvalue")
@@ -530,8 +635,8 @@ plot_fora_comparison <- function(
   # Compare FORA results for a single tissue
   compare_fora_sets <- function(fora_all, fora_filtered, tissue_name) {
     df <- full_join(
-      fora_all %>% select(pathway, pval_all = pval),
-      fora_filtered %>% select(pathway, pval_filtered = pval),
+      fora_all %>% dplyr::select(pathway, pval_all = pval),
+      fora_filtered %>% dplyr::select(pathway, pval_filtered = pval),
       by = "pathway"
     ) %>%
       mutate(
@@ -569,7 +674,7 @@ plot_fora_comparison <- function(
     
     # Merge
     annotated <- bind_rows(shared, all_only, filtered_only) %>%
-      select(pathway, Annotate)
+      dplyr::select(pathway, Annotate)
     
     df %>% left_join(annotated, by = "pathway")
   }
@@ -593,28 +698,86 @@ plot_fora_comparison <- function(
     "Not Significant" = "gray80"
   )
   
-  # Plot
-  p <- ggplot(comparison_df, aes(x = log10_pval_all, y = log10_pval_filtered, color = Enrichment)) +
-    geom_point(alpha = 0.8) +
-    geom_text_repel(aes(label = Annotate), size = 2.5, max.overlaps = 100, na.rm = TRUE) +
-    geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray40") +
-    geom_hline(yintercept = -log10(0.05), linetype = "dotted", color = "black") +
-    geom_vline(xintercept = -log10(0.05), linetype = "dotted", color = "black") +
-    facet_wrap(~ Tissue, ncol = 5) +
-    scale_color_manual(values = enrichment_colors) +
-    theme_minimal() +
-    theme(
-      legend.position = "top",
-      axis.text.x = element_text(angle = 0, hjust = 0.5),
-      strip.text = element_text(face = "bold")
-    ) +
-    labs(
-      x = "-log10(p-value) from All DEGs",
-      y = "-log10(p-value) from Specificity-Filtered DEGs",
-      color = "Enrichment Class"
-    )
+  plot_list <- comparison_df %>%
+    group_split(Tissue) %>%
+    map(function(sub_df) {
+      t_name <- unique(sub_df$Tissue)
+      
+      ggplot(sub_df, aes(x = log10_pval_all, y = log10_pval_filtered, color = Enrichment)) +
+        geom_point(alpha = 0.8, size = 1) +
+        geom_text_repel(aes(label = Annotate), size = 1.8, max.overlaps = 5, na.rm = TRUE) +
+        geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray40") +
+        geom_hline(yintercept = -log10(0.05), linetype = "dotted", color = "black") +
+        geom_vline(xintercept = -log10(0.05), linetype = "dotted", color = "black") +
+        scale_color_manual(values = enrichment_colors) +
+        pretty_plot() + L_border() +
+        ylim(0,16) +
+        #theme_minimal() +
+        theme(
+          legend.position = "bottom",
+          axis.title = element_blank(), # Remove individual titles to save space
+          plot.title = element_text(size = 9, face = "bold", hjust = 0.5)
+        ) +
+        labs(title = t_name)
+    })
   
-  ggsave(output_path, p, width = 16, height = 6, dpi = 300)
+  # 6. Extract Legend for the entire grid
+  # We create a temporary plot with the legend visible to grab it
+  temp_plot <- ggplot(comparison_df, aes(x = log10_pval_all, y = log10_pval_filtered, color = Enrichment)) +
+    geom_point() +
+    scale_color_manual(values = enrichment_colors) +
+    theme(legend.position = "top", legend.title = element_text(face = "bold"))
+  
+  shared_legend <- get_legend(temp_plot)
+  
+  # 7. Assemble with plot_grid
+  # Inner grid for the plots
+  main_grid <- plot_grid(plotlist = plot_list, ncol = 5)
+  
+  ggsave(output_path, main_grid, width = 6.2, height = 1.6, dpi = 300)
+  
+  
+  #ggsave(output_path, main_grid, width = 12, height = 8, dpi = 300)
+  
+  # # Final assembly with legend on top and shared axis labels
+  # final_p <- plot_grid(
+  #   shared_legend,
+  #   main_grid,
+  #   ncol = 1,
+  #   rel_heights = c(0.1, 1) # Legend takes 10% of height
+  # )
+  
+  # # Add global labels (since individual ones were removed)
+  # final_p <- annotate_figure(final_p, 
+  #                            left = text_grob("-log10(p-value) Filtered DEGs", rot = 90, size = 10),
+  #                            bottom = text_grob("-log10(p-value) All DEGs", size = 10))
+  
+  # Save
+  # Note: with 5 columns, you likely need more than 6 inches width!
+  #ggsave(output_path, final_p, width = 6, height = 3, dpi = 300)
+  
+  # # Plot
+  # p <- ggplot(comparison_df, aes(x = log10_pval_all, y = log10_pval_filtered, color = Enrichment)) +
+  #   geom_point(alpha = 0.8) +
+  #   geom_text_repel(aes(label = Annotate), size = 2, max.overlaps = 10, na.rm = TRUE) +
+  #   geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray40") +
+  #   geom_hline(yintercept = -log10(0.05), linetype = "dotted", color = "black") +
+  #   geom_vline(xintercept = -log10(0.05), linetype = "dotted", color = "black") +
+  #   facet_wrap(~ Tissue, ncol = 5) +
+  #   scale_color_manual(values = enrichment_colors) +
+  #   theme(legend.position = "none",axis.title.x = element_blank(),axis.title.y = element_blank()) +
+  #   # theme(
+  #   #   legend.position = "top",
+  #   #   axis.text.x = element_text(angle = 0, hjust = 0.5),
+  #   #   strip.text = element_text(face = "bold")
+  #   # ) +
+  #   labs(
+  #     x = "-log10(p-value) from All DEGs",
+  #     y = "-log10(p-value) from Specificity-Filtered DEGs",
+  #     color = "Enrichment Class"
+  #   )
+  
+  #ggsave(output_path, p, width = 6, height = 3, dpi = 300)
 }
 
 # Named lists of results by tissue
@@ -656,14 +819,17 @@ plot_fora_comparison(
   fora_all_list = hallmark_all,
   fora_filtered_list = hallmark_filtered,
   gene_set_label = "Hallmark",
-  output_path = "./02_Tumor_RNA_Analysis/outputs/plots/07_specificity_plots/hallmark_fora_logpval_comparison_all_tissues.pdf"
+  output_path = "./outputs/plots/07_specificity_plots/20260304_hallmark_fora_logpval_comparison_all_tissues_no_text.pdf"
+  #output_path = "./outputs/plots/07_specificity_plots/20260304_hallmark_fora_logpval_comparison_all_tissues.pdf"
+  
 )
 
 plot_fora_comparison(
   fora_all_list = c6_all,
   fora_filtered_list = c6_filtered,
   gene_set_label = "C6",
-  output_path = "./02_Tumor_RNA_Analysis/outputs/plots/07_specificity_plots/c6_fora_logpval_comparison_all_tissues.pdf"
+  #output_path = "./outputs/plots/07_specificity_plots/20260304_c6_fora_logpval_comparison_all_tissues_no_text.pdf"
+  output_path = "./outputs/plots/07_specificity_plots/20260304_c6_fora_logpval_comparison_all_tissues.pdf"
 )
 
 ## Specificity should be evaluated by percentile / cutoff

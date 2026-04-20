@@ -59,23 +59,23 @@ one_versus_rest_deseq2 = function(raw_counts,deseq2_metadata,formula_string,cons
 
 ## Make the tables by site
 noncut_breast_deseq_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                    "~ ESTIMATE_purity + rna_inferred_female + site.breast.noncut",c("site.breast.noncut","ParenchymalBreast","Rest"),
-                                    "./outputs/DEGs/02_DESEQ2_noncut_breast_vs_rest.csv")
+                                                 "~ ESTIMATE_purity + rna_inferred_female + site.breast.noncut",c("site.breast.noncut","ParenchymalBreast","Rest"),
+                                                 "./outputs/DEGs/02_DESEQ2_noncut_breast_vs_rest.csv")
 cut_breast_deseq_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                                 "~ ESTIMATE_purity + rna_inferred_female + site.breast.cut",c("site.breast.cut","CutaneousBreast","Rest"),
-                                                 "./outputs/DEGs/02_DESEQ2_cut_breast_vs_rest.csv")
+                                              "~ ESTIMATE_purity + rna_inferred_female + site.breast.cut",c("site.breast.cut","CutaneousBreast","Rest"),
+                                              "./outputs/DEGs/02_DESEQ2_cut_breast_vs_rest.csv")
 hnfs_deseq_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                                 "~ ESTIMATE_purity + rna_inferred_female + site.hnfs",c("site.hnfs","HNFS","Rest"),
-                                                 "./outputs/DEGs/02_DESEQ2_hnfs_vs_rest.csv")
+                                        "~ ESTIMATE_purity + rna_inferred_female + site.hnfs",c("site.hnfs","HNFS","Rest"),
+                                        "./outputs/DEGs/02_DESEQ2_hnfs_vs_rest.csv")
 heart_deseq_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                                 "~ ESTIMATE_purity + rna_inferred_female + site.heart",c("site.heart","Heart","Rest"),
-                                                 "./outputs/DEGs/02_DESEQ2_heart_vs_rest.csv")
+                                         "~ ESTIMATE_purity + rna_inferred_female + site.heart",c("site.heart","Heart","Rest"),
+                                         "./outputs/DEGs/02_DESEQ2_heart_vs_rest.csv")
 extremities_deseq_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                                 "~ ESTIMATE_purity + rna_inferred_female + site.extremities",c("site.extremities","Extremities","Rest"),
-                                                 "./outputs/DEGs/02_DESEQ2_extremities_vs_rest.csv")
+                                               "~ ESTIMATE_purity + rna_inferred_female + site.extremities",c("site.extremities","Extremities","Rest"),
+                                               "./outputs/DEGs/02_DESEQ2_extremities_vs_rest.csv")
 others_deseq_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                                 "~ ESTIMATE_purity + rna_inferred_female + site.others",c("site.others","Others","Rest"),
-                                                 "./outputs/DEGs/02_DESEQ2_others_vs_rest.csv")
+                                          "~ ESTIMATE_purity + rna_inferred_female + site.others",c("site.others","Others","Rest"),
+                                          "./outputs/DEGs/02_DESEQ2_others_vs_rest.csv")
 
 ## All results regardless of whether they are positive
 noncut_breast_deseq_res_all = noncut_breast_deseq_res %>% as.data.frame() %>% mutate(cluster="ParenchymalBreast")
@@ -508,20 +508,20 @@ save_deg_csv(deg_hallmark_c6_combined,"./outputs/DEGs/deg_hallmark_c6_combined.c
 ## Repeat the analysis above but with HClust derived clusters instead
 ## Make the tables by site
 hclust1_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                                 "~ ESTIMATE_purity + rna_inferred_female + expr.hclust1",c("expr.hclust1","Cluster1","Rest"),
-                                                 "./outputs/DEGs/02_hclust_Cluster1_vs_rest.tsv")
+                                     "~ ESTIMATE_purity + rna_inferred_female + expr.hclust1",c("expr.hclust1","Cluster1","Rest"),
+                                     "./outputs/DEGs/02_hclust_Cluster1_vs_rest.tsv")
 hclust2_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                              "~ ESTIMATE_purity + rna_inferred_female + expr.hclust2",c("expr.hclust2","Cluster2","Rest"),
-                                              "./outputs/DEGs/02_hclust_Cluster2_vs_rest.tsv")
+                                     "~ ESTIMATE_purity + rna_inferred_female + expr.hclust2",c("expr.hclust2","Cluster2","Rest"),
+                                     "./outputs/DEGs/02_hclust_Cluster2_vs_rest.tsv")
 hclust3_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                        "~ ESTIMATE_purity + rna_inferred_female + expr.hclust3",c("expr.hclust3","Cluster3","Rest"),
-                                        "./outputs/DEGs/02_hclust_Cluster3_vs_rest.tsv")
+                                     "~ ESTIMATE_purity + rna_inferred_female + expr.hclust3",c("expr.hclust3","Cluster3","Rest"),
+                                     "./outputs/DEGs/02_hclust_Cluster3_vs_rest.tsv")
 hclust4_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                         "~ ESTIMATE_purity + rna_inferred_female + expr.hclust4",c("expr.hclust4","Cluster4","Rest"),
-                                         "./outputs/DEGs/02_hclust_Cluster4_vs_rest.tsv")
+                                     "~ ESTIMATE_purity + rna_inferred_female + expr.hclust4",c("expr.hclust4","Cluster4","Rest"),
+                                     "./outputs/DEGs/02_hclust_Cluster4_vs_rest.tsv")
 hclust5_res = one_versus_rest_deseq2(raw_counts,deseq2_metadata,
-                                               "~ ESTIMATE_purity + rna_inferred_female + expr.hclust5",c("expr.hclust5","Cluster5","Rest"),
-                                               "./outputs/DEGs/02_hclust_Cluster5_vs_rest.tsv")
+                                     "~ ESTIMATE_purity + rna_inferred_female + expr.hclust5",c("expr.hclust5","Cluster5","Rest"),
+                                     "./outputs/DEGs/02_hclust_Cluster5_vs_rest.tsv")
 
 hclust1_res_all = hclust1_res %>% as.data.frame() %>% mutate(cluster="Cluster 1")
 hclust2_res_all = hclust2_res %>% as.data.frame() %>% mutate(cluster="Cluster 2")
@@ -875,7 +875,7 @@ save_deg_csv(hclust_deg_hallmark_c6_combined,"./outputs/DEGs/hclust_deg_hallmark
 # 
 # ## Make volcano plot based on the marker dataframe provided
 # make_volcano = function(
-#   marker_df,
+    #   marker_df,
 #   highlight_genes,
 #   fc_cutoff=0.5,
 #   log2FC_col = "avg_log2FC",
@@ -1286,4 +1286,3 @@ save_deg_csv(hclust_deg_hallmark_c6_combined,"./outputs/DEGs/hclust_deg_hallmark
 # test1 = all_markers_by_site_cluster_nomsig[all_markers_by_site_cluster_nomsig$cluster=="ParenchymalBreast",]$gene
 # test2 = fgsea_c6_set$PTEN_DN.V1_UP
 # intersect(test1,test2)
-

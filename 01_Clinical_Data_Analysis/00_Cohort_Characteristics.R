@@ -559,6 +559,7 @@ treatment_records_per_patient_per_primary_site_plot = ggplot(treatment_records_p
   geom_jitter() +
   theme_minimal() +
   labs(y="Primary Site",x="Number of Treatment Records per Patient")
+treatment_records_per_patient_per_primary_site_plot
 
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient_per_primary_site_boxplot.png",treatment_records_per_patient_per_primary_site_plot,dpi=300,width=4,height=8)
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient_per_primary_site_boxplot.pdf",treatment_records_per_patient_per_primary_site_plot,dpi=300,width=4,height=8)
@@ -624,23 +625,26 @@ top_drug_names <- drug_total_count$DRUG[1:15]
 drug_count_df_top_only = drug_count_df %>% filter(DRUG %in% top_drug_names)
 
 # Make the plot
-treatment_by_setting_plot = ggplot(drug_count_df_top_only,aes(x=ModeTotal,y=reorder(DRUG,OverallTotal),fill=`MODE (FORMATTED)`)) +
+treatment_by_setting_plot = ggplot(drug_count_df_top_only,aes(y=ModeTotal,x=reorder(DRUG,-OverallTotal),fill=`MODE (FORMATTED)`)) +
   geom_bar(stat="identity") +
   labs(fill="Treatment Setting",x="# of Treatment Records",y="Treatment Name") +
-  theme_minimal() +
-  L_border() + #pretty_plot() +
-  scale_x_continuous(expand=c(0,Inf)) +
-  scale_fill_npg()
+  pretty_plot() + L_border() +
+  scale_y_continuous(expand=c(0,Inf)) +
+  scale_fill_npg() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1,size=4))
 treatment_by_setting_plot
 
 
 treatment_by_setting_plot_clean = treatment_by_setting_plot + theme(legend.position = "none",axis.title = element_blank(),
-                                                                    axis.text.y = element_text(size=6),
-                                                                    axis.text.x = element_text(size=6), axis.ticks.x = element_line())
+                                                                    axis.text.y = element_text(size=5),
+                                                                    axis.text.x = element_text(size=5), axis.ticks.x = element_line())
 
 treatment_by_setting_plot_clean
 ggsave("./outputs/plots/00_top_treatment_received_barplot_with_legend.pdf",treatment_plot,dpi=300,width=2.2,height=2.2)
 ggsave("./outputs/plots/00_top_treatment_received_barplot.pdf",treatment_by_setting_plot_clean,dpi=300,width=2.2,height=2.2)
+
+ggsave("./outputs/plots/00_top_treatment_received_barplot_horizontal.pdf",treatment_by_setting_plot_clean,dpi=300,width=5,height=1.6)
+
 
 ## Which drug was the most common prescribed in mets setting?
 drug_count_df_met_only = drug_count_df %>%

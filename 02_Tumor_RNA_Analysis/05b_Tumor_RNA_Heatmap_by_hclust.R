@@ -26,143 +26,131 @@ hclust_combined_fora = read.csv("./outputs/DEGs/hclust_deg_hallmark_c6_combined.
 ## getting the top gene set and show the top overexpressed genes
 ## If genes is already shown in another set skip it
 
-#all_deseq_res_pos_high_fc = all_deseq_res_pos %>% filter(log2FoldChange > 1)
-
-## Non-cutaneous
-noncut_breast_set_hallmark = deseq2_combined_fora %>% 
-  filter(padj < 0.01, term_set == "Hallmarks",primary_site == "ParenchymalBreast") %>%
+## hclust1
+hclust1_hallmark = hclust_combined_fora %>% 
+  filter(padj < 0.01, term_set == "Hallmarks",cluster == "Cluster 1") %>%
+  #arrange(-odds_ratio) %>%
   head(1)
-noncut_breast_set_hallmark_genes = unlist(strsplit(noncut_breast_set_hallmark %>% pull(overlapGenes), ", "))
-noncut_breast_top_hallmark_genes = all_deseq_res_pos %>% 
-  filter(cluster=="ParenchymalBreast", gene %in% noncut_breast_set_genes) %>%
+hclust1_set_hallmark_genes = unlist(strsplit(hclust1_hallmark %>% pull(overlapGenes), ", "))
+hclust1_top_hallmark_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 1", gene %in% hclust1_set_hallmark_genes) %>%
   arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-noncut_breast_top_hallmark_genes
+hclust1_top_hallmark_genes
 
-noncut_breast_set_c6 = deseq2_combined_fora %>% 
-  filter(padj < 0.01, term_set == "C6",primary_site == "ParenchymalBreast") %>%
+hclust1_set_c6 = hclust_combined_fora %>% 
+  filter(padj < 0.01, term_set == "C6",cluster == "Cluster 1") %>%
+  #arrange(-odds_ratio) %>%
   head(1)
-noncut_breast_set_c6_genes = unlist(strsplit(noncut_breast_set_c6 %>% pull(overlapGenes), ", "))
-noncut_breast_top_c6_genes = all_deseq_res_pos %>% 
-  filter(cluster=="ParenchymalBreast", gene %in% noncut_breast_set_c6_genes) %>%
+hclust1_set_c6_genes = unlist(strsplit(hclust1_set_c6 %>% pull(overlapGenes), ", "))
+hclust1_top_c6_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 1", gene %in% hclust1_set_c6_genes) %>%
   arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-noncut_breast_top_c6_genes
+hclust1_top_c6_genes
 
-## Cutaneous
-cut_breast_set_hallmark = deseq2_combined_fora %>% 
-  filter(term_set == "Hallmarks", primary_site == "CutaneousBreast") %>%
-  arrange(pval) %>% head(1)
-cut_breast_set_hallmark_genes = unlist(strsplit(cut_breast_set_hallmark %>% pull(overlapGenes), ", "))
-cut_breast_top_hallmark_genes = all_deseq_res_pos %>% 
-  filter(cluster=="CutaneousBreast", gene %in% cut_breast_set_hallmark_genes) %>%
-  arrange(padj)  %>% head(5) %>% arrange(-log2FoldChange)
-cut_breast_top_hallmark_genes
 
-cut_breast_set_c6 = deseq2_combined_fora %>% 
-  filter(term_set == "C6", primary_site == "CutaneousBreast") %>%
-  arrange(pval) %>% head(2) %>% tail(1)
-cut_breast_set_c6_genes = unlist(strsplit(cut_breast_set_c6 %>% pull(overlapGenes), ", "))
-cut_breast_top_c6_genes = all_deseq_res_pos %>% 
-  filter(cluster=="CutaneousBreast", gene %in% cut_breast_set_c6_genes) %>%
+## hclust2
+hclust2_hallmark = hclust_combined_fora %>% 
+  filter(padj < 0.01, term_set == "Hallmarks",cluster == "Cluster 2") %>%
+  #arrange(-odds_ratio) %>%
+  head(1)
+hclust2_set_hallmark_genes = unlist(strsplit(hclust2_hallmark %>% pull(overlapGenes), ", "))
+hclust2_top_hallmark_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 2", gene %in% hclust2_set_hallmark_genes) %>%
   arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-cut_breast_top_c6_genes
+hclust2_top_hallmark_genes
 
-## HNFS
-hnfs_set_hallmark = deseq2_combined_fora %>% 
-  filter(term_set == "Hallmarks", primary_site == "HNFS") %>%
-  arrange(pval) %>% head(1)
-hnfs_set_hallmark_genes = unlist(strsplit(hnfs_set_hallmark %>% pull(overlapGenes), ", "))
-hnfs_top_hallmark_genes = all_deseq_res_pos %>% 
-  filter(cluster=="HNFS", gene %in% hnfs_set_hallmark_genes) %>%
-  arrange(padj)  %>% head(5) %>% arrange(-log2FoldChange)
-hnfs_top_hallmark_genes
-
-hnfs_set_c6 = deseq2_combined_fora %>% 
-  filter(term_set == "C6", primary_site == "HNFS") %>%
-  arrange(pval) %>% head(1)# %>% tail(1)
-hnfs_set_c6_genes = unlist(strsplit(hnfs_set_c6 %>% pull(overlapGenes), ", "))
-hnfs_top_c6_genes = all_deseq_res_pos %>% 
-  filter(cluster=="HNFS", gene %in% hnfs_set_c6_genes) %>%
+hclust2_set_c6 = hclust_combined_fora %>% 
+  filter(padj < 0.01, term_set == "C6",cluster == "Cluster 2") %>%
+  #arrange(-odds_ratio) %>%
+  head(1)
+hclust2_set_c6_genes = unlist(strsplit(hclust2_set_c6 %>% pull(overlapGenes), ", "))
+hclust2_top_c6_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 2", gene %in% hclust2_set_c6_genes) %>%
   arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-hnfs_top_c6_genes
+hclust2_top_c6_genes
 
-## Heart
-heart_set_hallmark = deseq2_combined_fora %>% 
-  filter(term_set == "Hallmarks", primary_site == "Heart") %>%
-  arrange(pval) %>% head(1)
-heart_set_hallmark_genes = unlist(strsplit(heart_set_hallmark %>% pull(overlapGenes), ", "))
-heart_top_hallmark_genes = all_deseq_res_pos %>% 
-  filter(cluster=="Heart", gene %in% heart_set_hallmark_genes) %>%
+## hclust3
+hclust3_hallmark = hclust_combined_fora %>% 
+  filter(padj < 0.01, term_set == "Hallmarks",cluster == "Cluster 3") %>%
+  #arrange(-odds_ratio) %>%
+  head(1)
+hclust3_set_hallmark_genes = unlist(strsplit(hclust3_hallmark %>% pull(overlapGenes), ", "))
+hclust3_top_hallmark_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 3", gene %in% hclust3_set_hallmark_genes) %>%
   arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-heart_top_hallmark_genes
+hclust3_top_hallmark_genes
 
-heart_set_c6 = deseq2_combined_fora %>% 
-  filter(term_set == "C6", primary_site == "Heart") %>%
-  arrange(pval) %>% head(1) #%>% tail(1)
-heart_set_c6_genes = unlist(strsplit(heart_set_c6 %>% pull(overlapGenes), ", "))
-heart_top_c6_genes = all_deseq_res_pos %>% 
-  filter(cluster=="Heart", gene %in% heart_set_c6_genes) %>%
+hclust3_set_c6 = hclust_combined_fora %>% 
+  filter(padj < 0.01, term_set == "C6",cluster == "Cluster 3") %>%
+  #arrange(-odds_ratio) %>%
+  head(1)
+hclust3_set_c6_genes = unlist(strsplit(hclust3_set_c6 %>% pull(overlapGenes), ", "))
+hclust3_top_c6_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 3", gene %in% hclust3_set_c6_genes) %>%
   arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-heart_top_c6_genes
+hclust3_top_c6_genes
 
-## Extremities
-extremities_set_hallmark = deseq2_combined_fora %>% 
-  filter(term_set == "Hallmarks", primary_site == "Extremities") %>%
-  arrange(pval) %>% head(1)
-extremities_set_hallmark_genes = unlist(strsplit(extremities_set_hallmark %>% pull(overlapGenes), ", "))
-extremities_top_hallmark_genes = all_deseq_res_pos %>% 
-  filter(cluster=="Extremities", gene %in% extremities_set_hallmark_genes) %>%
+## hclust4
+hclust4_hallmark = hclust_combined_fora %>% 
+  filter(padj < 0.01, term_set == "Hallmarks",cluster == "Cluster 4") %>%
+  head(1)
+hclust4_set_hallmark_genes = unlist(strsplit(hclust4_hallmark %>% pull(overlapGenes), ", "))
+hclust4_top_hallmark_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 4", gene %in% hclust4_set_hallmark_genes) %>%
   arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-extremities_top_hallmark_genes
+hclust4_top_hallmark_genes
 
-extremities_set_c6 = deseq2_combined_fora %>% 
-  filter(term_set == "C6", primary_site == "Extremities") %>%
-  arrange(pval) %>% head(2) %>% tail(1)
-extremities_set_c6_genes = unlist(strsplit(extremities_set_c6 %>% pull(overlapGenes), ", "))
-extremities_top_c6_genes = all_deseq_res_pos %>% 
-  filter(cluster=="Extremities", gene %in% extremities_set_c6_genes) %>%
+hclust4_set_c6 = hclust_combined_fora %>% 
+  filter(padj < 0.01, term_set == "C6",cluster == "Cluster 4") %>%
+  head(1)
+hclust4_set_c6_genes = unlist(strsplit(hclust4_set_c6 %>% pull(overlapGenes), ", "))
+hclust4_top_c6_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 4", gene %in% hclust4_set_c6_genes) %>%
   arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-extremities_top_c6_genes
+hclust4_top_c6_genes
 
-## Others
-others_set_hallmark = deseq2_combined_fora %>% 
-  filter(term_set == "Hallmarks", primary_site == "Others") %>%
-  arrange(pval) %>% head(1)
-others_set_hallmark_genes = unlist(strsplit(others_set_hallmark %>% pull(overlapGenes), ", "))
-others_top_hallmark_genes = all_deseq_res_pos %>% 
-  filter(cluster=="Others", gene %in% others_set_hallmark_genes) %>%
-  arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-others_top_hallmark_genes
 
-others_set_c6 = deseq2_combined_fora %>% 
-  filter(term_set == "C6", primary_site == "Others") %>%
-  arrange(pval) %>% head(1)# %>% tail(1)
-others_set_c6_genes = unlist(strsplit(others_set_c6 %>% pull(overlapGenes), ", "))
-others_top_c6_genes = all_deseq_res_pos %>% 
-  filter(cluster=="Others", gene %in% others_set_c6_genes, !(gene %in% others_top_hallmark_genes$gene)) %>%
+## hclust5
+hclust5_hallmark = hclust_combined_fora %>% 
+  filter(padj < 0.01, term_set == "Hallmarks",cluster == "Cluster 5") %>%
+  head(2) %>% ## ESR Late has already been picked by an earlier cluster so we move to the next best
+  tail(1)
+hclust5_set_hallmark_genes = unlist(strsplit(hclust5_hallmark %>% pull(overlapGenes), ", "))
+hclust5_top_hallmark_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 5", gene %in% hclust5_set_hallmark_genes) %>%
   arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
-others_top_c6_genes
+hclust5_top_hallmark_genes
+
+hclust5_set_c6 = hclust_combined_fora %>% 
+  filter(padj < 0.05, term_set == "C6",cluster == "Cluster 5") %>%
+  head(1)
+hclust5_set_c6_genes = unlist(strsplit(hclust5_set_c6 %>% pull(overlapGenes), ", "))
+hclust5_top_c6_genes = hclust_res_pos %>% 
+  filter(cluster=="Cluster 5", gene %in% hclust5_set_c6_genes) %>%
+  arrange(padj) %>% head(5) %>% arrange(-log2FoldChange)
+hclust5_top_c6_genes
+
 
 ## Combine all into the gene_set_df
 gene_set_df = rbind(
-  # Noncut
-  data.frame(gene = noncut_breast_top_hallmark_genes$gene, pathway = noncut_breast_set_hallmark$pretty_pathway[[1]]),
-  data.frame(gene = noncut_breast_top_c6_genes$gene, pathway = noncut_breast_set_c6$pretty_pathway[[1]]),
+  # hclust1
+  data.frame(gene = hclust1_top_hallmark_genes$gene, pathway = hclust1_hallmark$pretty_pathway[[1]]),
+  data.frame(gene = hclust1_top_c6_genes$gene, pathway = hclust1_set_c6$pretty_pathway[[1]]),
   # Cut
-  data.frame(gene = cut_breast_top_hallmark_genes$gene, pathway = cut_breast_set_hallmark$pretty_pathway[[1]]),
-  data.frame(gene = cut_breast_top_c6_genes$gene, pathway = cut_breast_set_c6$pretty_pathway[[1]]),
+  data.frame(gene = hclust2_top_hallmark_genes$gene, pathway = hclust2_hallmark$pretty_pathway[[1]]),
+  data.frame(gene = hclust2_top_c6_genes$gene, pathway = hclust2_set_c6$pretty_pathway[[1]]),
   # HNFS
-  data.frame(gene = hnfs_top_hallmark_genes$gene, pathway = hnfs_set_hallmark$pretty_pathway[[1]]),
-  data.frame(gene = hnfs_top_c6_genes$gene, pathway = hnfs_set_c6$pretty_pathway[[1]]),
+  data.frame(gene = hclust3_top_hallmark_genes$gene, pathway = hclust3_hallmark$pretty_pathway[[1]]),
+  data.frame(gene = hclust3_top_c6_genes$gene, pathway = hclust3_set_c6$pretty_pathway[[1]]),
   # Heart
-  data.frame(gene = heart_top_hallmark_genes$gene, pathway = heart_set_hallmark$pretty_pathway[[1]]),
-  data.frame(gene = heart_top_c6_genes$gene, pathway = heart_set_c6$pretty_pathway[[1]]),
+  data.frame(gene = hclust4_top_hallmark_genes$gene, pathway = hclust4_hallmark$pretty_pathway[[1]]),
+  data.frame(gene = hclust4_top_c6_genes$gene, pathway = hclust4_set_c6$pretty_pathway[[1]]),
   # Extremities
-  data.frame(gene = extremities_top_hallmark_genes$gene, pathway = extremities_set_hallmark$pretty_pathway[[1]]),
-  data.frame(gene = extremities_top_c6_genes$gene, pathway = extremities_set_c6$pretty_pathway[[1]]),
-  # Others
-  data.frame(gene = others_top_hallmark_genes$gene, pathway = others_set_hallmark$pretty_pathway[[1]]),
-  data.frame(gene = others_top_c6_genes$gene, pathway = others_set_c6$pretty_pathway[[1]])
+  data.frame(gene = hclust5_top_hallmark_genes$gene, pathway = hclust5_hallmark$pretty_pathway[[1]]),
+  data.frame(gene = hclust5_top_c6_genes$gene, pathway = hclust5_set_c6$pretty_pathway[[1]])
 )
+gene_set_df
+
 
 rownames(gene_set_df) = gene_set_df$gene
 gene_set_df$`Gene Set` = gene_set_df$pathway
@@ -173,10 +161,12 @@ gene_set_df$`Gene Set` = gsub("\\.V1", "", gene_set_df$`Gene Set`)
 gene_set_df$`Gene Set` = gsub("EPITHELIAL MESENCHYMAL TRANSITION", "EMT", gene_set_df$`Gene Set`)
 #gene_set_df$`Gene Set` = gsub("TGFB", "TGFB UP", gene_set_df$`Gene Set`)
 gene_set_df$`Gene Set` = gsub("MYC TARGETS V1", "MYC_TARGETS", gene_set_df$`Gene Set`)
+gene_set_df$`Gene Set` = gsub("MYC_TARGETS", "MYC", gene_set_df$`Gene Set`)
 gene_set_df$`Gene Set` = gsub("HEME METABOLISM", "HEME META", gene_set_df$`Gene Set`)
-gene_set_df$`Gene Set` = gsub("CHOLESTEROL HOMEOSTASIS", "CHOLESTEROL", gene_set_df$`Gene Set`)
-gene_set_df$`Gene Set` = gsub("PRC2 EED DN", "EED DOWN", gene_set_df$`Gene Set`)
-gene_set_df$`Gene Set` = gsub("ATF2 S", "ATF2 UP", gene_set_df$`Gene Set`)
+gene_set_df$`Gene Set` = gsub("ESTROGEN RESPONSE LATE", "ESTROGEN", gene_set_df$`Gene Set`)
+gene_set_df$`Gene Set` = gsub("KRAS SIGNALING DN", "KRAS DN", gene_set_df$`Gene Set`)
+gene_set_df$`Gene Set` = gsub("ESC J1 EARLY", "ESC EARLY", gene_set_df$`Gene Set`)
+#gene_set_df$`Gene Set` = gsub("ATF2 S", "ATF2 UP", gene_set_df$`Gene Set`)
 gene_set_df$`Gene Set` = gsub("\\_", " ", gene_set_df$`Gene Set`)
 
 gene_set_df
@@ -186,11 +176,10 @@ gene_set_df$`Gene Set` = factor(
   gene_set_df$`Gene Set`,
   levels = c(
     "EMT","TGFB",
-    "MYC TARGETS","CSR LATE",
-    "CHOLESTEROL","PGF",
-    "COAGULATION","ERBB2",
-    "MYOGENESIS","EED DOWN",
-    "HEME META","ATF2 UP"
+    "HEME META","EGFR",
+    "ESTROGEN","ESC EARLY",
+    "MYC","CSR LATE",
+    "KRAS DN","P53 DN"
   )
 )
 
@@ -209,19 +198,20 @@ gene_set_palette = setNames(dynamic_pal_npg, levels(gene_set_df$`Gene Set`))
 
 
 ## Sort the idendities,sites,and heatmap data
-asc_cluster_idents = so@meta.data %>% arrange(seurat_clusters_by_site,`entity:sample_id`) %>% dplyr::select(seurat_clusters_by_site_str)
-asc_cluster_idents$seurat_clusters_by_site_str = factor(
-  asc_cluster_idents$seurat_clusters_by_site_str,
+asc_cluster_idents = so@meta.data %>% arrange(hcluster_by_expr_str,`entity:sample_id`) %>% dplyr::select(hcluster_by_expr_str)
+asc_cluster_idents$hcluster_by_expr_str = factor(
+  asc_cluster_idents$hcluster_by_expr_str,
   levels = c(
-    "Breast (Parenchymal)",
-    "Breast (Cutaneous)",
-    "HNFS",
-    "Heart",
-    "Extremities",
-    "Others"
+    "Cluster 1",
+    "Cluster 2",
+    "Cluster 3",
+    "Cluster 4",
+    "Cluster 5"
   )
 )
-asc_primary_sites =  so@meta.data %>% arrange(seurat_clusters_by_site,`entity:sample_id`) %>% dplyr::select(`Primary Site (Recombined)`)
+
+# This time sort by hclust
+asc_primary_sites =  so@meta.data %>% arrange(hcluster_by_expr_str,`entity:sample_id`) %>% dplyr::select(`Primary Site (Recombined)`)
 
 asc_new_marker_heatmap_data = GetAssayData(so,layer="vst_scaled")[rownames(gene_set_df),rownames(asc_cluster_idents)]
 
@@ -242,7 +232,7 @@ significance_pal = c(
   "nom. p < 0.05" = purples_cols[2],
   "nom. p >= 0.05" = purples_cols[1]
 )
-all_markers_dedupped = all_deseq_res_pos %>% arrange(-log2FoldChange) %>% distinct(gene, .keep_all = TRUE)
+all_markers_dedupped = hclust_res_pos %>% arrange(-log2FoldChange) %>% distinct(gene, .keep_all = TRUE)
 all_new_markers_FC = all_markers_dedupped %>% filter(gene %in% rownames(gene_set_df))
 rownames(all_new_markers_FC) = all_new_markers_FC$gene
 all_new_markers_FC = all_new_markers_FC %>% mutate(
@@ -326,11 +316,11 @@ representative_somatic_muts_merged_with_germline = merge(
 )
 
 representative_somatic_muts_merged = representative_somatic_muts_merged_with_germline %>%
-  arrange(seurat_clusters_by_site,`entity:sample_id`) %>% 
+  arrange(hcluster_by_expr_str,`entity:sample_id`) %>% 
   replace_na(list(rep_Hugo_Symbol="Not available"))
 
 representative_germline_vars_merged = representative_somatic_muts_merged_with_germline %>%
-  arrange(seurat_clusters_by_site,`entity:sample_id`) %>% 
+  arrange(hcluster_by_expr_str,`entity:sample_id`) %>% 
   #select(`germline_Hugo_Symbol`) %>% 
   replace_na(list(germline_Hugo_Symbol="No PV Detected"))
 
@@ -435,6 +425,7 @@ age_col_annot = colorRamp2(c(20, 80), c("white", "purple"))
 purity_col_annot = colorRamp2(c(0.4,1), c("white", "pink"))
 
 asc_top_annotations = HeatmapAnnotation(
+  "Expression Cluster" = representative_somatic_muts_merged$hcluster_by_expr_str,
   `Primary Site`= asc_primary_sites$`Primary Site (Recombined)`,
   `Cutaneous` = representative_somatic_muts_merged$`cutaneous_viz`,
   "RAAS/LAAS" = representative_somatic_muts_merged$RAAS_LAAS_Class,
@@ -444,7 +435,6 @@ asc_top_annotations = HeatmapAnnotation(
   "Epithelioid" = representative_somatic_muts_merged$is_epithelioid,
   "Spindle Cell" = representative_somatic_muts_merged$is_spindle,
   "Nuclear Grade" = representative_somatic_muts_merged$BX_NUCLEAR_GRADE,
-  "Expression Cluster" = representative_somatic_muts_merged$hcluster_by_expr_str,
   #"Mets at Dx" = representative_somatic_muts_merged$has_mets,
   #"Vasoformative" = representative_somatic_muts_merged$BX_VASOFORMATIVE,
   col=list(
@@ -508,7 +498,7 @@ complex_heatmap_fig = ComplexHeatmap::Heatmap(
   )
 )
 #pdf("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_cluster_gene_set_heatmap_dendro.pdf",width=24,height=18)
-pdf("./outputs/plots/02_seurat_plots/02_cluster_gene_set_heatmap_dendro_cluster_by_site_top_5_pathway_test.pdf",width=24,height=20)
+pdf("./outputs/plots/02_seurat_plots/02_cluster_gene_set_heatmap_dendro_cluster_by_hclust_top_5_pathway_test.pdf",width=24,height=20)
 #png("./outputs/plots/02_seurat_plots/02_cluster_gene_set_heatmap_dendro_cluster_by_site_top_5_pathway_test.png",width=24,height=18)
 
 draw(complex_heatmap_fig, heatmap_legend_side = "bottom", annotation_legend_side = "bottom",merge_legend = TRUE)
@@ -557,342 +547,3 @@ head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 3")&(hclust_co
 all_deseq_res_pos[all_deseq_res_pos$gene=="SREBF2",]
 hclust_res_pos[hclust_res_pos$gene=="SREBF2",]
 
-
-# ## Select Gene sets to Highlight per site
-# ## Given marker df, fora df, cluster name, and pathway
-# ## Return the overlapped genes sorted by significance
-# ## Maybe also require that the top 5 genes are also significant?
-# 
-# pick_genes = function(marker_df,fora_df,cluster,pathway) {
-#   marker_subset = marker_df[marker_df$cluster==cluster,]
-#   fora_df_subset = fora_df[
-#     (fora_df$cluster==cluster)&(fora_df$pathway==pathway),"overlapGenes"
-#   ][1]
-#   gene_list = strsplit(fora_df_subset,",")[[1]]
-#   marker_df_subset = marker_subset[marker_subset$gene %in% gene_list,]
-#   marker_df_subset = marker_df_subset[order(marker_df_subset$padj),]
-#   #marker_df_subset = marker_df_subset[order(-marker_df_subset$log2FoldChange),]
-#   return(marker_df_subset)
-# }
-# 
-# pick_genes_any_enriched = function(marker_df, fora_df, cluster_id, top_n = 10) {
-#   marker_subset = marker_df %>% filter(cluster == cluster_id)
-#   # 2. Filter FORA for significant pathways for THIS cluster
-#   enriched_pathways = fora_df %>% filter(cluster == cluster_id, padj < 0.1)
-#   # 3. Extract Genes (Handles both List columns and Character strings with / or ,)
-#   qualifying_genes = enriched_pathways %>% 
-#     pull(overlapGenes) %>% 
-#     str_split(pattern = "[,/ ;]+") %>% 
-#     flatten_chr() %>% 
-#     unique()
-#   top_subset = marker_subset %>%
-#     mutate(is_qualified = gene %in% qualifying_genes) %>%
-#     filter(is_qualified) %>%
-#     arrange(desc(log2FoldChange)) %>%
-#     head(top_n)
-#   return(top_subset)
-# }
-# pick_genes_any_enriched(all_deseq_res_pos,deseq2_combined_fora,"ParenchymalBreast")
-# 
-# make_gene_set_df = function(marker_df,fora_df,cluster,pathway,name,top_n=10) {
-#   #picked_genes = pick_genes(all_deseq_res_pos,deseq2_combined_fora,cluster,pathway)[1:top_n,"gene"]
-#   picked_genes = pick_genes_any_enriched(all_deseq_res_pos,deseq2_combined_fora,cluster)[1:top_n,"gene"]
-#   picked_df = data.frame(row.names = picked_genes)
-#   picked_df$`Gene Set` = name
-#   return(picked_df)
-# }
-# 
-# ## Given marker df and fora df, and cluster name, and a mapping between cluster name to pathway gene sets
-# ## Select overexpressed genes (from high to low by pval in marker df) such that
-# ## the best n genes in the top n pathways are selected
-# pick_genes_enriched_by_set = function(marker_df,fora_df,cluster,term_set="Hallmarks",top_n_genes=5,top_n_pathway=2) {
-#   # Step 1: Filtering 
-#   marker_subset = marker_df[marker_df$cluster==cluster,]
-#   marker_subset = marker_subset[order(marker_subset$padj),]
-#   #fora_subset = fora_df[(fora_df$term_set==term_set),]
-#   #fora_subset = fora_subset[order(fora_subset$padj),]
-#   top_fora_pathways = fora_df
-#   #top_fora_pathways = head(fora_df[order(fora_df$padj),],top_n_pathway)
-#   
-#   # Step 4: Initialize a list to store the top genes
-#   all_top_genes = list()
-#   used_genes = c()
-#   for (i in 1:nrow(top_fora_pathways)) {
-#     overlap_genes = top_fora_pathways$overlapGenes[i] %>% 
-#       str_split(pattern = ",") %>%
-#       unlist()
-#     overlap_genes = setdiff(overlap_genes, used_genes) # Exclude genes already included in previous sets
-#     marker_subset$is_qualified = marker_subset$gene %in% overlap_genes
-#     top_subset = marker_subset[marker_subset$is_qualified,]
-#     top_subset_genes = head(top_subset,top_n_genes)$gene
-#     used_genes = c(used_genes, top_subset_genes)
-#     # Store the result
-#     all_top_genes[[i]] = data.frame(
-#       pathway = top_fora_pathways$pathway[i], 
-#       gene = top_subset_genes
-#     )
-#   }
-#   # Step 6: Combine all results into one dataframe
-#   final_df = bind_rows(all_top_genes)
-#   # Return the combined dataframe
-#   return(final_df)
-# }
-# 
-# get_top_fora = function(fora_df,clust,term_set_to_use,top_n) {
-#   hclust_fora_head = fora_df %>% 
-#     filter(cluster == clust, term_set == term_set_to_use) %>% 
-#     arrange(padj) %>% head(top_n)
-#   return(hclust_fora_head)
-# }
-# term_set_to_use = "Hallmarks"
-# hclust1_fora_head = hclust_combined_fora %>% 
-#   filter(cluster == "Cluster 1", term_set == term_set_to_use) %>% 
-#   arrange(padj)# %>% head(3)
-# hclust2_fora_head = hclust_combined_fora %>% 
-#   filter(cluster == "Cluster 2", term_set == term_set_to_use) %>% 
-#   arrange(padj)# %>% head(1)
-# hclust3_fora_head = hclust_combined_fora %>% 
-#   filter(cluster == "Cluster 3", term_set == term_set_to_use) %>% 
-#   arrange(padj)# %>% head(1)
-# hclust4_fora_head = hclust_combined_fora %>% 
-#   filter(cluster == "Cluster 4", term_set == term_set_to_use) %>% 
-#   arrange(padj)# %>% head(3)
-# hclust5_fora_head = hclust_combined_fora %>% 
-#   filter(cluster == "Cluster 5", term_set == term_set_to_use) %>% 
-#   arrange(padj)# %>% head(3)
-# 
-# ## Pick 1 from hallmark/C6 depending on which cluster has the most of its members
-# check_cluster_member_counts = table(so@meta.data$hcluster_by_expr_str,so@meta.data$seurat_clusters_by_site_str)
-# gene_set_df = rbind(
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 1","Hallmarks",1),"ParenchymalBreast"),
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 1","C6",1),"ParenchymalBreast"),
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 2","Hallmarks",1),"HNFS"),
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 2","C6",1),"HNFS"),
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 3","Hallmarks",1),"HNFS"),
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 3","C6",1),"HNFS"),
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 4","Hallmarks",1),"CutaneousBreast"),
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 4","C6",1),"CutaneousBreast"),
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 5","Hallmarks",1),"CutaneousBreast"),
-#   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#                                                             "Cluster 5","C6",1),"CutaneousBreast")#,
-#   # pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#   #                                                           "Cluster 2","Hallmarks",1),"Heart"),
-#   # pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#   #                                                           "Cluster 2","C6",1),"Heart"),
-#   # pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#   #                                                           "Cluster 5","Hallmarks",1),"Extremities"),
-#   # pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#   #                                                           "Cluster 5","C6",1),"Extremities"),
-#   # pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#   #                                                           "Cluster 2","Hallmarks",1),"Others"),
-#   # pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-#   #                                                           "Cluster 2","C6",1),"Others")
-# )
-# 
-# # ## This is the pick 1 from hallmark and 1 from C6 gene set
-# # gene_set_df = rbind(
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 1","Hallmarks",1),"ParenchymalBreast"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 1","C6",1),"ParenchymalBreast"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 2","Hallmarks",1),"CutaneousBreast"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 2","C6",1),"CutaneousBreast"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 3","Hallmarks",1),"CutaneousBreast"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 3","C6",1),"CutaneousBreast"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 4","Hallmarks",1),"HNFS"),
-# #   # pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #   #                                                           "Cluster 4","Hallmarks",2),"HNFS")[6:10,], # The most enriched pathway (estrogen) is already taken by cluster 2
-# #   # so we go for the next highest enriched one
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 4","C6",1),"HNFS"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 5","Hallmarks",1),"HNFS"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #                                                             "Cluster 5","C6",1),"HNFS")
-# #   # pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #   #                                                           "Cluster 1","Hallmarks",1),"HNFS"),
-# #   # pick_genes_enriched_by_set(all_deseq_res_pos,get_top_fora(hclust_combined_fora,
-# #   #                                                           "Cluster 1","C6",1),"HNFS")
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust_combined_fora,2),"CutaneousBreast"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust3_fora_head,2),"CutaneousBreast"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust1_fora_head,2),"HNFS"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust4_fora_head,2),"HNFS"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust5_fora_head,2),"HNFS")
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust1_fora_head,2),"Heart"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust1_fora_head,2),"Extremities"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust2_fora_head,2),"Extremities"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust1_fora_head,2),"Others")
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust3_fora_head,2),"Others")
-# # )
-# 
-# # ## This is the pick two from hallmark geneset
-# # gene_set_df = rbind(
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust1_fora_head,1),"ParenchymalBreast"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust2_fora_head,2),"CutaneousBreast"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust3_fora_head,2),"CutaneousBreast"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust4_fora_head,2),"HNFS"),
-# #   pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust5_fora_head,2),"HNFS")
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust1_fora_head,2),"Heart"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust1_fora_head,2),"Extremities"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust2_fora_head,2),"Extremities"),
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust1_fora_head,2),"Others")
-# #   #pick_genes_enriched_by_set(all_deseq_res_pos,head(hclust3_fora_head,2),"Others")
-# # )
-
-#gene_set_df = gene_set_df[!duplicated(gene_set_df$gene),]
-#rownames(gene_set_df) = gene_set_df$gene
-#gene_set_df$`Gene Set` = gene_set_df$pathway
-
-# ## If using C6 gene set
-# gene_set_df$`Gene Set` = factor(
-#   gene_set_df$`Gene Set`,
-#   levels = c(
-#     "TGFB_UP","PTEN_DN",
-#     "KRAS_DEP","NRL_DN","P53_DN",
-#     "CSR_LATE_UP","RB_P107_DN",
-#     "AKT_UP","MEK_UP","SIRNA_EIF4GI_UP"
-#   )
-# )
-## If using Hallmark gene set
-# gene_set_df$`Gene Set` = factor(
-#   gene_set_df$`Gene Set`,
-#   levels = c(
-#     "EMT","MYOGENESIS",
-#     "MYC","E2F_TARGETS",
-#     "ESTROGEN_RESPONSE","KRAS",
-#     "P53_PATHWAY","METABOLISM"
-#     #"MYC_TARGETS_V1","E2F_TARGETS",
-#     #"ESTROGEN_RESPONSE_LATE","KRAS_SIGNALING_DN",
-#     #"P53_PATHWAY","FATTY_ACID_METABOLISM"
-#     #"AKT_UP","MEK_UP","SIRNA_EIF4GI_UP"
-#   )
-# )
-
-
-# tissue_pathway_map = list(
-#   "ParenchymalBreast" = "TGFB_UP.V1_UP",
-#   "CutaneousBreast" = "MYC_UP.V1_UP",
-#   "HNFS" = "PGF_UP.V1_UP",
-#   "Heart" = "ESC_J1_UP_LATE.V1_UP",
-#   "Extremities" = "KRAS.600.LUNG.BREAST_UP.V1_UP",
-#   "Others" = "PTEN_DN.V1_UP"
-# )
-# pathway_name_map = list(
-#   "TGFB_UP.V1_UP" = "TGF-Beta Signature",
-#   "MYC_UP.V1_UP" = "MYC Signature",
-#   "PGF_UP.V1_UP" = "PGF Signature",
-#   "ESC_J1_UP_LATE.V1_UP" = "Embryonic Stem Cell Signature",
-#   "KRAS.600.LUNG.BREAST_UP.V1_UP" = "KRAS Signature",
-#   "PTEN_DN.V1_UP" = "PTEN Mutant Signature"
-# )
-
-# Combine all generated dataframes
-# gene_set_dfs = lapply(names(tissue_hallmark_map), function(tissue) {
-#   make_gene_set_df(all_deseq_res_pos, deseq2_combined_fora, tissue, tissue_hallmark_map[[tissue]], pathway_name_map[[tissue_hallmark_map[[tissue]]]])
-# })
-
-# gene_set_dfs = lapply(names(tissue_hallmark_map), function(tissue) {
-#   make_gene_set_df(all_deseq_res_pos, deseq2_combined_fora, tissue, tissue_hallmark_map[[tissue]], pathway_name_map[[tissue_hallmark_map[[tissue]]]])
-# })
-
-#gene_set_df_old = do.call(rbind, gene_set_dfs)
-#gene_set_df_old$`Gene Set` = factor(gene_set_df_old$`Gene Set`,levels = unname(pathway_name_map))
-
-# 
-# for (i in 1:total_sets) {
-#   
-# }
-# gene_set_palette = c(
-#   "Epithelial Mesenchymal Transition"=pal_npg("nrc")(6)[1],
-#   "MYC Targets"=pal_npg("nrc")(6)[2],
-#   "P53 Pathway"=pal_npg("nrc")(6)[3],
-#   "TGF-Beta Signaling"=pal_npg("nrc")(6)[4],
-#   "Myogenesis"=pal_npg("nrc")(6)[5],
-#   "Heme Metabolism"=pal_npg("nrc")(6)[6]
-# )
-
-#fora_c6_subset = deseq2_combined_fora[deseq2_combined_fora$term_set=="C6",]
-#fora_c6_subset = fora_c6_subset[order(fora_c6_subset$padj),]
-#fora_c6_subset_dedupped = fora_c6_subset %>% arrange(padj) %>% distinct(cluster, .keep_all = TRUE)
-
-
-# ## Pick the top 5 genes by log2FC in a pathway that the site overexpressed in
-# noncut_breast_genes = pick_genes(all_deseq_res_pos,deseq2_combined_fora,"ParenchymalBreast","TGFB_UP.V1_UP")[1:5,"gene"]
-# 
-# #noncut_breast_genes = pick_genes(all_deseq_res_pos,deseq2_combined_fora,"ParenchymalBreast","HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION")[1:5,"gene"]
-# #pick_genes(all_deseq_res_pos,deseq2_combined_fora,"ParenchymalBreast","HALLMARK_MYOGENESIS")
-# #pick_genes(all_deseq_res_pos,deseq2_combined_fora,"ParenchymalBreast","HALLMARK_TGF_BETA_SIGNALING")
-# #pick_genes(all_deseq_res_pos,deseq2_combined_fora,"ParenchymalBreast","HALLMARK_ANGIOGENESIS")
-# noncut_breast_df = data.frame(row.names = noncut_breast_genes)
-# #noncut_breast_df$`Gene Set` = "Epithelial Mesenchymal Transition"
-# noncut_breast_df$`Gene Set` = "TGF-Beta Upregulated"
-# 
-# 
-# #cut_breast_genes = pick_genes(all_deseq_res_pos,deseq2_combined_fora,"CutaneousBreast","HALLMARK_MYC_TARGETS_V2")[1:5,"gene"]
-# cut_breast_genes = pick_genes(all_deseq_res_pos,deseq2_combined_fora,"CutaneousBreast","HALLMARK_MYC_TARGETS_V2")[1:5,"gene"]
-# 
-# #pick_genes(all_deseq_res_pos,deseq2_combined_fora,"CutaneousBreast","HALLMARK_E2F_TARGETS")
-# #pick_genes(all_deseq_res_pos,deseq2_combined_fora,"CutaneousBreast","HALLMARK_UV_RESPONSE_UP")
-# cut_breast_df = data.frame(row.names = cut_breast_genes)
-# cut_breast_df$`Gene Set` = "MYC Targets"
-# 
-# hnfs_genes = pick_genes(all_deseq_res_pos,deseq2_combined_fora,"HNFS","HALLMARK_P53_PATHWAY")[1:5,"gene"]
-# #pick_genes(all_deseq_res_pos,deseq2_combined_fora,"Heart","HALLMARK_COAGULATION")
-# hnfs_df = data.frame(row.names = hnfs_genes)
-# hnfs_df$`Gene Set` = "P53 Pathway"
-# 
-# heart_genes = pick_genes(all_deseq_res_pos,deseq2_combined_fora,"Heart","HALLMARK_TGF_BETA_SIGNALING")[1:5,"gene"]
-# heart_df = data.frame(row.names = heart_genes)
-# heart_df$`Gene Set` = "TGF-Beta Signaling"
-# 
-# extremities_genes = pick_genes(all_deseq_res_pos,deseq2_combined_fora,"Extremities","HALLMARK_MYOGENESIS")[1:5,"gene"]
-# extremities_df = data.frame(row.names = extremities_genes)
-# extremities_df$`Gene Set` = "Myogenesis"
-# 
-# others_genes = pick_genes(all_deseq_res_pos,deseq2_combined_fora,"Others","HALLMARK_HEME_METABOLISM")[1:5,"gene"]
-# others_df = data.frame(row.names = others_genes)
-# others_df$`Gene Set` = "Heme Metabolism"
-# 
-# gene_set_df = rbind(
-#   #noncut_breast_df,
-#   #cut_breast_df,
-#   #hnfs_df,
-#   heart_df,
-#   extremities_df,
-#   others_df
-# )
-# 
-# gene_set_df$`Gene Set` = factor(
-#   gene_set_df$`Gene Set`,
-#   levels = c("Epithelial Mesenchymal Transition",
-#              "MYC Targets",
-#              "P53 Pathway",
-#              "TGF-Beta Signaling",
-#              "Myogenesis",
-#              "Heme Metabolism"
-#   ))
-# 
-# gene_set_palette = c(
-#   "Epithelial Mesenchymal Transition"=pal_npg("nrc")(6)[1],
-#   "MYC Targets"=pal_npg("nrc")(6)[2],
-#   "P53 Pathway"=pal_npg("nrc")(6)[3],
-#   "TGF-Beta Signaling"=pal_npg("nrc")(6)[4],
-#   "Myogenesis"=pal_npg("nrc")(6)[5],
-#   "Heme Metabolism"=pal_npg("nrc")(6)[6]
-# )
-# 
-# gene_set_df

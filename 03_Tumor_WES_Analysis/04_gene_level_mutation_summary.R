@@ -40,6 +40,8 @@ asc_maf@clinical.data$`IsCutaneous`[is.na(asc_maf@clinical.data$`Is Cutaneous`)]
 asc_maf@clinical.data$`Subtype` = asc_maf@clinical.data$RAAS_LAAS_Class
 asc_maf@clinical.data$`TMB` = asc_maf@clinical.data$`TMB_all_mutations`
 
+quantile(as.numeric(asc_maf@clinical.data$TMB))
+
 primary_site_palette_temp = c(
   "Other Visceral Organs"=pal_npg("nrc")(9)[1],
   "Hepatobiliary"=pal_npg("nrc")(9)[2],
@@ -52,6 +54,22 @@ primary_site_palette_temp = c(
   #"NA"=pal_npg("nrc")(9)[9],
   "Other Rare Sites"=pal_npg("nrc")(9)[9]
 )
+
+## Calculate ti/tv per sample
+asc_maf_titv = titv(asc_maf,useSyn = TRUE, plot = FALSE)
+asc_maf_titv_proportions = asc_maf_titv$fraction.contribution
+asc_maf_titv_proportions_merged = asc_maf_titv_proportions %>%
+  left_join(asc_maf@clinical.data, by = "Tumor_Sample_Barcode")
+ct_prop_plot = ggplot(asc_maf_titv_proportions_merged,aes(x=`C>T`,y=fct_reorder(`Primary_Site_(Recombined)`,`C>T`,.fun = mean))) + 
+  geom_boxplot(width=0.5,outlier.shape = NA) +
+  geom_jitter(width = 0.2,size=0.25,aes(color=`Primary_Site_(Recombined)`)) +
+  pretty_plot() + L_border() +
+  scale_color_manual(values=primary_site_palette_temp) +
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(),axis.text = element_text(size = 5),legend.position = "none")
+ct_prop_plot
+ggsave("./outputs/plots/ct_proportion_plot.pdf",ct_prop_plot,dpi=300,width=2,height=1.6)
+
+
 
 # Function to parse GTF specifically for gene coordinates
 get_gtf_coords <- function(gtf_path) {
@@ -82,7 +100,8 @@ library(tidyverse)
 annotation_color = list(
   `PrimarySite`=primary_site_palette_maftools,
   `IsCutaneous`=cutaneous_palette,
-  `Subtype`=RAAS_class_palette
+  `Subtype`=RAAS_class_palette,
+  `RAAS_LAAS_Class`=RAAS_class_palette
 )
 variant_palette
 make_oncoplot_priority_filter = function(maf, gene_ref, priority_genes = c(), save_path="", top_n=15, top_by="total", raw_palette=FALSE) {
@@ -90,9 +109,7 @@ make_oncoplot_priority_filter = function(maf, gene_ref, priority_genes = c(), sa
   # 1. Get Gene Summary from MAF
   gene_sum <- getGeneSummary(maf)
   gene_sum$mut_amp_del = gene_sum$MutatedSamples + gene_sum$Amp + gene_sum$DeepDel
-  
-  print("genesum")
-  print(head(gene_sum))
+
   
   # 2. Join with GTF and define Priority
   ranked_pool <- gene_sum %>%
@@ -120,8 +137,12 @@ make_oncoplot_priority_filter = function(maf, gene_ref, priority_genes = c(), sa
     # Define the 1MB exclusion zone
     # We remove all genes within 1MB of the gene we just picked
     pool <- pool %>%
-      filter(!(chr == top_gene$chr & 
+      filter(!(chr == top_gene$chr &
                  abs(start - top_gene$start) <= 1000000))
+    # 
+    # pool <- pool %>%
+    #   filter(!(chr == top_gene$chr & 
+    #              abs(start - top_gene$start) <= 1))
   }
   
   # 4. Generate Plot
@@ -146,7 +167,8 @@ make_oncoplot_priority_filter = function(maf, gene_ref, priority_genes = c(), sa
   else {
     oncoplot(maf = maf,
              genes = final_selection,
-             clinicalFeatures = c("IsCutaneous","PrimarySite"),
+             #clinicalFeatures = c("IsCutaneous","PrimarySite"),
+             clinicalFeatures = c("IsCutaneous","RAAS_LAAS_Class"),
              topBarData = "TMB",
              draw_titv = TRUE,
              sortByAnnotation = TRUE,
@@ -171,6 +193,14 @@ oncoplot_all_samples_with_cn = make_oncoplot_priority_filter(
   save_path = "./outputs/plots/04_oncoplot_all_with_CN_new.pdf",top_by="mut_amp_del",
   top=20
 )
+
+oncoplot_all_samples_with_cn_no_priority = make_oncoplot_priority_filter(
+  asc_maf,gene_ref,
+  priority_genes=c(),
+  save_path = "./outputs/plots/04_oncoplot_all_with_CN_new_no_priority.pdf",top_by="mut_amp_del",
+  top=20
+)
+
 oncoplot_all_samples_with_cn
 #make_oncoplot_priority_filter(asc_maf,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_all_with_CN.pdf",top_by="total")
 #make_oncoplot_priority_filter(asc_maf,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_all_with_CN_new.pdf",top_by="total")
@@ -202,6 +232,9 @@ asc_maf_cut = subsetMaf(asc_maf,tsb = asc_maf_cut_tsb)
 #make_oncoplot(asc_maf_cut,save_path = "./outputs/plots/04_oncoplot_cutaneous_with_CN.pdf",top_n=30)
 #make_oncoplot_gtf_filter(asc_maf_cut,gene_ref,save_path = "./outputs/plots/04_oncoplot_cutaneous_with_CN.pdf",top_n=30)
 make_oncoplot_priority_filter(asc_maf_cut,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_cutaneous_with_CN.pdf",top_by="mut_amp_del")
+make_oncoplot_priority_filter(asc_maf_cut,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_cutaneous_with_CN_raw.pdf",top_by="mut_amp_del",raw_palette = TRUE)
+
+make_oncoplot_priority_filter(asc_maf_cut,gene_ref,priority_genes=c(),save_path = "./outputs/plots/04_oncoplot_cutaneous_with_CN_no_priority.pdf",top_by="total",top_n = 20)
 
 somaticInteractions(maf = asc_maf_cut, top = 25, pvalue = c(0.05, 0.1))
 
@@ -227,18 +260,20 @@ somaticInteractions(maf = asc_maf_noncut, top = 25, pvalue = c(0.05, 0.1))
 asc_maf_cut_breast_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`Primary_Site_(Recombined)` == "Breast (Cutaneous)"]$Tumor_Sample_Barcode
 asc_maf_cut_breast = subsetMaf(asc_maf,tsb = asc_maf_cut_breast_tsb)
 make_oncoplot_priority_filter(asc_maf_cut_breast,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_cutaneous_breast_with_CN.pdf",top_by="mut_amp_del")
-make_oncoplot_priority_filter(asc_maf_cut_breast,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_cutaneous_breast_with_CN_raw_palette.pdf",top_by="mut_amp_del",raw_palette = TRUE)
+make_oncoplot_priority_filter(asc_maf_cut_breast,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_cutaneous_breast_with_CN_with_subtype.pdf",top_by="mut_amp_del")
 
 ## NonCutaneous Breast
 asc_maf_noncut_breast_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`Primary_Site_(Recombined)` == "Breast (Parenchymal)"]$Tumor_Sample_Barcode
 asc_maf_noncut_breast = subsetMaf(asc_maf,tsb = asc_maf_noncut_breast_tsb)
 make_oncoplot_priority_filter(asc_maf_noncut_breast,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_non_cutaneous_breast_with_CN.pdf",top_by="mut_amp_del")
+make_oncoplot_priority_filter(asc_maf_noncut_breast,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_non_cutaneous_breast_with_CN_with_subtype.pdf",top_by="mut_amp_del")
 
 ## HNFS
 asc_maf_hnfs_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`Primary_Site_(Recombined)` == "HNFS"]$Tumor_Sample_Barcode
 asc_maf_hnfs = subsetMaf(asc_maf,tsb = asc_maf_hnfs_tsb)
 make_oncoplot_priority_filter(asc_maf_hnfs,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_HNFS_with_CN.pdf",top_by="mut_amp_del")
 make_oncoplot_priority_filter(asc_maf_hnfs,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_HNFS_with_CN_raw_palette.pdf",top_by="mut_amp_del",raw_palette = TRUE)
+make_oncoplot_priority_filter(asc_maf_hnfs,gene_ref,priority_genes=oncokb_genes,save_path = "./outputs/plots/04_oncoplot_HNFS_with_CN_with_subtype.pdf",top_by="mut_amp_del",raw_palette = FALSE)
 
 ## Heart
 asc_maf_heart_tsb = asc_maf@clinical.data[asc_maf@clinical.data$`Primary_Site_(Recombined)` == "Heart"]$Tumor_Sample_Barcode
@@ -341,6 +376,54 @@ overall_mut_plot = oncoplot(
   fontSize = 0.8,
 )
 dev.off()
+
+
+viz_genes
+
+asc_maf_cut_noncut_barcodes = getClinicalData(asc_maf) %>%
+  filter(!is.na(`IsCutaneous`)) %>%
+  pull(Tumor_Sample_Barcode)
+asc_maf_cut_noncut_filtered = subsetMaf(maf = asc_maf, tsb = asc_maf_cut_noncut_barcodes)
+cut_noncut_enrichment = clinicalEnrichment(maf = asc_maf_cut_noncut_filtered, clinicalFeature = "IsCutaneous",minMut=5)
+
+## Two cateogry comparison is equivalent to one versus rest
+cut_noncut_enrichment_output = cut_noncut_enrichment$groupwise_comparision
+cut_noncut_enrichment_output$padj = p.adjust(cut_noncut_enrichment_output$p_value,method="BH")
+cut_noncut_enrichment_output = cut_noncut_enrichment_output %>%
+  separate(n_mutated_group1, into = c("mut1", "total1"), sep = " of ", convert = TRUE) %>%
+  separate(n_mutated_group2, into = c("mut2", "total2"), sep = " of ", convert = TRUE) %>%
+  filter(Group1 == "Non-cutaneous AS") %>%
+  mutate(
+    pct_non_cutaneous = (mut1 / total1) * 100,
+    pct_cutaneous = (mut2 / total2) * 100,
+    significance = case_when(
+      fdr < 0.05 ~ "FDR < 0.05",
+      TRUE ~ "Not Significant"
+    )
+  )
+
+cut_noncut_enrichment_output_plot = ggplot(cut_noncut_enrichment_output, aes(x = pct_non_cutaneous, y = pct_cutaneous, color = significance)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "grey80") +
+  geom_point(size = 2) +
+  geom_text_repel(
+    data = cut_noncut_enrichment_output %>% filter(((padj < 0.05) & (pct_cutaneous >= 15)) | (pct_non_cutaneous >= 10) | ((pct_non_cutaneous > 7)&(pct_cutaneous > 20))), 
+    aes(label = Hugo_Symbol),
+    size = 2,
+    max.overlaps = Inf,
+    box.padding = 0.1
+  ) +
+  scale_color_manual(values = c(
+    "FDR < 0.05" = "dodgerblue3",          # Bright Red
+    "Not Significant" = "grey80"
+  )) +
+  pretty_plot() + L_border() +
+  scale_x_continuous(labels = function(x) paste0(x, "%")) +
+  scale_y_continuous(labels = function(y) paste0(y, "%")) +
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(),legend.position = "none")
+
+cut_noncut_enrichment_output_plot
+ggsave("./outputs/plots/cut_noncut_enrichment_output_plot.pdf",cut_noncut_enrichment_output_plot,dpi=300,width=5,height=1.3)
+
 
 ## Plot gene by clinical attribute (Whether one gene mutation is enriched in cutaneous vs. non-cut)
 asc_maf_ct = table(asc_maf@data$Tumor_Sample_Barcode,asc_maf@data$Hugo_Symbol)

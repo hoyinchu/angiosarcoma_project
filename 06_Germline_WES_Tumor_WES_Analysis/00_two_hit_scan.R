@@ -55,6 +55,7 @@ germline_versus_tumor_mut_counts = germline_somatic_merged_no_dup %>% group_by(H
 germline_versus_tumor_mut_counts$germline_and_somatic_count_chr = as.factor(germline_versus_tumor_mut_counts$germline_and_somatic_count)
 germline_versus_tumor_mut_counts = germline_versus_tumor_mut_counts %>% mutate(
   bicarrier_category = case_when(
+    germline_versus_tumor_mut_counts$germline_and_somatic_count == 5 ~ "5",
     germline_versus_tumor_mut_counts$germline_and_somatic_count == 4 ~ "4",
     germline_versus_tumor_mut_counts$germline_and_somatic_count == 1 ~ "1",
     germline_and_somatic_count == 0 ~ "0"
@@ -90,17 +91,19 @@ germline_versus_tumor_gene_plot
 
 germline_versus_tumor_mut_counts
 ## Make a rank plot of total number of patients with both germline and somatic variants in the same gene
-germline_versus_tumor_mut_counts$bicarrier_category_rank = rank(-as.numeric(germline_versus_tumor_mut_counts$bicarrier_category),ties.method = "first")
-rank_range = range(germline_versus_tumor_mut_counts$bicarrier_category_rank, na.rm = TRUE)
-biallelic_rank_plot = ggplot(data=germline_versus_tumor_mut_counts,aes(x=bicarrier_category_rank,y=bicarrier_category,color=bicarrier_category>1)) +
+germline_versus_tumor_mut_counts_filtered = germline_versus_tumor_mut_counts# %>% filter(germline_pv_carrier_count > 0)
+germline_versus_tumor_mut_counts_filtered$bicarrier_category_rank = rank(-as.numeric(germline_versus_tumor_mut_counts_filtered$bicarrier_category),ties.method = "first")
+rank_range = range(germline_versus_tumor_mut_counts_filtered$bicarrier_category_rank, na.rm = TRUE)
+biallelic_rank_plot = ggplot(data=germline_versus_tumor_mut_counts_filtered,aes(x=bicarrier_category_rank,y=bicarrier_category,color=bicarrier_category>1)) +
   geom_point() + pretty_plot() + L_border() + scale_color_manual(values = c("TRUE"="firebrick","FALSE"="black")) +
   scale_x_continuous(breaks = rank_range) +
+  #scale_y_discrete(expand = c(0,0.075)) +
   theme(legend.position = "none", axis.title = element_blank())
 biallelic_rank_plot
 cowplot::ggsave2("./outputs/plots/biallelic_rank_plot.pdf",biallelic_rank_plot,dpi=300,width=1.6,height=1.3)
 
 ## Alternatively plot it this way
-highlight_genes = c("TP53","KDR","PKHD1","USH2A","CFTR","FLG","PAH","POT1","TTN","CYP21A2","GJB2")
+highlight_genes = c("MUC16","TP53","KDR","PKHD1","USH2A","CFTR","FLG","PAH","POT1","TTN","CYP21A2","GJB2")
 germline_versus_tumor_mut_counts$to_highlight = germline_versus_tumor_mut_counts$Hugo_Symbol %in% highlight_genes
 germline_versus_tumor_gene_plot = ggplot(
   germline_versus_tumor_mut_counts %>% arrange(to_highlight),aes(x=germline_pv_carrier_count,y=somatic_nonsyn_carrier_count,color=to_highlight)
@@ -110,7 +113,6 @@ germline_versus_tumor_gene_plot = ggplot(
 germline_versus_tumor_gene_plot
 cowplot::ggsave2("./outputs/plots/germline_versus_tumor_gene_plot.pdf",germline_versus_tumor_gene_plot,dpi=300,width=1.6,height=1.3)
 
-
 ## Write the count table 
 write.csv(germline_versus_tumor_mut_counts,"./outputs/tables/germline_vs_tumor_gene_counts.csv",row.names = FALSE)
 
@@ -119,6 +121,7 @@ germline_versus_tumor_mut_counts = read.csv("./outputs/tables/germline_vs_tumor_
 
 ## Also add other clinically relevant information
 clin_data = read.csv("../data/processed/clinical_data.tsv",sep="\t",check.names = FALSE)
+clin_data = read.csv("../data/processed/clinical_data_manual_deident.tsv",sep="\t",check.names = FALSE)
 clin_data$individual_alias = clin_data$`STUDY ID`
 clin_data$germline_avail = as.numeric(clin_data$individual_alias %in% germline_case_subset$individual_alias)
 #clin_data$germline_avail = as.numeric(clin_data$individual_alias %in% germline_case_alias_ids)
@@ -165,47 +168,60 @@ clin_data = clin_data %>% mutate(
   levels = c("None Detected","Somatic Only","Germline Only","Somatic + Germline")
   ))
 
-clin_data
+clin_data 
 
 
 ## Make the age plot
-pot1_age_plot = ggplot(clin_data,aes(x=pot1_mutation_status,y=`Age (Combined)`)) +
-  pretty_plot() + L_border() +
-  geom_jitter(width = 0.1,color="gray",size=1) +
-  geom_boxplot(width = 0.4, fill = "white",outlier.shape = NA) +
+pot1_age_plot = ggplot(clin_data %>% filter(`Primary Site (Recombined)` != "Missing or Unknown"), aes(x = pot1_mutation_status, y = `Age (Combined)`)) +
+  pretty_plot() + 
+  L_border() +
+  geom_jitter(aes(fill = `Primary Site (Recombined)`), 
+              shape = 21, width = 0.1, color = "black", size = 1, stroke = 0.3) +
+  # 3. Keep boxplot colors static (black lines, white fill)
+  geom_boxplot(width = 0.4, fill = "white", color = "black", outlier.shape = NA) +
   stat_compare_means(comparisons = list(
-    c("Somatic Only","None Detected"),
-    c("Germline Only","None Detected"),
-    c("Somatic + Germline","None Detected")
+    c("Somatic Only", "None Detected"),
+    c("Germline Only", "None Detected"),
+    c("Somatic + Germline", "None Detected")
   )) +
-  theme(axis.title = element_blank(),axis.text.x=element_blank())
+  scale_fill_manual(values=primary_site_palette) +
+  theme(axis.title = element_blank(), axis.text.x = element_blank()) +
+  theme(legend.position = "none")
 
 pot1_age_plot
-cowplot::ggsave2("./outputs/plots/pot1_age_of_onset.pdf",pot1_age_plot,dpi=300,width=1.8,height=1.2)
+cowplot::ggsave2("./outputs/plots/pot1_age_of_onset_woth_color.pdf",pot1_age_plot,dpi=300,width=1.8,height=1.2)
+cowplot::ggsave2("./outputs/plots/pot1_age_of_onset_with_legend.pdf",pot1_age_plot,dpi=300,width=1.8,height=1.2)
 
 
-pot1_age_plot = ggplot(clin_data,aes(
-  x=pot1_mutation_status,
-  y=!!sym("Age (Combined)")
-  #group=pot1_mutation_status
-  #color=germline_somatic_avail_status,
-  #group = interaction(pot1_mutation_status,germline_somatic_avail_status)
-  )) +
-  geom_violin(fill = "skyblue", alpha = 0.5) +  # Violin plot for each x-category
-  geom_boxplot(width = 0.1, fill = "white") +  # Boxplot for each x-category
-  geom_point(
-             position = position_jitter(width = 0.1), size = 1) +  # Points with different colors
-  labs(x = "POT1 Mutation Status", y = "Age of onset", color="Sample availability status") +
-  theme_minimal() + 
-  stat_compare_means(comparisons = list(c("Somatic + Germline","None Detected"),
-                                        c("Somatic Only","None Detected"),c("Germline Only","None Detected"))) +
-  theme(axis.text.x = element_text(angle = 45, vjust = .5, hjust=.5))
+clin_data %>%
+  group_by(pot1_mutation_status) %>%
+  summarize(mean_value = mean(`Age (Combined)`, na.rm = TRUE))
 
-clin_data %>% group_by(pot1_mutation_status) %>% summarise(mean_age=mean(`Age (Combined)`,na.rm=TRUE))
 
-pot1_age_plot
-#ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset_both_avail_only.png",pot1_age_plot,dpi=300,width=10,height=8)
-#ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset.png",pot1_age_plot,dpi=300,width=10,height=8)
-ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset_no_hue.png",pot1_age_plot,dpi=300,width=4,height=6)
+# 
+# pot1_age_plot = ggplot(clin_data,aes(
+#   x=pot1_mutation_status,
+#   y=!!sym("Age (Combined)")
+#   #group=pot1_mutation_status
+#   #color=germline_somatic_avail_status,
+#   #group = interaction(pot1_mutation_status,germline_somatic_avail_status)
+#   )) +
+#   geom_violin(fill = "skyblue", alpha = 0.5) +  # Violin plot for each x-category
+#   geom_boxplot(width = 0.1, fill = "white") +  # Boxplot for each x-category
+#   geom_point(
+#              position = position_jitter(width = 0.1), size = 1) +  # Points with different colors
+#   labs(x = "POT1 Mutation Status", y = "Age of onset", color="Sample availability status") +
+#   theme_minimal() + 
+#   stat_compare_means(comparisons = list(c("Somatic + Germline","None Detected"),
+#                                         c("Somatic Only","None Detected"),c("Germline Only","None Detected"))) +
+#   theme(axis.text.x = element_text(angle = 45, vjust = .5, hjust=.5))
+# 
+# clin_data %>% group_by(pot1_mutation_status) %>% summarise(mean_age=mean(`Age (Combined)`,na.rm=TRUE))
+# 
+# pot1_age_plot
+# #ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset_both_avail_only.png",pot1_age_plot,dpi=300,width=10,height=8)
+# #ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset.png",pot1_age_plot,dpi=300,width=10,height=8)
+# ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset_no_hue.png",pot1_age_plot,dpi=300,width=4,height=6)
+# 
 
 

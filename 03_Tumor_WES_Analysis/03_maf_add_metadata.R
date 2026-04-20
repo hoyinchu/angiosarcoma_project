@@ -96,16 +96,24 @@ pair_df["control_sample"] = sub('.*entityName:([^,}]*)[},].*', '\\1', pair_df$co
 pair_df["case_sample"] = gsub("__", "_", pair_df$case_sample)
 cnvkit_fga_summary_merged = merge(cnvkit_fga_summary,pair_df[,c("entity:pair_id","case_sample")],by.x="pair_id",by.y="entity:pair_id")
 
+cnvkit_fga_summary_merged_2 = merge(cnvkit_fga_summary_merged,total_mutations_per_sample_combined_with_meta,by.x="case_sample",by.y="")
 
 ggplot(cnvkit_fga_summary,aes(x=fga)) + geom_histogram()
 
 total_mutations_per_sample_combined_with_meta_merged = merge(
   total_mutations_per_sample_combined_with_meta,
-  cnvkit_fga_summary[,c("pair_id","fga")],
-  by="pair_id",all.x=TRUE
+  cnvkit_fga_summary_merged[,c("pair_id","case_sample","fga","total_length")],
+  by.x="Tumor_Sample_Barcode",by.y="case_sample",all.x=TRUE
 )
 
-
+# total_mutations_per_sample_combined_with_meta_merged$TMB_renormalized = 
+#   total_mutations_per_sample_combined_with_meta_merged$Total_Mutations/total_mutations_per_sample_combined_with_meta_merged$total_length
+# 
+# ggplot(total_mutations_per_sample_combined_with_meta_merged,aes(x=fga,y=TMB_renormalized)) +
+#   geom_point()
+# 
+# ggplot(total_mutations_per_sample_combined_with_meta_merged,aes(x=fga,y=Total_Mutations)) +
+#   geom_point()
 
 if (FALSE) {
   write.csv(total_mutations_per_sample_combined_with_meta,file="./outputs/tables/total_mutations_per_sample.csv",row.names=FALSE)
@@ -119,6 +127,8 @@ sig_matrix_t = as.data.frame(t(sig_matrix),check.names=FALSE)
 sig_matrix_t = cbind(Tumor_Sample_Barcode=rownames(sig_matrix_t),sig_matrix_t)
 ## Add the sum for SBS7
 sig_matrix_t$SBS7 = sig_matrix_t$SBS7a + sig_matrix_t$SBS7b + sig_matrix_t$SBS7c + sig_matrix_t$SBS7d
+
+ggplot(sig_matrix_t,aes(x=`SBS7`)) + geom_histogram()
 
 # Add tmb and signature decomposition to original metadata
 sample_meta_df_added = merge(sample_meta_df_subset,total_mutations_per_sample_combined,by.x="entity:sample_id",by.y="Tumor_Sample_Barcode",all.x=TRUE)

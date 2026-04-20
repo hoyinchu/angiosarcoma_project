@@ -1,0 +1,61 @@
+Gene Symbol,OtherName,Pathway,drugs
+ERBB2,HER2 / Neu,mAb Targets,"Trastuzumab (mAb), Enhertu (ADC)"
+PDCD1,PD-1,mAb Targets,"Pembrolizumab, Nivolumab, Dostarlimab"
+CD274,PD-L1,mAb Targets,"Atezolizumab, Durvalumab, Avelumab"
+CTLA4,CTLA-4,mAb Targets,"Ipilimumab, Tremelimumab"
+EGFR,EGFR,mAb Targets,"Cetuximab, Panitumumab, Amivantamab"
+CD38,CD38,mAb Targets,"Daratumumab, Isatuximab"
+VEGFA,VEGF-A,mAb Targets,Bevacizumab
+VEGFB,VEGF-B,mAb Targets,Bevacizumab
+VEGFC,VEGF-C,mAb Targets,Bevacizumab
+KDR,VEGFR2,mAb Targets,Ramucirumab
+MET,c-Met,mAb Targets,"Amivantamab (Bispecific), Telisotuzumab*"
+ERBB3,HER3,mAb Targets,Patritumab deruxtecan (ADC)
+TACSTD2,TROP-2,mAb Targets,Sacituzumab govitecan (ADC)
+CLDN18,Claudin 18.2,mAb Targets,Zolbetuximab
+NECTIN4,Nectin-4,mAb Targets,Enfortumab vedotin (ADC)
+FOLR1,Folate Receptor alpha,mAb Targets,Mirvetuximab soravtansine (ADC)
+GPRC5D,GPRC5D,mAb Targets,Talquetamab (Bispecific)
+DLL3,Delta-like ligand 3,mAb Targets,Tarlatamab (Bispecific)
+SLAMF7,CS1 / CD319,mAb Targets,Elotuzumab
+LAG3,LAG-3,mAb Targets,Relatilimab
+CDH6,Cadherin-6,mAb Targets,Raludotatug deruxtecan (Late-stage/Breakthrough)
+CD248,,mAB Targets,"Enoblituzumab,Risvutatug Rezetecan"
+CLEC14A,,mAB Targets,"C3-SG3249"
+ERBB4,,Small molecule target,"Osimertinib, Lapatinib, Zongertinib"
+FLT1,,Small molecule target,"Axitinib, Lenvatinib, Cabozantinib"
+FLT4,,Small molecule target,"Axitinib, Lenvatinib, Cabozantinib"
+FGFR1,,Small molecule target,"Erdafitinib, Pemigatinib, Futibatinib"
+FGFR2,,Small molecule target,"Erdafitinib, Pemigatinib, Futibatinib"
+FGFR3,,Small molecule target,"Erdafitinib, Pemigatinib, Futibatinib"
+FGFR4,,Small molecule target,"Fisogatinib"
+NRP1,,Small molecule target,"EG00229",
+NRP2,,Small molecule target,"EG00229",
+BRAF,,Small molecule target,"Vemurafenib, Trametinib, Selumetinib"
+MEK1,MAP2K1,Small molecule target,"Vemurafenib, Trametinib, Selumetinib"
+MAP2K2,,Small molecule target,"Vemurafenib, Trametinib, Selumetinib"
+ABL1,,Small molecule target,"Imatinib, Dasatinib, Bosutinib, Ponatinib"
+SRC,,Small molecule target,"Imatinib, Dasatinib, Bosutinib, Ponatinib"
+LCK,,Small molecule target,"Imatinib, Dasatinib, Bosutinib, Ponatinib"
+YES1,,Small molecule target,"Imatinib, Dasatinib, Bosutinib, Ponatinib"
+BTK,,Small molecule target,"Ibrutinib, Acalabrutinib, Ruxolitinib"
+JAK1,,Small molecule target,"Ibrutinib, Acalabrutinib, Ruxolitinib"
+JAK2,,Small molecule target,"Ibrutinib, Acalabrutinib, Ruxolitinib"
+JAK3,,Small molecule target,"Ibrutinib, Acalabrutinib, Ruxolitinib"
+ALK,,Small molecule target,"Crizotinib, Alectinib, Capmatinib, Taletrectinib (2025)"
+ROS1,,Small molecule target,"Crizotinib, Alectinib, Capmatinib, Taletrectinib (2025)"
+NTRK1,,Small molecule target,"Larotrectinib, Entrectinib"
+NTRK2,,Small molecule target,"Larotrectinib, Entrectinib"
+NTRK3,,Small molecule target,"Larotrectinib, Entrectinib",
+CDK4,,Small molecule target,"Palbociclib, Abemaciclib, Ribociclib"
+CDK6,,Small molecule target,"Palbociclib, Abemaciclib, Ribociclib"
+CDK9,,Small molecule target,"Palbociclib, Abemaciclib, Ribociclib"
+PIK3CA,,Small molecule target,"Alpelisib, Capivasertib, Everolimus"
+AKT1,,Small molecule target,"Alpelisib, Capivasertib, Everolimus"
+MTOR,,Small molecule target,"Alpelisib, Capivasertib, Everolimus"
+RET,,Small molecule target,"Selpercatinib, Avapritinib, Midostaurin"
+KIT,,Small molecule target,"Selpercatinib, Avapritinib, Midostaurin"
+PDGFRA,,Small molecule target,"Selpercatinib, Avapritinib, Midostaurin"
+PDGFRB,,Small molecule target,"Selpercatinib, Avapritinib, Midostaurin"
+PDGFA,,Small molecule target,"Selpercatinib, Avapritinib, Midostaurin"
+PDGFB,,Small molecule target,"Selpercatinib, Avapritinib, Midostaurin"

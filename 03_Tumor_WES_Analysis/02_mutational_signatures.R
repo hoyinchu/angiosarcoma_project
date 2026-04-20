@@ -108,7 +108,7 @@ reconstruction_plot = plot_original_vs_reconstructed(tri_nuc_mat,strict_decomp$f
 sample_meta_df = read.csv("../data/processed/sample_clin_data.tsv",check.names = FALSE,sep="\t") %>% filter(
   `entity:sample_id` %in% maf_df$Tumor_Sample_Barcode
 )
-strict_decomp_res_rel_long_no_zero_sbs7_only = strict_decomp_res_rel_long_no_zero %>% filter(SBS=="SBS1")#filter(SBS=="SBS7b" | SBS=="SBS7a")
+strict_decomp_res_rel_long_no_zero_sbs7_only = strict_decomp_res_rel_long_no_zero %>% filter(SBS=="SBS7b" | SBS=="SBS7a")
 #strict_decomp_res_rel_long_no_zero_sbs7_only = strict_decomp_res_rel_long_no_zero %>% filter(SBS=="SBS1")
 
 sample_meta_with_sbs7 = merge(sample_meta_df,strict_decomp_res_rel_long_no_zero_sbs7_only,
@@ -120,11 +120,12 @@ sample_meta_with_sbs7_stats_long = sample_meta_with_sbs7_stats %>% pivot_longer(
 
 sbs7_prop_plot = ggplot(sample_meta_with_sbs7_stats,aes(y=fct_reorder(`Primary Site (Recombined)`,`mean(is_over_05)`),x=`mean(is_over_05)`)) +
   geom_bar(stat="identity") +
-  labs(y="Primary Site",x="% Samples with >= 50% SBS7") +
-  theme_minimal() +
-  scale_x_continuous(labels = scales::percent)
+  pretty_plot() + L_border() +
+  scale_x_continuous(labels = scales::percent,expand = c(0,Inf)) +
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank(),axis.text = element_text(size = 5),legend.position = "none")
 sbs7_prop_plot
-ggsave(sbs7_prop_plot,file="./outputs/plots/02_over_050_SBS7_proportion_by_site_plot.png",dpi=300,height=4,width=4)
+#ggsave(sbs7_prop_plot,file="./outputs/plots/02_over_050_SBS7_proportion_by_site_plot.png",dpi=300,height=4,width=4)
+ggsave(sbs7_prop_plot,file="./outputs/plots/02_over_050_SBS7_proportion_by_site_plot.pdf",dpi=300,height=1.6,width=1.5)
 
 
 if (FALSE) {

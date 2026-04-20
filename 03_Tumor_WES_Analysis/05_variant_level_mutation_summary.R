@@ -6,7 +6,6 @@ library(ComplexHeatmap)
 #library(ggtree)
 library(scales)
 
-#setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 maf_path = "../data/processed/tumor_WES/ASC_mutations.maf"
 maf_meta_path = "../data/processed/tumor_WES/ASC_mutations_metadata.tsv"
 maf_df = read.csv(maf_path,sep="\t",check.names=FALSE)
@@ -63,6 +62,8 @@ calc_mutation_frequency = function(maf) {
 
 mut_freq_df = calc_mutation_frequency(nonsilent_maf)
 mut_freq_df_mut_recurrent_only = mut_freq_df[mut_freq_df$mut_count_unique > 1,]
+## Exclude non missense change
+mut_freq_df_mut_recurrent_only = mut_freq_df_mut_recurrent_only %>% filter(grepl("p\\.", tumor_mutation_id_short))
 
 ## Subset MAF to only these entries
 maf_subset = maf_merged[maf_merged$tumor_mutation_id %in% mut_freq_df_mut_recurrent_only$tumor_mutation_id,]
@@ -73,17 +74,6 @@ colnames(mut_by_site_table) = c("tumor_mutation_id_short","primary_site","count"
 # Set level by total count
 tumor_mutation_id_short_order = mut_freq_df_mut_recurrent_only[order(-mut_freq_df_mut_recurrent_only$mut_count_unique),]$tumor_mutation_id_short
 mut_by_site_table$tumor_mutation_id_short = factor(mut_by_site_table$tumor_mutation_id_short,levels=tumor_mutation_id_short_order)
-recurrent_mutation_plot = ggplot(mut_by_site_table,aes(x=tumor_mutation_id_short,y=count,fill=primary_site)) +
-  geom_bar(stat = "identity",position = "stack") +
-  theme_minimal() +
-  scale_y_continuous(breaks= pretty_breaks()) + 
-  labs(x="Gene",y="Number of Patients with Mutation",fill="Primary Site") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),legend.position="top") +
-  scale_fill_manual(values=primary_site_palette) +
-  pretty_plot() + L_border()
-recurrent_mutation_plot
-ggsave(recurrent_mutation_plot,file="./outputs/plots/05_recurrent_mutation_plot.png",height=4,width=6)
-ggsave(recurrent_mutation_plot,file="./outputs/plots/05_recurrent_mutation_plot.pdf",height=4,width=6)
 
 ## Also calculate the AlphaMissense scores for each of the variant
 ## Uniprot ID file = uniprot_to_gene_names.txt
@@ -96,13 +86,14 @@ mut_freq_df_mut_recurrent_only_merged = merge(mut_freq_df_mut_recurrent_only,
 ## This requires downloading the AlphaMissense csv
 ## You can get it from here:
 ##
-alpha_missense_df = read.csv("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/reference_data/AlphaMissense/AlphaMissense_hg19_subset.tsv",sep="\t")
+alpha_missense_df = read.csv("../data/public/AlphaMissense_hg19.tsv",sep="\t",skip = 3)
 alpha_missense_df_subset = alpha_missense_df %>% filter(
-  uniprot_id %in% uniprot_genes$uniprot_id,
+  uniprot_id %in% mut_freq_df_mut_recurrent_only_merged$uniprot_id,
 )
+write.csv(alpha_missense_df_subset,"../data/public/AlphaMissense_hg19_recurrent_subset.csv",row.names = FALSE)
 # Rename mutation ID by protein name
-mut_freq_df_mut_recurrent_only$aa_change = strsplit(mut_freq_df_mut_recurrent_only$tumor_mutation_id_short,"\\.") 
-mut_freq_df_mut_recurrent_only$aa_change = sapply(mut_freq_df_mut_recurrent_only$aa_change, function(x) if (length(x) >= 2) x[2] else NA)
+mut_freq_df_mut_recurrent_only_merged$aa_change = strsplit(mut_freq_df_mut_recurrent_only_merged$tumor_mutation_id_short,"\\.") 
+mut_freq_df_mut_recurrent_only_merged$aa_change = sapply(mut_freq_df_mut_recurrent_only_merged$aa_change, function(x) if (length(x) >= 2) x[2] else NA)
 mut_freq_df_mut_recurrent_only_merged$uniprot_aa_change = paste0(mut_freq_df_mut_recurrent_only_merged$uniprot_id,
                                                                  "_",
                                                                  mut_freq_df_mut_recurrent_only_merged$aa_change
@@ -130,8 +121,77 @@ mut_count_alphamissense_plot = ggplot(mut_freq_df_mut_recurrent_only_with_score,
   ggrepel::geom_label_repel() +
   theme_minimal() +
   labs(x="# of Patients with Mutation",y="AlphaMissense Pathogenicity Score")
+mut_count_alphamissense_plot
 ggsave("03_Tumor_WES_Analysis/outputs/plots/05_variant_patients_by_am_pathogenicity.png",mut_count_alphamissense_plot,dpi=300,height=6,width=12)
 ggsave("03_Tumor_WES_Analysis/outputs/plots/05_variant_patients_by_am_pathogenicity.pdf",mut_count_alphamissense_plot,dpi=300,height=6,width=12)
+
+## Label the mutations marked as pathogenic by alphamissense
+am_pathogenic_mutations = mut_freq_df_mut_recurrent_only_with_score[,c("tumor_mutation_id_short","am_pathogenicity","am_class")]
+mut_by_site_table_am_merged = merge(mut_by_site_table,am_pathogenic_mutations,by="tumor_mutation_id_short",all.x=TRUE)
+table(mut_by_site_table_am_merged$am_class)
+
+am_label_data = mut_by_site_table_am_merged %>%
+  group_by(tumor_mutation_id_short) %>%
+  summarize(
+    total_count = sum(count),
+    am_class = first(am_class) # Assuming one am_class per mutation ID
+  ) %>%
+  filter(am_class == "pathogenic")
+
+recurrent_mutation_plot = ggplot(mut_by_site_table_am_merged,aes(x=tumor_mutation_id_short,y=count,fill=primary_site)) +
+  geom_bar(stat = "identity",position = "stack") +
+  geom_text(data = am_label_data, 
+            aes(x = tumor_mutation_id_short, y = total_count, label = "*"),
+            inherit.aes = FALSE,    # Prevents searching for 'fill' in label_data
+            vjust = -0.2,           # Adjust slightly above the bar
+            size = 5,               # Size of the asterisk
+            color = "black") +
+  scale_y_continuous(breaks= pretty_breaks(),expand = expansion(mult = c(0, 0.15))) + 
+  pretty_plot() + L_border() +
+  labs(x="Gene",y="Number of Patients with Mutation",fill="Primary Site") +
+  scale_fill_manual(values=primary_site_palette) +
+  theme(axis.title.x = element_blank(),axis.title.y = element_blank()) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1,size=5)) + 
+  theme(legend.position="top") +
+  guides(fill = guide_legend(nrow = 2))
+
+
+recurrent_mutation_plot
+ggsave(recurrent_mutation_plot,file="./outputs/plots/05_recurrent_mutation_plot.png",height=4,width=6)
+ggsave(recurrent_mutation_plot,file="./outputs/plots/05_recurrent_mutation_plot.pdf",height=2,width=6)
+ggsave(recurrent_mutation_plot,file="./outputs/plots/05_recurrent_mutation_plot_no_legend.pdf",height=1.3,width=5.2)
+ggsave(recurrent_mutation_plot,file="./outputs/plots/05_recurrent_mutation_plot_with_legend.pdf",height=1.3,width=5.2)
+
+## Also check the VAF for each variant
+mut_by_site_table_am_merged
+
+mut_by_site_table
+
+temp_data = asc_maf@data
+colnames(temp_data) = make.unique(colnames(temp_data))
+asc_maf_vaf_subset = temp_data %>% 
+  filter(tumor_mutation_id_short %in% mut_by_site_table_am_merged$tumor_mutation_id_short)
+
+asc_maf_vaf_subset$t_VAF = asc_maf_vaf_subset$t_alt_count/asc_maf_vaf_subset$t_depth
+asc_maf_vaf_subset$tumor_mutation_id_short = factor(asc_maf_vaf_subset$tumor_mutation_id_short,levels=unique(mut_by_site_table_am_merged$tumor_mutation_id_short))
+asc_maf_vaf_subset_merged = merge(asc_maf_vaf_subset,asc_maf@clinical.data[,c("Tumor_Sample_Barcode","Primary_Site_(Recombined)")],by="Tumor_Sample_Barcode",all.x=TRUE)
+
+
+recurrent_t_vaf_plot = ggplot(asc_maf_vaf_subset_merged,aes(x=tumor_mutation_id_short,y=t_VAF)) + 
+  geom_boxplot() +
+  geom_point(aes(color=`Primary_Site_(Recombined)`,alpha=0.9)) +
+  scale_color_manual(values=primary_site_palette) +
+  pretty_plot() + L_border() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1,size=5),axis.title.x = element_blank(),axis.title.y = element_blank()) +
+  theme(legend.position = "bottom") #theme(legend.position = "none")
+
+recurrent_t_vaf_plot
+ggsave(recurrent_t_vaf_plot,file="./outputs/plots/recurrent_t_vaf_plot_with_legend.pdf",height=3,width=5.2)
+ggsave(recurrent_t_vaf_plot,file="./outputs/plots/recurrent_t_vaf_plot_no_legend.pdf",height=3,width=5.2)
+
+asc_maf_vaf_subset_merged %>%
+  group_by(tumor_mutation_id_short) %>%
+  summarize(mean_value = median(t_VAF, na.rm = TRUE))
 
 ## Make a "representative somatic / germline mutation" per sample table that has somatic vs. germline mutation?
 ## Somatic Logic: Hotspot Mutation -> Mutation in Mutsig Significant Gene -> Mutation in COSMIC Cancer Tier 1 gene
@@ -187,32 +247,32 @@ maf_high_score_muts_only[,c("Tumor_Sample_Barcode","tumor_mutation_id","Hugo_Sym
 write.csv(maf_high_score_muts_only,"03_Tumor_WES_Analysis/outputs/tables/representative_mutation_table.csv",row.names = FALSE)
 
 
-
-## Check if recurrent mutated genes are enriched in certain pathways
-library(msigdbr)
-fgsea_kegg_set = msigdbr(species = "Homo sapiens", category = "C2", subcategory = "CP:KEGG") %>% split(x = .$gene_symbol, f = .$gs_name)
-fgsea_c5_set = msigdbr(species = "Homo sapiens", category = "C5", subcategory = "GO:BP") %>% split(x = .$gene_symbol, f = .$gs_name)
-fgsea_c6_set = msigdbr(species = "Homo sapiens", category = "C6") %>% split(x = .$gene_symbol, f = .$gs_name)
-fgsea_c8_set = msigdbr(species = "Homo sapiens", category = "C8") %>% split(x = .$gene_symbol, f = .$gs_name)
-
-test_genes = c("KDR","POT1","DEAF1","CGREF1","TPO","SYPL2","SPERT","PTPRO","PHF21B","OR10AG1","NYAP2","NCKAP5","MGRN1","MALT1","FAM194B","ERN2","DSCAM","DNAI1","COL19A1","CNR1","CHD3","ACTN2")
-test_pathways = fgsea::fora(fgsea_c8_set,genes=test_genes,universe=unique(maf_merged$Hugo_Symbol))
-test_pathways
-
-# ## Add MutSig information for each gene
-# mutsig_output_path = "data/processed/tumor_WES/mutsig/Apr16_2024_sig_genes.txt"
-# mutsig_gene = read.csv(mutsig_output_path,sep="\t")
-# mut_freq_df_mut_recurrent_only_merged = merge(mut_freq_df_mut_recurrent_only,mutsig_gene,by.x="Hugo_Symbol",by.y="gene",all.x=TRUE)
-# mut_freq_df_mut_recurrent_only_merged[["mutsig_pval_sig"]] = mut_freq_df_mut_recurrent_only_merged$q < 0.1
-# mut_freq_df_mut_recurrent_only_merged[is.na(mut_freq_df_mut_recurrent_only_merged)] = FALSE
-# mut_freq_df_mut_recurrent_only_merged = mut_freq_df_mut_recurrent_only_merged[order(-mut_freq_df_mut_recurrent_only_merged$mut_count_unique),]
 # 
-# recurrent_mutation_plot = ggplot(mut_freq_df_mut_recurrent_only_merged,aes(y=reorder(tumor_mutation_id_short,mut_count_unique),x=mut_count_unique,fill=mutsig_pval_sig)) +
-#   geom_bar(stat="identity") +
-#   labs(y="Gene",x="Number of Patients with Mutation",fill="Gene MutSig q-val < 0.1") +
-#   theme_minimal()
-# recurrent_mutation_plot
-# ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.png")
+# ## Check if recurrent mutated genes are enriched in certain pathways
+# library(msigdbr)
+# fgsea_kegg_set = msigdbr(species = "Homo sapiens", category = "C2", subcategory = "CP:KEGG") %>% split(x = .$gene_symbol, f = .$gs_name)
+# fgsea_c5_set = msigdbr(species = "Homo sapiens", category = "C5", subcategory = "GO:BP") %>% split(x = .$gene_symbol, f = .$gs_name)
+# fgsea_c6_set = msigdbr(species = "Homo sapiens", category = "C6") %>% split(x = .$gene_symbol, f = .$gs_name)
+# fgsea_c8_set = msigdbr(species = "Homo sapiens", category = "C8") %>% split(x = .$gene_symbol, f = .$gs_name)
+# 
+# test_genes = c("KDR","POT1","DEAF1","CGREF1","TPO","SYPL2","SPERT","PTPRO","PHF21B","OR10AG1","NYAP2","NCKAP5","MGRN1","MALT1","FAM194B","ERN2","DSCAM","DNAI1","COL19A1","CNR1","CHD3","ACTN2")
+# test_pathways = fgsea::fora(fgsea_c8_set,genes=test_genes,universe=unique(maf_merged$Hugo_Symbol))
+# test_pathways
+# 
+# # ## Add MutSig information for each gene
+# # mutsig_output_path = "data/processed/tumor_WES/mutsig/Apr16_2024_sig_genes.txt"
+# # mutsig_gene = read.csv(mutsig_output_path,sep="\t")
+# # mut_freq_df_mut_recurrent_only_merged = merge(mut_freq_df_mut_recurrent_only,mutsig_gene,by.x="Hugo_Symbol",by.y="gene",all.x=TRUE)
+# # mut_freq_df_mut_recurrent_only_merged[["mutsig_pval_sig"]] = mut_freq_df_mut_recurrent_only_merged$q < 0.1
+# # mut_freq_df_mut_recurrent_only_merged[is.na(mut_freq_df_mut_recurrent_only_merged)] = FALSE
+# # mut_freq_df_mut_recurrent_only_merged = mut_freq_df_mut_recurrent_only_merged[order(-mut_freq_df_mut_recurrent_only_merged$mut_count_unique),]
+# # 
+# # recurrent_mutation_plot = ggplot(mut_freq_df_mut_recurrent_only_merged,aes(y=reorder(tumor_mutation_id_short,mut_count_unique),x=mut_count_unique,fill=mutsig_pval_sig)) +
+# #   geom_bar(stat="identity") +
+# #   labs(y="Gene",x="Number of Patients with Mutation",fill="Gene MutSig q-val < 0.1") +
+# #   theme_minimal()
+# # recurrent_mutation_plot
+# # ggsave(recurrent_mutation_plot,file="03_Tumor_WES_Analysis/outputs/plots/05_recurrent_mutation_plot.png")
 
 ## Make lollipop plot for KDR
 pdf(file="03_Tumor_WES_Analysis/outputs/plots/05_KDR_lollipop_plot.pdf",height=6)
