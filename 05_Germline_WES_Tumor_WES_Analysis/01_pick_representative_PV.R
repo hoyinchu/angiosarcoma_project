@@ -1,8 +1,7 @@
 library(dplyr)
 library(tidyverse)
 
-setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
-
+## Contact Saud to get the raw DF
 germline_df = read.csv("../reference_data/ClinicalTables/Jun2023_ASC_Case_Control_Sample_Merged_Germline.tsv",sep="\t",check.names=FALSE)
 
 ## Convert disease status to int and factors
@@ -23,18 +22,18 @@ case_germline_df_subset_long
 
 # Merge information about each gene
 # Check p-value from burden test
-burden_result = read.csv("05_Germline_WES_Analysis/outputs/tables/germline_PV_gene_enrichment_min_2_in_case.tsv",sep="\t")
+burden_result = read.csv("./outputs/tables/germline_PV_gene_enrichment_min_2_in_case.tsv",sep="\t")
 burden_result = burden_result %>% arrange(p.value)
 burden_result$Hugo_Symbol = sapply(str_split(burden_result$term, "_"), function(x) x[2])
 burden_significant_genes = burden_result[burden_result$adjusted_pval < 0.1,]$Hugo_Symbol
 burden_nominal_genes = burden_result[burden_result$p.value < 0.05,]$Hugo_Symbol
 
 # Check if it is a COSMIC tier 1 gene
-cosmic_path = "data/public/cosmic_cancer_gene_census.csv"
+cosmic_path = "../data/public/cosmic_cancer_gene_census.csv"
 cosmic_df = read.csv(cosmic_path)
 cosmic_tier1_genes = cosmic_df[cosmic_df$Tier==1,]$Gene.Symbol
 # Or if somatic pathogenic variant was also detected in the gene
-somatic_germline_mut_table = read.csv("06_Germline_WES_Tumor_WES_Analysis/outputs/tables/germline_vs_tumor_gene_counts.csv")
+somatic_germline_mut_table = read.csv("./outputs/tables/germline_vs_tumor_gene_counts.csv")
 somatic_gerline_mut_genes = somatic_germline_mut_table %>%
   filter(germline_pv_carrier_count > 0, somatic_nonsyn_carrier_count>0) %>%
   pull(Hugo_Symbol)
@@ -80,8 +79,7 @@ case_germline_df_high_priority_merged = merge(
   by="Sample",all.x=TRUE
   )
 
-write.csv(case_germline_df_high_priority_merged,
-          "05_Germline_WES_Analysis/outputs/tables/representative_germline_pv_table.csv",row.names = FALSE)
+write.csv(case_germline_df_high_priority_merged,"./outputs/tables/representative_germline_pv_table.csv",row.names = FALSE)
 
 
 

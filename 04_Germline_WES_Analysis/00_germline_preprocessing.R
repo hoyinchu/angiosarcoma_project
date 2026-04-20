@@ -1,14 +1,12 @@
 library(dplyr)
-
 sample_df = read.csv("../data/processed/germline/sample_Mar03_2023.tsv",sep="\t",check.names = FALSE)
-germline_table = read.csv("../data/processed/germline//germline_df.tsv",sep="\t",check.names=FALSE)
+germline_table = read.csv("../data/processed/germline/germline_df.tsv",sep="\t",check.names=FALSE)
 
 # Check if sample is included after filtering 
 normal_samples = sample_df %>% filter(sample_type=="Normal")
 normal_samples_subset = normal_samples[,c("entity:sample_id","sample_alias","individual_alias","sampleMeanCoverage")]
 normal_samples_subset["passed_germline_filter"] = normal_samples_subset$sample_alias %in% germline_table$Sample
 normal_samples_subset["data_type"] = "normal_WES"
-
 write.table(normal_samples_subset,file="../data/processed/germline/germline_sample_status.tsv",sep="\t",row.names=FALSE)
 
 # Sample coverage
@@ -16,9 +14,6 @@ summary(normal_samples_subset$sampleMeanCoverage)
 
 ## After running BAMs through DeepVariant pipeline, the resulting VCF is filtered using notebooks
 ## Come back to this section after the filtering has been done 
-
-
-
 ## Get the filtered tables from notebooks
 germline_filtered_variants_cases = read.csv("./outputs/tables/filtered_germline_variants_cases.tsv",check.names = FALSE,sep="\t")
 germline_filtered_variants_cases
@@ -82,12 +77,10 @@ germline_filtered_variants_cases_annotated_subset = germline_filtered_variants_c
 
 colnames(germline_filtered_variants_cases_annotated_subset) = maf_columns
 germline_filtered_variants_cases_annotated_subset
-#write.csv(germline_filrered_variants_cases_annotated_subset,row.names = FALSE)
 write.table(germline_filtered_variants_cases_annotated_subset,
             file = "./outputs/tables/filtered_germline_variants_cases_subset.maf", row.names=FALSE, sep="\t", quote = FALSE)
 
 ## Also change the clinical table so that it can be read by downstream library
-
 # clinical meta information
 clin_sample_meta_path = "../data/processed/sample_clin_data.tsv"
 sample_meta_df = read.csv(clin_sample_meta_path,check.names = FALSE,sep="\t")

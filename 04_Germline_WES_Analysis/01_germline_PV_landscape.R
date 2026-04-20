@@ -2,13 +2,11 @@ library(maftools)
 
 germline_maf_file_path = "./outputs/tables/filtered_germline_variants_cases_subset.maf"
 germline_clin_file_path = "./outputs/tables/germline_sample_clin_df.tsv"
-
 germline_case_maf = read.maf(germline_maf_file_path,clinicalData = germline_clin_file_path)
 
 ## Full table annotation
 germline_case_table = read.csv("./outputs/tables/filtered_germline_variants_cases.tsv",sep="\t")
 subset_genes = unique(germline_case_table[germline_case_table$pass_germline_filter!="unselected_clinvar_pathogenic_high_conf",]$SYMBOL)
-
 germline_case_maf_subset = subsetMaf(germline_case_maf,genes = subset_genes)
 
 ## Rename column for visalization
@@ -252,7 +250,6 @@ unlockBinding("get_lp_data", asNamespace("maftools"))
 assignInNamespace("get_lp_data", get_lp_data_custom, ns = "maftools")
 lockBinding("get_lp_data", asNamespace("maftools"))
 
-#pot1_dual_lollipop_save_path = "./outputs/plots/02_POT1_dual_lollipop.pdf"
 pot1_dual_lollipop_save_path = "./outputs/plots/02_POT1_dual_lollipop_small.pdf"
 
 pdf(file=pot1_dual_lollipop_save_path,height=6,width=6)

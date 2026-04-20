@@ -3,14 +3,10 @@ library(tidyverse)
 library(ggrepel)
 library(ggpubr)
 library(stringr)
+
 ## Load the preprocessed one-hot encoded sample by pathogenic variant carrier status dataframe. 
 germline_df = read.csv("../data/processed/germline/Jun2023_ASC_Case_Control_Sample_Merged_Germline.tsv",sep="\t",check.names=FALSE)
 germline_case_subset = germline_df[germline_df$is_ASC=="True",]
-
-## Alternatively load the QC table
-#qc_table = read_tsv("../05_Germline_WES_Analysis/germline_sample_status.tsv")
-#germline_case_sample_ids = qc_table %>% filter(passed_germline_filter) %>% pull(sample_alias)
-#germline_case_alias_ids = word(germline_case_sample_ids, 1, 2, sep = "_")
 
 ## Load the preprocessed somatic variant table 
 # Load processed MAF file and clinical metadata
@@ -196,32 +192,3 @@ cowplot::ggsave2("./outputs/plots/pot1_age_of_onset_with_legend.pdf",pot1_age_pl
 clin_data %>%
   group_by(pot1_mutation_status) %>%
   summarize(mean_value = mean(`Age (Combined)`, na.rm = TRUE))
-
-
-# 
-# pot1_age_plot = ggplot(clin_data,aes(
-#   x=pot1_mutation_status,
-#   y=!!sym("Age (Combined)")
-#   #group=pot1_mutation_status
-#   #color=germline_somatic_avail_status,
-#   #group = interaction(pot1_mutation_status,germline_somatic_avail_status)
-#   )) +
-#   geom_violin(fill = "skyblue", alpha = 0.5) +  # Violin plot for each x-category
-#   geom_boxplot(width = 0.1, fill = "white") +  # Boxplot for each x-category
-#   geom_point(
-#              position = position_jitter(width = 0.1), size = 1) +  # Points with different colors
-#   labs(x = "POT1 Mutation Status", y = "Age of onset", color="Sample availability status") +
-#   theme_minimal() + 
-#   stat_compare_means(comparisons = list(c("Somatic + Germline","None Detected"),
-#                                         c("Somatic Only","None Detected"),c("Germline Only","None Detected"))) +
-#   theme(axis.text.x = element_text(angle = 45, vjust = .5, hjust=.5))
-# 
-# clin_data %>% group_by(pot1_mutation_status) %>% summarise(mean_age=mean(`Age (Combined)`,na.rm=TRUE))
-# 
-# pot1_age_plot
-# #ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset_both_avail_only.png",pot1_age_plot,dpi=300,width=10,height=8)
-# #ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset.png",pot1_age_plot,dpi=300,width=10,height=8)
-# ggsave("06_Germline_WES_Tumor_WES_Analysis/outputs/plots/01_POT1_mutation_status_by_age_of_onset_no_hue.png",pot1_age_plot,dpi=300,width=4,height=6)
-# 
-
-
