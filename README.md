@@ -1,5 +1,7 @@
 # Angiosarcoma Project Code Directory
 
+![project_logo](images/Fig1_Repo_ver.png)
+
 Code repository for analysis performed in the angiosarcoma project manuscript. Each directory contains code related to a particular type of analysis and are numbered in order of execution unless otherwise indicated in the code files.
 
 Unless otherwise specificied, the analysis code should be ran in ascending order by directory as well as by the prefix in each script in each directory.
