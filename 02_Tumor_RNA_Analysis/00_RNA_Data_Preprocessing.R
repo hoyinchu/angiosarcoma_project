@@ -103,121 +103,6 @@ count_data_filtered = count_data_filtered[count_data_filtered$Name %in% keep_tx,
 ## Collapse transcript counts into gene counts
 collapsed_filtered_counts = collapse_count_data(count_data_filtered)
 
-### 2025-05-04
-## Check if we do a z-score normalization against GTEX breast tissues whether that would change the outcome
-## Spoiler: it did not
-# gtex_breast_rna_counts = read.csv("../data/raw/rna/GTEx/gene_reads_v10_breast_mammary_tissue.gct",sep="\t",skip=2,check.names = FALSE)
-# #gtex_breast_rna_counts = read.csv("data/raw/rna/GTEx/gene_reads_v10_skin_sun_exposed_lower_leg.gct",sep="\t",skip=2,check.names = FALSE)
-# 
-# gtex_breast_rna_counts_collapsed = collapse_count_data(gtex_breast_rna_counts)
-# gtex_breast_rna_shared_name = intersect(gtex_breast_rna_counts$Description,count_data_filtered$Description)
-# 
-# 
-# asc_breast_samples = sample_meta_data %>% filter(`Primary Site (Recombined)`=="Breast (Cutaneous)" | `Primary Site (Recombined)`=="Breast (Parenchymal)") %>% pull(`entity:sample_id`)
-# asc_breast_samples_with_rna = intersect(asc_breast_samples,colnames(collapsed_filtered_counts))
-# collapsed_filtered_counts_breast = collapsed_filtered_counts[,asc_breast_samples_with_rna]
-# gtex_asc_shared_genes = intersect(rownames(gtex_breast_rna_counts_collapsed),rownames(collapsed_filtered_counts_breast))
-# gtex_asc_breast_merged = cbind(collpased_filtered_counts_breast[gtex_asc_shared_genes,],gtex_breast_rna_counts_collapsed[gtex_asc_shared_genes,])
-
-# ## Write the merged version for purity calculation
-# library(estimate)
-# asc_gtex_collapsed_count_path="/Users/hoyin/Downloads/gene_tpm_v10_bladder_processed.tsv"
-# #asc_gtex_collapsed_count_path="data/processed/rna/asc_merged_with_gtex.txt"
-# 
-# write.table(gtex_asc_breast_merged,asc_gtex_collapsed_count_path,sep="\t",quote = FALSE)
-# write.table(t(gtex_asc_breast_merged),asc_gtex_collapsed_count_path,sep="\t",quote = FALSE)
-# 
-# filterCommonGenes(input.f=asc_gtex_collapsed_count_path, output.f="data/processed/rna/asc_merged_with_gtex_collapsed_counts.gct", id="GeneSymbol")
-# estimateScore(input.ds = "data/processed/rna/asc_merged_with_gtex_collapsed_counts.gct",output.ds = "data/processed/rna/asc_merged_with_gtex_estimate_score.gct")#,platform = "illumina"
-# asc_tex_merged_estimate_score_table = read.csv("data/processed/rna/asc_merged_with_gtex_estimate_score.gct",sep="\t",skip=2,check.names = FALSE)
-# asc_tex_merged_estimate_scores = asc_tex_merged_estimate_score_table[asc_tex_merged_estimate_score_table$NAME == "ESTIMATEScore", -c(1,2)]
-# ## Using the equation indicated in the original publication
-# asc_tex_merged_purity_estimates = cos(0.6049872018+0.0001467884*asc_tex_merged_estimate_scores)
-# asc_tex_merged_purity_estimates_table = as.data.frame(t(asc_tex_merged_purity_estimates))
-# colnames(asc_tex_merged_purity_estimates_table) = c("ESTIMATE_purity")
-# rownames(asc_tex_merged_purity_estimates_table) <- gsub("\\.", "-", rownames(asc_tex_merged_purity_estimates_table))
-# asc_tex_merged_purity_estimates_table = cbind("entity:sample_id" = rownames(asc_tex_merged_purity_estimates_table),asc_tex_merged_purity_estimates_table)
-# write.table(asc_tex_merged_purity_estimates_table,  # Add row names as a new column
-#             file = "data/processed/rna/asc_merged_with_gtex_estimate_score.tsv",  # Change to .csv if needed
-#             sep = "\t",  # Use "," for CSV files
-#             quote = FALSE,
-#             row.names = FALSE  # Prevent duplicate row names
-# )
-
-
-#
-# # 6. Create metadata
-# breast_tumor_ids = colnames(collapsed_filtered_counts_breast)
-# breast_gtex_ids = colnames(gtex_breast_rna_counts_collapsed)
-# breast_condition = c(rep("tumor", length(breast_tumor_ids)),
-#               rep("normal", length(breast_gtex_ids)))
-# breast_sample_info = data.frame(
-#   row.names = c(breast_tumor_ids, breast_gtex_ids),
-#   condition = factor(breast_condition, levels = c("normal", "tumor"))
-# )
-# 
-# # 7. DESeq2 setup
-# breast_dds = DESeqDataSetFromMatrix(
-#   countData = gtex_asc_breast_merged,
-#   colData = breast_sample_info,
-#   design = ~ condition
-# )
-# breast_dds = estimateSizeFactors(breast_dds)
-# breast_norm_counts = counts(breast_dds, normalized = TRUE)
-# 
-# library(sva)
-# # 5. Run svaseq to estimate surrogate variables
-# mod <- model.matrix(~ condition, data = colData(breast_dds))
-# mod0 <- model.matrix(~ 1, data = colData(breast_dds))  # null model
-# 
-# svobj <- svaseq(breast_norm_counts, mod, mod0)
-# 
-# # 6. Add surrogate variables to sample_info
-# for (i in seq_len(ncol(svobj$sv))) {
-#   breast_sample_info[[paste0("SV", i)]] <- svobj$sv[, i]
-# }
-# 
-# # 7. Redefine DESeq2 object with surrogate variables
-# breast_design_formula <- as.formula(paste("~", paste0("SV", seq_len(ncol(svobj$sv)), collapse = " + "), "+ condition"))
-# breast_dds = DESeqDataSetFromMatrix(
-#   countData = gtex_asc_breast_merged,
-#   colData = breast_sample_info,
-#   design = breast_design_formula
-# )
-# 
-# breast_dds = DESeq(breast_dds)
-# breast_dds_res = results(breast_dds, contrast = c("condition", "tumor", "normal"))
-# 
-# # 10. Order and filter for overexpressed genes
-# breast_dds_res_ordered = breast_dds_res[order(breast_dds_res$pvalue), ]
-# breast_overexpressed_genes = breast_dds_res_ordered[breast_dds_res_ordered$log2FoldChange > 1 & breast_dds_res_ordered$padj < 0.05, ]
-# write.table(breast_dds_res_ordered,file = "02_Tumor_RNA_Analysis/outputs/DEGs/2025_05_04_GTEx_DEGs/02_GTEx_breast_overexpression_with_sva.tsv", sep = "\t", quote = FALSE)
-# 
-# # 1. Perform variance-stabilizing transformation
-# vsd <- vst(breast_dds, blind = TRUE)  # blind = TRUE avoids using condition info for transformation
-# 
-# # 2. Extract PCA data
-# pcaData <- plotPCA(vsd, intgroup = "condition", returnData = TRUE)
-# percentVar <- round(100 * attr(pcaData, "percentVar"))
-# 
-# # 3. Quick PCA plot
-# ggplot(pcaData, aes(x = PC1, y = PC2, color = condition)) +
-#   geom_point(size = 3) +
-#   labs(
-#     title = "PCA of Tumor vs. GTEx RNA-seq (Breast)",
-#     x = paste0("PC1: ", percentVar[1], "% variance"),
-#     y = paste0("PC2: ", percentVar[2], "% variance")
-#   ) +
-#   theme_minimal() +
-#   theme(
-#     plot.title = element_text(size = 14, face = "bold"),
-#     axis.title = element_text(size = 12),
-#     legend.title = element_blank(),
-#     legend.position = "top"
-#   )
-# 
-# #Heatmap(gtex_asc_breast_merged)
-
 
 ## Estimate Tumor Purity using ESTIMATE (Yoshihara K., 2013)
 library(estimate)
@@ -227,6 +112,7 @@ filterCommonGenes(input.f=collapsed_count_path, output.f="../data/processed/rna/
 estimateScore(input.ds = "../data/processed/rna/collapsed_counts.gct",output.ds = "../data/processed/rna/estimate_score.gct",platform = "illumina")
 estimate_score_table = read.csv("../data/processed/rna/estimate_score.gct",sep="\t",skip=2,check.names = FALSE)
 estimate_scores = estimate_score_table[estimate_score_table$NAME == "ESTIMATEScore", -c(1,2)]
+
 ## Using the equation indicated in the original publication
 purity_estimates = cos(0.6049872018+0.0001467884*estimate_scores)
 purity_estimates_table = as.data.frame(t(purity_estimates))
@@ -304,39 +190,6 @@ if(FALSE){
   write.csv(collapsed_filtered_counts,file="../data/processed/rna/00_filtered_gene_counts.csv")
   write.csv(collpased_filtered_vst,file="../data/processed/rna/00_filtered_gene_counts.vst.csv")
   write.csv(collpased_tpm_data, file="../data/processed/rna/00_filtered_gene_tpm.csv")
-  #write.csv(meta_data_filtered_merged,file="reference_data/RNA_Seq/outputs/filtered_metadata.csv")
   write.csv(sample_meta_data_filtered,file="../data/processed/rna/00_filtered_sample_metadata.csv")
 }
 
-
-
-# 
-# ## Process external data
-# ## Loh (ASC)
-# loh_gene_count_data = read.csv("reference_data/RNA_Seq/external/raw/GSE163359_Raw_gene_counts_matrix_angio.txt",sep="\t",check.names = FALSE)
-# collapse_count_data_external = function(count_data) {
-#   # Given count data, collapse transcripts associated with the same gene into one entry
-#   count_data$Name = NULL
-#   collapased_counts = count_data %>% 
-#     group_by(GeneName) %>%
-#     summarise(across(everything(), sum))
-#   collapased_counts = as.data.frame(collapased_counts)
-#   rownames(collapased_counts) = collapased_counts$GeneName
-#   collapased_counts$GeneName = NULL
-#   collapased_counts
-# }
-# loh_gene_count_data_collpased = collapse_count_data_external(loh_gene_count_data)
-# loh_gene_count_data_collpased_filtered = loh_gene_count_data_collpased[rowSums(loh_gene_count_data_collpased) > 100,]
-# loh_gene_count_data_collpased_filtered
-# 
-# ## GTEX (Healthy Breast Tissue)
-# gtex_breast_count_data = read.csv("reference_data/RNA_Seq/external/raw/bulk-gex_v8_rna-seq_counts-by-tissue_gene_reads_2017-06-05_v8_breast_mammary_tissue.gct",sep="\t",skip=2,check.names = FALSE,row.names = 1)
-# keep_tx_gtex_breast = filter_transcripts(gtex_breast_count_data)
-# gtex_breast_count_data_filtered = gtex_breast_count_data[gtex_breast_count_data$Name %in% keep_tx_gtex_breast,]
-# ## Collapse transcript counts into gene counts
-# gtex_breast_count_data_filtered_collpased = collapse_count_data(gtex_breast_count_data_filtered)
-# 
-# if(FALSE) {
-#   write.csv(loh_gene_count_data_collpased_filtered,file="reference_data/RNA_Seq/external/processed/GSE163359_Raw_gene_counts_matrix_angio_filtered.csv")
-#   write.csv(gtex_breast_count_data_filtered_collpased,file="reference_data/RNA_Seq/external/processed/GTEX_v8_breast_mammary_tissue_counts_filtered.csv")
-# }

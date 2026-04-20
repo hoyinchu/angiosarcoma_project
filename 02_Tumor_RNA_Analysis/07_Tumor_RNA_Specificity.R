@@ -6,197 +6,20 @@ library(DESeq2)
 library(Seurat)
 library(fgsea)
 library(ggrepel)
-#library(scSigR)
 
-#setwd("/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts")
 
 ## Load Seurat object from 10x format and save
 ## Takes a quite a bit of time so only do this once
 if (FALSE) {
-  so_raw = Seurat::Read10X(data.dir="./data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421_matrices")
-  so_metadata = read.csv("./data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad.metadata.csv")
+  so_raw = Seurat::Read10X(data.dir="../data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421_matrices")
+  so_metadata = read.csv("../data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad.metadata.csv")
   gtex_so = CreateSeuratObject(counts = so_raw, meta.data = so_metadata)
   SaveSeuratRds(gtex_so,file = "./data/public/GTEx/GTExSeuratObj2025.rds")
 }
 
-# ## Load Seurat Object
-# gtex_so = readRDS("./data/public/GTEx/GTExSeuratObj2025.rds")
-# #gtex_so@meta.data$Cell_Type = gtex_so@meta.data$Cell.types.level.3
-# 
-# ## Subset into tissue of interest
-# gtex_breast_so = subset(gtex_so,tissue == "breast")
-# gtex_skin_so = subset(gtex_so,tissue == "skin")
-# gtex_heart_so = subset(gtex_so, tissue == "heart")
-# gtex_extremities_so = subset(gtex_so, tissue == "skeletalmuscle")
-# 
-# ## Calculate signatureusing scSigR
-# ## Temporarily switch directory to scSigR and source all the functions
-# ## Import the RunSigR function from scSigR
-# scSigR_scripts_path = "/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scSigR/R"
-# setwd(scSigR_scripts_path)
-# # Source all R scripts in the directory
-# r_files <- list.files(pattern = "\\.R$")
-# for (file in r_files) {
-#   print(file)
-#   source(file)
-# }
-# 
-# gtex_breast_signature = RunSigR(gtex_breast_so,cell_types=c("Stromal", "Epithelial", "Immune"),celltype_column="Cell.types.level.3")
-# gtex_skin_signature = RunSigR(gtex_skin_so,cell_types=c("Stromal", "Epithelial", "Immune","Other"),celltype_column="Cell.types.level.3")
-# gtex_heart_signature = RunSigR(gtex_heart_so,cell_types=c("Glia", "Stromal", "Immune"),celltype_column="Cell.types.level.3")
-# gtex_extremities_signature = RunSigR(gtex_extremities_so,cell_types=c("Glia", "Immune", "Stromal"),celltype_column="Cell.types.level.3")
-# 
-# gtex_breast_signature_out = tibble::rownames_to_column(gtex_breast_signature, var = "Gene_name")
-# gtex_skin_signature_out = tibble::rownames_to_column(gtex_skin_signature, var = "Gene_name")
-# gtex_heart_signature_out = tibble::rownames_to_column(gtex_heart_signature, var = "Gene_name")
-# gtex_extremities_signature_out = tibble::rownames_to_column(gtex_extremities_signature, var = "Gene_name")
-# 
-# write.table(gtex_breast_signature_out, file = "/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts/data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421_sig_matrices/breast_signature.txt", sep = "\t", quote = FALSE, row.names = FALSE)
-# write.table(gtex_skin_signature_out, file = "/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts/data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421_sig_matrices/skin_signature.txt", sep = "\t", quote = FALSE, row.names = FALSE)
-# write.table(gtex_heart_signature_out, file = "/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts/data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421_sig_matrices/heart_signature.txt", sep = "\t", quote = FALSE, row.names = FALSE)
-# write.table(gtex_extremities_signature_out, file = "/Users/hoyin/Desktop/DanaFarber/workspaces/CMI_Painter_Angiosarcoma_WES_analysis_mh_regional/scripts/data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421_sig_matrices/extremities_signature.txt", sep = "\t", quote = FALSE, row.names = FALSE)
-
-## Set the working directory back to the project directory
-
-#gtex_so
-
-
-#unique(gtex_so@meta.data$tissue)
-#max(gtex_so@meta.data$PercentMito)
-
-# ## Load seurat object from GTEX
-# library(SeuratDisk)
-# SeuratDisk::Convert(
-#   source="./data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs_converted.h5ad",
-#   dest="h5seurat",
-#   overwrite = TRUE
-# )
-# gtex_so = SeuratDisk::LoadH5Seurat(
-#   "./data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs_converted.h5seurat",
-#   assays = "RNA"
-# )
-# 
-# library(reticulate)
-# library(scater)
-# library(SeuratDisk)
-# use_python("/Users/hoyin/miniforge3/bin/python")
-# ad = import("anndata", convert = FALSE)
-# #gtex_ad = ad$read_h5ad("./data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs_converted.h5ad")
-# gtex_ad = ad$read_h5ad("./data/public/GTEx/GTEx_8_tissues_snRNAseq_atlas_071421.public_obs.h5ad")
-# gtex_so = Convert(gtex_ad, to = "seurat")
-# 
-# #seuratObject = SeuratDisk::LoadH5Seurat("example_dir/example_ad.h5Seurat")
-# 
-# ## Conversion didnt go well. Need to make changes in scanpy before conversion
-# 
-# # This creates a copy of this .h5ad object reformatted into .h5seurat inside the example_dir directory
-# 
-# # This .d5seurat object can then be read in manually
-# seuratObject <- LoadH5Seurat("example_dir/example_ad.h5Seurat")
-
-
-## Check if the DEG results are tissue-specific
-
-# ## Load GTEX result
-# gtex_breast = read.csv("./data/public/GTEx/gene_reads_v10_breast_mammary_tissue.gct",sep="\t",skip=2,check.names = FALSE)
-# gtex_skin = read.csv("./data/public/GTEx/gene_reads_v10_skin_sun_exposed_lower_leg.gct",sep="\t",skip=2,check.names = FALSE)
-# gtex_muscle = read.csv("./data/public/GTEx/gene_reads_v10_muscle_skeletal.gct",sep="\t",skip=2,check.names = FALSE)
-# gtex_heart = read.csv("./data/public/GTEx/gene_reads_v10_heart_left_ventricle.gct",sep="\t",skip=2,check.names = FALSE)
-# 
-# ## Load the DEG results
-# hclust_deg_table = read.csv("./02_Tumor_RNA_Analysis/outputs/DEGs/02_DESEQ2_hclust_expr_sites_combined_results_all.tsv",sep="\t")
-# sites_deg_table = read.csv("./02_Tumor_RNA_Analysis/outputs/DEGs/02_DESEQ2_sites_combined_results_all.tsv",sep="\t")
-# 
-# ## Load the processed count data
-# collapsed_filtered_counts = read.csv("data/processed/rna/00_filtered_gene_counts.csv",check.names = FALSE,row.names = 1)
-# 
-# ## Subset each gtex tables to the genes that are overlapped
-# gtex_breast_subset = gtex_breast[gtex_breast$Description %in% rownames(collapsed_filtered_counts),]
-# gtex_skin_subset = gtex_skin[gtex_skin$Description %in% rownames(collapsed_filtered_counts),]
-# gtex_muscle_subset = gtex_muscle[gtex_muscle$Description %in% rownames(collapsed_filtered_counts),]
-# gtex_heart_subset = gtex_heart[gtex_heart$Description %in% rownames(collapsed_filtered_counts),]
-# 
-# ## Collapse the same way it was done to preprocessed count data
-# collapse_count_data = function(count_data) {
-#   # Given count data, collapse transcripts associated with the same gene into one entry
-#   count_data$Name = NULL
-#   collapased_counts = count_data %>% 
-#     group_by(Description) %>%
-#     summarise(across(everything(), sum))
-#   collapased_counts = as.data.frame(collapased_counts)
-#   rownames(collapased_counts) = collapased_counts$Description
-#   collapased_counts$Description = NULL
-#   return(collapased_counts)
-# }
-# gtex_breast_subset = collapse_count_data(gtex_breast_subset)
-# gtex_skin_subset = collapse_count_data(gtex_skin_subset)
-# gtex_muscle_subset = collapse_count_data(gtex_muscle_subset)
-# gtex_heart_subset = collapse_count_data(gtex_heart_subset)
-# 
-# ## Combined the collapsed subset tables
-# gtex_collapsed_counts_combined = cbind(gtex_breast_subset,gtex_skin_subset,gtex_muscle_subset,gtex_heart_subset)
-# 
-# ## Create sample metadata
-# sample_ids = colnames(gtex_collapsed_counts_combined)
-# tissue_labels = rep(c("Breast", "Skin", "Muscle", "Heart"),
-#                     times = c(ncol(gtex_breast_subset),
-#                               ncol(gtex_skin_subset),
-#                               ncol(gtex_muscle_subset),
-#                               ncol(gtex_heart_subset)))
-# sample_metadata = data.frame(
-#   sample_id = sample_ids,
-#   tissue = factor(tissue_labels)
-# )
-# rownames(sample_metadata) = sample_metadata$sample_id
-# 
-# ## Set one hot features
-# sample_metadata = sample_metadata %>% mutate(
-#   site.breast = ifelse(tissue == "Breast","Breast","Rest"),
-#   site.heart = ifelse(tissue == "Heart","Heart","Rest"),
-#   site.muscle = ifelse(tissue == "Muscle","Muscle","Rest"),
-#   site.skin = ifelse(tissue == "Skin","Skin","Rest"),
-# )
-# 
-# one_versus_rest_deseq2 = function(raw_counts,deseq2_metadata,formula_string,constrast,outpath) {
-#   deseq2_dds = DESeqDataSetFromMatrix(
-#     countData = raw_counts,
-#     colData = deseq2_metadata,
-#     design = as.formula(formula_string)  # Adjusting for covariates
-#   )
-#   deseq2_estimates = DESeq(deseq2_dds)
-#   deseq2_results = results(deseq2_estimates,contrast = constrast)
-#   deseq2_results$gene = rownames(deseq2_results)
-#   write.table(deseq2_results,file = outpath, sep = "\t", quote = FALSE)
-#   return(deseq2_results)
-# }
-# 
-# 
-# 
-# gtex_breast_deseq_res = one_versus_rest_deseq2(gtex_collapsed_counts_combined,sample_metadata,
-#                                                  "~ site.breast",c("site.breast","Breast","Rest"),
-#                                                  "02_Tumor_RNA_Analysis/outputs/DEGs/2025_05_04_GTEx_DEGs/02_GTEX_breast_vs_rest.tsv")
-# 
-# gtex_heart_deseq_res = one_versus_rest_deseq2(gtex_collapsed_counts_combined,sample_metadata,
-#                                                "~ site.heart",c("site.heart","Heart","Rest"),
-#                                                "02_Tumor_RNA_Analysis/outputs/DEGs/2025_05_04_GTEx_DEGs/02_GTEX_heart_vs_rest.tsv")
-# 
-# gtex_muscle_deseq_res = one_versus_rest_deseq2(gtex_collapsed_counts_combined,sample_metadata,
-#                                                "~ site.muscle",c("site.muscle","Muscle","Rest"),
-#                                                "02_Tumor_RNA_Analysis/outputs/DEGs/2025_05_04_GTEx_DEGs/02_GTEX_muscle_vs_rest.tsv")
-# 
-# gtex_skin_deseq_res = one_versus_rest_deseq2(gtex_collapsed_counts_combined,sample_metadata,
-#                                                "~ site.skin",c("site.skin","Skin","Rest"),
-#                                                "02_Tumor_RNA_Analysis/outputs/DEGs/2025_05_04_GTEx_DEGs/02_GTEX_skin_vs_rest.tsv")
-# 
-# ## Combine all results into one table
-# #deseq_combined_results = bind_rows(deseq_results_list)
-# 
-
 
 # Calculate per-tissue specificity score
 so = readRDS("../data/processed/rna/ASCSeuratObj2025.rds")
-
-
 gtex_df = read.csv("../data/public/rna_tissue_gtex.tsv",sep="\t")
 
 calculate_tissue_specificity = function(df) {
@@ -240,24 +63,7 @@ gtex_specificity_table = gtex_specificity_df_dedupped %>%
   )
 
 
-## Plot specificty index distribution
-
-# ggplot(gtex_specificity_df, aes(x = tissue_specificity_rank, fill = Tissue, color = Tissue)) +
-#   geom_density(alpha = 0.4) +
-#   theme_minimal() +
-#   labs(
-#     title = "Tissue-Specificity Density per Tissue",
-#     x = "Tissue Specificity",
-#     y = "Density"
-#   ) +
-#   theme(legend.position = "right")
-
-#heatmap(gtex_specificity_mat)
-
 ## Load the DEG results
-#hclust_deg_table = read.csv("./outputs/DEGs/02_DESEQ2_hclust_expr_sites_combined_results_all.tsv",sep="\t")
-#sites_deg_table = read.csv("./outputs/DEGs/02_DESEQ2_sites_combined_results_all.csv")
-
 hclust_deg_table = read.csv("./outputs/DEGs/02_DESEQ2_hclust_expr_sites_combined_results_all.csv")
 sites_deg_table = read.csv("./outputs/DEGs/02_DESEQ2_sites_combined_results_all.csv")
 
@@ -265,17 +71,6 @@ hallmark_deg_outputs = read.csv("./outputs/DEGs/deg_hallmark_c6_combined.csv")
 
 hclust_deg_table_merged = hclust_deg_table %>% left_join(gtex_specificity_table,by = c("gene"="Gene.name"))
 sites_deg_table_merged = sites_deg_table %>% left_join(gtex_specificity_table,by = c("gene"="Gene.name"))
-
-## Helper function to run fast-ORA
-# run_fora = function(degs,fgsea_sets,pval_col="p_val") {
-#   #genes = degs[degs$p_val_adj < 0.1,]$gene
-#   genes = degs[degs[[pval_col]] < 0.05,]$gene
-#   #print(genes)
-#   universe = rownames(so@assays$RNA$counts)
-#   fora_res = fora(fgsea_sets, genes, universe, minSize = 5, maxSize = 500)
-#   return(fora_res)
-# }
-
 
 run_fora = function(degs, fgsea_sets, pval_col="p_val") {
   genes = degs[degs[[pval_col]] < 0.05,]$gene
@@ -467,21 +262,6 @@ combined_specificity_plot = cowplot::plot_grid(
 combined_specificity_plot
 ggsave("./outputs/plots/07_specificity_plots/combined_specificity_plot.png",combined_specificity_plot,dpi = 600,width = 6,height = 1.6)
 
-# ggsave(
-#   "./outputs/plots/07_specificity_plots/2026_03_04_combined_specificity_annotated_plot.png",
-#   combined_sites_deg_df_plot,
-#   dpi = 300,
-#   width = 6,
-#   height = 4
-# )
-# 
-# ggsave(
-#   "./outputs/plots/07_specificity_plots/2026_03_04_combined_specificity_annotated_plot.pdf",
-#   combined_sites_deg_df_plot,
-#   dpi = 300,
-#   width = 10,
-#   height = 4
-# )
 
 # Step 8: Barplot of tissue specificity among significant vs not
 tissue_specificity_summary_v2 <- combined_sites_deg_df %>%
@@ -610,8 +390,6 @@ hnfs_c6_fora_all <- run_fora(hnfs_ora_set_all, fgsea_c6_set_up_only, pval_col = 
 extremities_c6_fora_all <- run_fora(extremities_ora_set_all, fgsea_c6_set_up_only, pval_col = "pvalue")
 heart_c6_fora_all <- run_fora(heart_ora_set_all, fgsea_c6_set_up_only, pval_col = "pvalue")
 
-
-
 plot_fora_comparison <- function(
   fora_all_list,
   fora_filtered_list,
@@ -735,49 +513,6 @@ plot_fora_comparison <- function(
   main_grid <- plot_grid(plotlist = plot_list, ncol = 5)
   
   ggsave(output_path, main_grid, width = 6.2, height = 1.6, dpi = 300)
-  
-  
-  #ggsave(output_path, main_grid, width = 12, height = 8, dpi = 300)
-  
-  # # Final assembly with legend on top and shared axis labels
-  # final_p <- plot_grid(
-  #   shared_legend,
-  #   main_grid,
-  #   ncol = 1,
-  #   rel_heights = c(0.1, 1) # Legend takes 10% of height
-  # )
-  
-  # # Add global labels (since individual ones were removed)
-  # final_p <- annotate_figure(final_p, 
-  #                            left = text_grob("-log10(p-value) Filtered DEGs", rot = 90, size = 10),
-  #                            bottom = text_grob("-log10(p-value) All DEGs", size = 10))
-  
-  # Save
-  # Note: with 5 columns, you likely need more than 6 inches width!
-  #ggsave(output_path, final_p, width = 6, height = 3, dpi = 300)
-  
-  # # Plot
-  # p <- ggplot(comparison_df, aes(x = log10_pval_all, y = log10_pval_filtered, color = Enrichment)) +
-  #   geom_point(alpha = 0.8) +
-  #   geom_text_repel(aes(label = Annotate), size = 2, max.overlaps = 10, na.rm = TRUE) +
-  #   geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "gray40") +
-  #   geom_hline(yintercept = -log10(0.05), linetype = "dotted", color = "black") +
-  #   geom_vline(xintercept = -log10(0.05), linetype = "dotted", color = "black") +
-  #   facet_wrap(~ Tissue, ncol = 5) +
-  #   scale_color_manual(values = enrichment_colors) +
-  #   theme(legend.position = "none",axis.title.x = element_blank(),axis.title.y = element_blank()) +
-  #   # theme(
-  #   #   legend.position = "top",
-  #   #   axis.text.x = element_text(angle = 0, hjust = 0.5),
-  #   #   strip.text = element_text(face = "bold")
-  #   # ) +
-  #   labs(
-  #     x = "-log10(p-value) from All DEGs",
-  #     y = "-log10(p-value) from Specificity-Filtered DEGs",
-  #     color = "Enrichment Class"
-  #   )
-  
-  #ggsave(output_path, p, width = 6, height = 3, dpi = 300)
 }
 
 # Named lists of results by tissue
@@ -833,11 +568,6 @@ plot_fora_comparison(
 )
 
 ## Specificity should be evaluated by percentile / cutoff
-
-
-## Seems like overall ORA selected genes are more tissue-specific
-## Route 1: Recognize this and say it as a limitation
-## Route 2: Try deconvolution, repeat analysis
 
 ggplot(sites_deg_table_merged_extremities,aes(x=breast,color=ora_set)) + geom_boxplot()
 

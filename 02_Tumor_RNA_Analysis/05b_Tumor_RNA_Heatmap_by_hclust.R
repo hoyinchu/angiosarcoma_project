@@ -14,9 +14,6 @@ library(ggpubr)
 ## Load the palettes
 source("../util_scripts/project_palettes.R")
 
-#hclust_all_deseq_res_pos = read.csv("./outputs/DEGs/02_DESEQ2_sites_combined_results_pos.csv") %>% filter(baseMean > 100)
-#hclust_deseq2_combined_fora = read.csv("./outputs/DEGs/hclust_deg_hallmark_c6_combined.csv")
-
 ## Load the hierarchical clusters
 so = readRDS("../data/processed/rna/ASCSeuratObj2025.rds")
 hclust_res_pos = read.csv("./outputs/DEGs/02_DESEQ2_hclust_expr_sites_combined_results_pos.tsv", sep = "\t")
@@ -503,47 +500,4 @@ pdf("./outputs/plots/02_seurat_plots/02_cluster_gene_set_heatmap_dendro_cluster_
 
 draw(complex_heatmap_fig, heatmap_legend_side = "bottom", annotation_legend_side = "bottom",merge_legend = TRUE)
 dev.off()
-
-## After drawing the heatmap calculate some basic summary statistics about each cluster / primary sites
-
-#so = readRDS("data/processed/rna/ASCSeuratObj2025.rds")
-
-## Number of parenchymal breast samples by site
-site_by_cluster_table = table(so@meta.data$seurat_clusters_by_site_str,so@meta.data$hcluster_by_expr_str)
-site_totals = rowSums(site_by_cluster_table)
-cluster_totals = colSums(site_by_cluster_table)
-
-## Number of KDR mutations per cluster
-## Symbol level
-table(representative_germline_vars_merged$rep_Hugo_Symbol,representative_germline_vars_merged$hcluster_by_expr_str)
-## Mutation level
-table(representative_germline_vars_merged$rep_tumor_mutation_id_short,representative_germline_vars_merged$hcluster_by_expr_str)
-
-## Check the cluster assignments for cutaneous breast angiosarcomas
-site_by_cluster_table
-## Check MYC's enrichment in cluster 4
-hclust_res_pos[hclust_res_pos$gene=="MYC",]
-## Check MYC pathway enrichment in cluster 4
-head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 4")&(hclust_combined_fora$term_set=="Hallmarks"),])
-## Check CSR LAte up p-values
-head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 4")&(hclust_combined_fora$term_set=="C6"),])
-## Check expression of NRP2 and FLT4 in cluster 4
-hclust_res_pos[hclust_res_pos$gene=="NRP2",]
-hclust_res_pos[hclust_res_pos$gene=="FLT4",]
-
-## Check FORA results for cluster 5
-head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 5")&(hclust_combined_fora$term_set=="Hallmarks"),])
-head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 5")&(hclust_combined_fora$term_set=="C6"),])
-## Check expression of IL37 and CTLA4
-deseq2_combined_fora[deseq2_combined_fora$gene=="IL37",]
-all_deseq_res_pos[all_deseq_res_pos$gene=="CTLA4",]
-
-## Check the cluster assignments for HNFS angiosarcomas
-site_by_cluster_table
-## Check FORA results for cluster 4
-head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 2")&(hclust_combined_fora$term_set=="Hallmarks"),])
-head(hclust_combined_fora[(hclust_combined_fora$cluster=="Cluster 3")&(hclust_combined_fora$term_set=="Hallmarks"),])
-## Check expression of SRBF2
-all_deseq_res_pos[all_deseq_res_pos$gene=="SREBF2",]
-hclust_res_pos[hclust_res_pos$gene=="SREBF2",]
 

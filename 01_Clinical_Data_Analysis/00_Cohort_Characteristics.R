@@ -8,7 +8,6 @@ library(ggpubr)
 library(ggalluvial)
 library(stringr)
 library(scales)
-library(RColorBrewer)
 library(reshape2)
 library(ggsci)
 library(ggbeeswarm)
@@ -16,21 +15,22 @@ library(colorRamp2)
 library(ComplexHeatmap)
 library(viridis)
 library(BuenColors)
-library(cowplot)
-library(ggalluvial)
 
 # Import processed clinical Data
 clin_df = read.csv("../data/processed/clinical_data_manual_deident.tsv",sep="\t",check.names = FALSE)
 
+## Check age and sex distribution of the cohort
+mean(clin_df$`Age (Combined)`,na.rm=TRUE)
+table(clin_df$`SEX (EHR_EXTRACTED)`)/(125+51)
+
 # Make a clinical characteristic table for the entire cohort
-#"Biopsy Location (Wagner2024)",
 all_vars = c("Age (Combined)","SEX (EHR_EXTRACTED)","Primary Site (Recombined)","Primary Site (Wagner2024)","Biopsy Location (Wagner2024)","RAAS_LAAS_Class","OTHER_CANCER (PRD)")
-#all_vars = c("Age (Combined)","SEX (EHR_EXTRACTED)","PRIMARY SITE (Combined)","RAAS_LAAS_Class","OTHER_CANCER (PRD)")
 categorical_vars = c("Primary Site (Recombined)","Primary Site (Wagner2024)","Biopsy Location (Wagner2024)","SEX (EHR_EXTRACTED)","RAAS_LAAS_Class","OTHER_CANCER (PRD)")
 table_overall = CreateTableOne(data = clin_df,vars = all_vars, factorVars = categorical_vars)
 table_overall_mat = print(table_overall, quote = FALSE, noSpaces = TRUE, printToggle = FALSE)
 write.csv(table_overall_mat, file = "./outputs/tables/clinical_characteristic_table.csv")
 
+# Check primary site classification schemes
 table(clin_df$`Primary Site (Wagner2024)`)
 sort(table(clin_df$`Primary Site (Recombined)`))
 
@@ -47,7 +47,7 @@ clin_df[clin_df$RAAS_LAAS_Class == "",]$RAAS_LAAS_Class = "Unknown"
 clin_df$RAAS_LAAS_Class = factor(clin_df$RAAS_LAAS_Class, levels=c("RAAS","LAAS","RAAS & LAAS","Non-RAAS/LAAS","Unknown"))
 
 # Use the npg palette from ggsci
-#show_col(pal_npg("nrc")(10))
+source("../util_scripts/project_palettes.R")
 RAAS_class_palette = c(
   "RAAS" = "#DC0000FF",
   "LAAS" = "4DBBD5FF",
@@ -56,36 +56,21 @@ RAAS_class_palette = c(
   "Unknown" = "#B09C85FF"
 )
 
-library(BuenColors)
+
 primary_site_count_plot = ggplot(clin_df,aes(y=fct_rev(fct_infreq(`Primary Site (Recombined)`)),fill=RAAS_LAAS_Class)) + 
   geom_bar() +
-  #geom_text(stat='count', aes(label=..count..), vjust=-1) + 
   theme_minimal() +
   labs(y="Primary Sites",x="# of Patients", fill="AS Subtype") + 
-  #scale_fill_brewer(palette="Accent") +
-  #coord_flip() +
   theme(text = element_text(size = 6),panel.border = element_rect(linewidth = 0.5)) +
-  # scale_y_discrete(labels=c("Breast (NOS)"="Breast\n(NOS)",
-  #                           "Breast (Parenchymal)"="Breast\n(Parenchymal)",
-  #                           "Breast (Cutaneous)"="Breast\n(Cutaneous)",
-  #                           "Other Visceral Organs" = "Other\nVisceral Organs"
-  #                           )) +
   scale_x_continuous(expand = c(0,0)) +
   L_border() +
   scale_fill_manual(values=RAAS_class_palette)
   
 primary_site_count_plot_clean = primary_site_count_plot + theme(legend.position = "none",axis.title = element_blank(),
                                                                 axis.text.x = element_text(), axis.ticks.x = element_line())
-primary_site_count_plot
-primary_site_count_plot_clean
 
 cowplot::ggsave2("./outputs/plots/00_num_patients_by_primary_site.pdf",primary_site_count_plot,dpi=300,width=1.8,height=1.6)
 cowplot::ggsave2("./outputs/plots/00_num_patients_by_primary_site_no_legend.pdf",primary_site_count_plot_clean,dpi=300,width=1.8,height=1.6)
-
-
-# ggsave("./outputs/plots/00_num_patients_by_primary_site.png",primary_site_count_plot,dpi=300, width=6,height=4)
-# ggsave("./outputs/plots/00_num_patients_by_primary_site.pdf",primary_site_count_plot,dpi=300, width=6,height=4)
-# ggsave("./outputs/plots/00_num_patients_by_primary_site_tall.pdf",primary_site_count_plot,dpi=300, width=6,height=12)
 
 ## Check statistics for other cancers
 other_cancer_df = read.csv("../data/processed/other_cancer_data.tsv",sep="\t",check.names = FALSE)
@@ -93,6 +78,7 @@ other_cancer_df = read.csv("../data/processed/other_cancer_data.tsv",sep="\t",ch
 # Filter to only cancers that occurred before diagnosis (negative or zero days from DX)
 prior_cancers_only = other_cancer_df %>%
   filter(!is.na(`DATE OTHER CANCERS (DAYS FROM DX)`) & `DATE OTHER CANCERS (DAYS FROM DX)` <= 0)
+
 # For each patient, keep the cancer with the most recent date before DX (i.e., max among negative days)
 most_recent_prior_cancer = prior_cancers_only %>%
   group_by(`STUDY ID`) %>%
@@ -106,16 +92,10 @@ prior_cancer_only = clin_other_cancer_df_merged %>% filter(
 )
 prior_cancer_only
 
-
 prior_cancer_only_counts = as.data.frame(table(prior_cancer_only$`OTHER CANCERS REMAPPED`,prior_cancer_only$`Primary Site (Recombined)`),stringsAsFactors = FALSE)
 colnames(prior_cancer_only_counts) = c("Prior Cancer", "Primary Site", "n")
-# prior_cancer_only_counts = as.data.frame(prior_cancer_only_counts)
 prior_cancer_only_counts$`Prior Cancer`[prior_cancer_only_counts$`Prior Cancer`=="NOT FOUND"] = "NO PRIOR CANCER"
-# prior_cancer_only_counts = prior_cancer_only_counts %>% mutate(
-#   case_when(
-#     `Prior Cancer` == "NOT FOUND" ~ "NO PRIOR CANCER"
-#   )
-# )
+
 
 ## Just for the count plot we adjust it
 prior_cancer_only_counts_adjusted = prior_cancer_only_counts
@@ -153,30 +133,21 @@ prior_cancer_only_counts_plot <- ggplot(prior_cancer_only_counts_adjusted,
   coord_flip() +
   labs(x = "Primary Sites", y = "# of Patients", fill = "Prior Cancer") +
   theme(axis.text.y = element_text(hjust = 0.5)) +
-  # scale_x_discrete(labels = c(
-  #   "Breast (Cutaneous)" = "Breast\n(Cutaneous)",
-  #   "Breast (Parenchymal)" = "Breast\n(Parenchymal)",
-  #   "Other Visceral Organs" = "Other\nVisceral Organs"
-  # )) +
   scale_fill_manual(values = prior_count_palette) +
   scale_y_continuous(expand=c(0,0)) +
   theme(text = element_text(size = 6),panel.border = element_rect(linewidth = 0.5)) +
   L_border()
 
-prior_cancer_only_counts_plot
 prior_cancer_only_counts_plot_clean = prior_cancer_only_counts_plot + theme(legend.position = "none",axis.title = element_blank(),
                                                                             axis.text.x = element_text(), axis.ticks.x = element_line())
 
-# Step 4: Save
-# ggsave("01_Clinical_Data_Analysis/outputs/plots/00_prior_cancer_count_plot.pdf", 
-#        prior_cancer_only_counts_plot, dpi = 300, width = 6, height = 4)
-
+# Step 4: Save the plots
 cowplot::ggsave2("./outputs/plots/00_prior_cancer_count_plot_clean.pdf",prior_cancer_only_counts_plot_clean,dpi=300,width=1.8,height=1.6)
 cowplot::ggsave2("./outputs/plots/00_prior_cancer_count_plot_with_legend.pdf",prior_cancer_only_counts_plot,dpi=300,width=1.8,height=1.6)
 
 prior_cancer_only_counts_filtered = prior_cancer_only_counts %>% filter(`Prior Cancer` != "NO PRIOR CANCER")
 
-
+## Plot prior history
 prior_history_count_plot = ggplot(data=prior_cancer_only_counts_filtered,aes(axis1=`Prior Cancer`,axis2=`Primary Site`,y=n)) +
   geom_alluvium(aes(fill = `Primary Site`)) +
   geom_stratum() +
@@ -195,8 +166,6 @@ prior_history_count_plot
 
 prior_history_count_plot_clean = prior_history_count_plot + theme(legend.position = "none",)
 
-#ggsave("01_Clinical_Data_Analysis/outputs/plots/00_prior_cancer_to_primary_alluvial_plot.png",prior_history_count_plot,dpi=300,width=20,height=12)
-#ggsave("01_Clinical_Data_Analysis/outputs/plots/00_prior_cancer_to_primary_alluvial_plot_no_no_prior.pdf",prior_history_count_plot,dpi=300,width=20,height=14)
 cowplot::ggsave2("./outputs/plots/00_prior_cancer_to_primary_alluvial_plot_no_no_prior_with_legend.pdf",prior_history_count_plot,dpi=300,width=6,height=5)
 cowplot::ggsave2("./outputs/plots/00_prior_cancer_to_primary_alluvial_plot_no_no_prior_no_legend.pdf",prior_history_count_plot_clean,dpi=300,width=6,height=5)
 
@@ -253,8 +222,6 @@ age_count_plot_clean = age_count_plot+ theme(legend.position = "none",axis.title
 
 age_count_plot_clean
 
-#ggsave("01_Clinical_Data_Analysis/outputs/plots/00_age_at_diagnosis_by_primary_site.png",plot=age_count_plot,dpi=300, width=12,height=5)
-#ggsave("01_Clinical_Data_Analysis/outputs/plots/00_age_at_diagnosis_by_primary_site.pdf",plot=age_count_plot,dpi=300, width=12,height=5)
 cowplot::ggsave2("./outputs/plots/00_age_at_diagnosis_by_primary_site_clean.pdf",plot=age_count_plot_clean,width=6,height=1.8)
 
 # Get the actual medians of each group
@@ -285,8 +252,8 @@ met_percentage_data = met_count_data %>%
   mutate(Percentage = Count / Total) %>%
   mutate(has_met_Percentage = ifelse(has_met, Count / Total, 0)) %>%
   ungroup()
+
 ## Hide Missing or Unkown
-#show_col(pal_npg("nrc")(2))
 met_percentage_data_filtered = met_percentage_data %>%
   filter(`Primary Site (Recombined)` != "Missing or Unknown") %>%
   mutate(has_met = case_when(
@@ -305,17 +272,13 @@ met_class_palette = c("Has Met" = "#E64B35FF","No Mets" = "#4DBBD5FF")
 met_percentage_data_plot = ggplot(met_percentage_data_filtered, aes(x = fct_rev(fct_reorder(`Primary Site (Recombined)`,has_met_Percentage)), y = Count, fill = has_met,label=Percentage)) +
   geom_bar(stat = "identity", position = "stack") +
   labs(x = "Primary Site", y = "Count", fill = "Has Metastasized") +
-  #theme_minimal() +
   geom_text(aes(label =scales::percent(Percentage)), 
             position = position_stack(vjust = 0.5), size = 2) +
-  #theme(axis.text.x = element_text(angle = 45, hjust = 1,size=12)) +
   scale_fill_manual(values=met_class_palette) +
   labs(x="Primary Site",y="# of Patients") +
   L_border() +
   scale_y_continuous(expand=c(0,0)) +
   theme(legend.position = "none", axis.text.x = element_text(size=2))
-  #geom_errorbar(aes(ymin = has_met_ci_low*100, ymax = has_met_ci_high*100), height = 0.2)
-  #scale_fill_npg()
 met_percentage_data_plot
 
 ggsave("./outputs/plots/00_primary_site_met_percentages.png",met_percentage_data_plot,dpi=300,width=12,height=4)
@@ -338,11 +301,10 @@ met_df = clin_df_long %>%
   filter(! `Mets Sites Ever (Recombined)` %in% c("Unknown"))
 
 met_cooccurence = met_df %>% dplyr::count(`Primary Site (Recombined)`,`Mets Sites Ever (Recombined)`) 
-
 met_cooccurence = met_cooccurence %>% mutate(`Primary Site`=`Primary Site (Recombined)`,`Metastatic Site`=`Mets Sites Ever (Recombined)`)
 
 # Save this as a source data
-write.csv(met_cooccurence, file = "01_Clinical_Data_Analysis/outputs/tables/metastatic_occurence_count_table.csv",row.names = FALSE)
+write.csv(met_cooccurence, file = "./outputs/tables/metastatic_occurence_count_table.csv",row.names = FALSE)
 
 ## What is the most common metastatic site?
 ## Also calculate the proportion of metastatic site total (after subtracting no mets events)
@@ -372,18 +334,6 @@ met_cooccurence_totals <- met_cooccurence_totals %>%
   ungroup()
 
 met_cooccurence_totals
-# 
-# met_cooccurence_totals = met_cooccurence %>%
-#   group_by(`Metastatic Site`) %>%
-#   summarise(Total = sum(n)) %>%
-#   mutate(AllMetsTotal = sum(Total)-met_cooccurence_totals[met_cooccurence_totals$`Metastatic Site`=="No Mets",]$Total) %>%
-#   rowwise() %>%
-#   mutate(
-#     met_site_total_prop = Total/AllMetsTotal,
-#     met_site_ci_low=binom.test(Total,AllMetsTotal)$conf.int[[1]],
-#     met_site_ci_high=binom.test(Total,AllMetsTotal)$conf.int[[2]]
-#   )
-# met_cooccurence_totals
 
 met_cooccurence_merged = met_cooccurence %>% left_join(met_cooccurence_totals)
 common_met_plot = ggplot(met_cooccurence_merged,aes(y=fct_reorder(`Metastatic Site`,Total),x=n,fill=`Primary Site (Recombined)`)) +
@@ -402,7 +352,10 @@ ggsave("./outputs/plots/00_metastatic_site_counts.pdf",common_met_plot_clean,dpi
 
 met_cooccurence_merged
 
+## Check total met occurence events
 sum(met_cooccurence$n)
+
+
 # The primary site to metastatic site alleuvial plot
 met_site_plot = ggplot(data = met_cooccurence,
        aes(axis1 = `Primary Site`, axis2 = `Metastatic Site`, y = n)) +
@@ -476,7 +429,6 @@ met_site_co_occurrence_plot = ggplot(data = met_site_co_occurrence_matrix_lower_
                                     hjust = 1))+
   coord_fixed() +
   theme(
-    #axis.title.x = element_blank(),
     axis.title.y = element_blank(),
     panel.grid.major = element_blank(),
     panel.border = element_blank(),
@@ -492,7 +444,6 @@ met_site_co_occurrence_plot
 
 met_site_co_occurrence_plot_clean = met_site_co_occurrence_plot+ theme(legend.position = "none",axis.title = element_blank(),
                                                                        axis.text.x = element_text(size=2),axis.text.y = element_text(size=2))
-
 
 ggsave("./outputs/plots/00_metastatic_site_cooccurence_matrix_with_legend.pdf",met_site_co_occurrence_plot,dpi=300,width=6,height=6)
 ggsave("./outputs/plots/00_metastatic_site_cooccurence_matrix.pdf",met_site_co_occurrence_plot_clean,dpi=300,width=3,height=1.5)
@@ -565,7 +516,6 @@ ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient
 ggsave("01_Clinical_Data_Analysis/outputs/plots/00_treatment_records_per_patient_per_primary_site_boxplot.pdf",treatment_records_per_patient_per_primary_site_plot,dpi=300,width=4,height=8)
 
 # Treatment by Primary Sites
-library(colorRamp2)
 met_treatment_only = treatment_df_filtered_merged[treatment_df_filtered_merged$MODE=="METS",]
 site_by_drug_table = table(treatment_df_filtered_merged$DRUG,treatment_df_filtered_merged$`Primary Site (Recombined)`)
 treatment_col_fun = colorRamp2(c(0, 20), c("white", "orange"))
@@ -574,10 +524,6 @@ treatment_row_sum = rowSums(site_by_drug_table)
 site_by_drug_table_ordered = site_by_drug_table[order(treatment_row_sum, decreasing = TRUE), order(treatment_col_sum, decreasing = TRUE)]
 treatment_col_anno = columnAnnotation(`Records` = anno_barplot(colSums(site_by_drug_table_ordered)))
 treatment_row_anno = rowAnnotation(`Records` = anno_barplot(rowSums(site_by_drug_table_ordered)))
-# treatment_col_fun = colorRamp2(
-#   c(min(site_by_drug_table_ordered), max(site_by_drug_table_ordered)), 
-#   viridis(2)
-# )
 
 treatment_complex_heatmap = Heatmap(site_by_drug_table_ordered, 
         name = "# of Treatment Records",
@@ -586,8 +532,6 @@ treatment_complex_heatmap = Heatmap(site_by_drug_table_ordered,
         right_annotation = treatment_row_anno,
         row_names_gp = gpar(fontsize = 5),    # Row labels size
         column_names_gp = gpar(fontsize = 5), # Column labels size
-        #show_heatmap_legend = FALSE,
-        # --- CHANGE HERE: Configure Horizontal Legend ---
         heatmap_legend_param = list(
           direction = "horizontal",
           title_position = "topcenter", # Puts title above the bar
@@ -599,8 +543,7 @@ treatment_complex_heatmap = Heatmap(site_by_drug_table_ordered,
         column_names_rot = 45
         )
 treatment_complex_heatmap
-#pdf("./outputs/plots/00_treatment_by_primary_site.pdf",width=4,height=4)
-#draw(treatment_complex_heatmap, heatmap_legend_side = "right", annotation_legend_side = "right")
+
 pdf("./outputs/plots/00_treatment_by_primary_site_with_legend.pdf",width=4,height=4)
 draw(treatment_complex_heatmap, heatmap_legend_side = "right", annotation_legend_side = "bottom")
 
@@ -642,7 +585,6 @@ treatment_by_setting_plot_clean = treatment_by_setting_plot + theme(legend.posit
 treatment_by_setting_plot_clean
 ggsave("./outputs/plots/00_top_treatment_received_barplot_with_legend.pdf",treatment_plot,dpi=300,width=2.2,height=2.2)
 ggsave("./outputs/plots/00_top_treatment_received_barplot.pdf",treatment_by_setting_plot_clean,dpi=300,width=2.2,height=2.2)
-
 ggsave("./outputs/plots/00_top_treatment_received_barplot_horizontal.pdf",treatment_by_setting_plot_clean,dpi=300,width=5,height=1.6)
 
 

@@ -6,7 +6,6 @@ library(dplyr)
 
 ## Load the previously created seurat data
 so = readRDS("../data/processed/rna/ASCSeuratObj2025.rds")
-#so = readRDS("data/processed/rna/ASCSeuratObj2025_Purity.rds")
 
 ## Load the palettes
 source("../util_scripts/project_palettes.R")
@@ -42,9 +41,6 @@ so_extremities = RunPCA(so_extremities,features=VariableFeatures(so_extremities,
 so_others = FindVariableFeatures(so_others)
 so_others = RunPCA(so_others,features=VariableFeatures(so_others,nfeatures = 2000),npcs = 2)
 
-# so = CellCycleScoring(so, s.features = cc.genes$s.genes, g2m.features = cc.genes$g2m.genes)
-# ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_overall_cell_cycle_pca_plots.png",DimPlot(so,group.by = "Phase",pt.size = 5))
-
 # Get the total variance:
 get_var_explained = function(so) {
   mat = GetAssayData(so, assay = "RNA", slot = "scale.data")
@@ -54,20 +50,6 @@ get_var_explained = function(so) {
   var_explained = eigen_values / total_variance
   return(var_explained)
 }
-
-# ## Helper function to make embedding plots
-# make_embedding_plot = function(df, color_col,title_text, palette=NULL) {
-#   embed_plot = ggplot(df,aes_string(x="PC_1",y="PC_2",color=color_col)) +
-#     geom_point(size=2) +
-#     theme_minimal() +
-#     #scale_color_npg() +
-#     labs(x="PC 1",y="PC 2",color=title_text,title=title_text) +
-#     theme(plot.title = element_text(hjust=0.5),legend.position="top",legend.title=element_blank())
-#   if (!is.null(palette)) {
-#     embed_plot = embed_plot + scale_color_manual(values = palette)
-#   }
-#   return(embed_plot)
-# }
 
 
 ## Plot PCA Dims 
@@ -173,21 +155,6 @@ plot_pca_by_cont = function(so,filename) {
   ggsave(combined_cont_plot,filename=filename,dpi=300,width=8,height=18)
 }
 
-# clinical_dimplot = DimPlot(so,reduction="pca",group.by = clin_groups,pt.size=3)
-# clinical_dimplot_2cols = DimPlot(so,reduction="pca",group.by = clin_groups,pt.size=3, ncol = 2)
-# clinical_dimplot_2cols
-
-# primary_site_plot = make_embedding_plot(clin_attr_subset_merged,"`Primary Site (Recombined)`") +
-#   scale_color_manual(values=primary_site_palette) +
-#   labs(x="PC 1",y="PC 2",color="Primary Site")
-# cluster_plot = make_embedding_plot(clin_attr_subset_merged,"seurat_clusters_renamed") +
-#   scale_color_manual(values=seurart_cluster_palette) +
-#   labs(x="PC 1",y="PC 2",color="Unsupervised Clusters")
-# 
-# combined_primary_clusters = plot_grid(cluster_plot,primary_site_plot)
-# combined_primary_clusters
-# ggsave("02_Tumor_RNA_Analysis/outputs/plots/02_seurat_plots/02_Fig2_cluster_primay_site_pc_plot.png",combined_primary_clusters,dpi=300,width=10,height=3)
-
 ## Plot PCA Dim
 plot_pca_dims = function(so,filename) {
   so_var_exp = get_var_explained(so)
@@ -243,15 +210,6 @@ plot_pca_elbow_plot = function(so,filename) {
 # Plot PCA related figures:
 plot_pca_figs = function(so,dirname,prefix) {
   dir.create(file.path(dirname))
-  # #plot_pca_dims(so,paste0(dirname,"/",prefix,"_pca_dims.png"))
-  # plot_pca_by_clin(so,paste0(dirname,"/",prefix,"_pca_dims.png"))
-  # plot_pca_by_cont(so,paste0(dirname,"/",prefix,"_pca_cont_meta.png"))
-  # plot_pca_loadings(so,paste0(dirname,"/",prefix,"_pca_loadings.png"))
-  # plot_pca_loading_dims(so,paste0(dirname,"/",prefix,"_pca_loading_dims.png"))
-  # plot_top_loading_features(so,paste0(dirname,"/",prefix,"_pca_top_loading_features.png"))
-  # plot_pca_elbow_plot(so,paste0(dirname,"/",prefix,"_pca_elbow_plot.png"))
-  # plot_mean_variance(so,paste0(dirname,"/",prefix,"_mean_variance_plot.png"))
-  # 
   plot_pca_by_clin(so,paste0(dirname,"/",prefix,"_pca_dims.pdf"))
   plot_pca_by_cont(so,paste0(dirname,"/",prefix,"_pca_cont_meta.pdf"))
   plot_pca_loadings(so,paste0(dirname,"/",prefix,"_pca_loadings.pdf"))

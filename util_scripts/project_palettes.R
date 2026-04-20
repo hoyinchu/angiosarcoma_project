@@ -91,14 +91,6 @@ RAAS_class_palette = c(
   "Unknown" = "#B09C85FF"
 )
 
-# gene_set_palette = c(
-#   "Angiogenesis"=pal_npg("nrc")(5)[1],
-#   "Lymphangiogenesis"=pal_npg("nrc")(5)[2],
-#   "FGFR Enriched"=pal_npg("nrc")(5)[3],
-#   "17q Amplified"=pal_npg("nrc")(5)[4],
-#   "Radioresistant"=pal_npg("nrc")(5)[5]
-# )
-
 # TMB palette
 orange_cols = brewer.pal(4,"Oranges")
 tmb_palette = c(
@@ -111,7 +103,6 @@ tmb_palette = c(
 
 ## Annotate Fold Change
 FC_col_annot = colorRamp2(c(0, 5), c("white", "red"))
-#logp_col_annot = colorRamp2(c(0, 5), c("white", "purple"))
 purples_cols = brewer.pal(4,"Purples")
 significance_pal = c(
   "adj. p < 0.01" = purples_cols[4],
@@ -127,12 +118,6 @@ rep_som_mut_palette = c(
   "CFTR"=pal_npg("nrc")(10)[3],
   "KDR"=pal_npg("nrc")(10)[4],
   "PLCG1"=pal_npg("nrc")(10)[5],
-  #"FLG"=pal_npg("nrc")(10)[3],
-  #"FLT1"=pal_npg("nrc")(10)[1],
-  #"FLT3"=pal_npg("nrc")(10)[3],
-  #"FLT4"=pal_npg("nrc")(10)[4],
-  #"FLG"=pal_npg("nrc")(10)[8],
-  #"BRAF"=pal_npg("nrc")(10)[9],
   "Others"="black",
   "Not available"="gray"
 )
@@ -143,13 +128,6 @@ rep_germ_var_palette = c(
   "CFTR"=pal_npg("nrc")(10)[3],
   "BRCA2"=pal_npg("nrc")(10)[6],
   "CHEK2"=pal_npg("nrc")(10)[7],
-  #"FLG"=pal_npg("nrc")(10)[3],
-  #"BRCA1"=pal_npg("nrc")(10)[7],
-  #"MUTYH"=pal_npg("nrc")(10)[10],
-  #"PKHD1"="red",
-  #"USH2A"="pink",
-  #"PAH"=pal_npg("nrc")(10)[11],
-  #"GJB2"=pal_npg("nrc")(10)[12],
   "Others"="black",
   "No PV Detected"="lightblue"
 )
