@@ -9,6 +9,7 @@ pair_set_df = read.csv("../data/raw/sample_tables/pair_set_membership.tsv",sep="
 # Format names
 pair_df["case_sample"] = sub('.*entityName:([^,}]*)[},].*', '\\1', pair_df$case_sample)
 pair_df["control_sample"] = sub('.*entityName:([^,}]*)[},].*', '\\1', pair_df$control_sample)
+
 # A single sample's name formatted incorrectly
 pair_df["case_sample"] = gsub("__", "_", pair_df$case_sample)
 

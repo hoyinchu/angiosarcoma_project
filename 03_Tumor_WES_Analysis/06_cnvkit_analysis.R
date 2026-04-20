@@ -18,16 +18,6 @@ combined_cnvkit <- list.files(path = cnvkit_data_dir,
   set_names(basename(.) %>% str_remove("\\.gainloss\\.txt$")) %>% 
   map_dfr(~read_tsv(.x, col_types = cols(chromosome = col_character())), .id = "sample_id")
 
-# MAke calls on amplification and deletions
-# combined_cnvkit = combined_cnvkit %>%
-#   mutate(cnv_call = case_when(
-#     log2 < -1.0 ~ "DeepDel",
-#     log2 < -0.5 ~ "ShallowDel",
-#     log2 > 1  ~ "Amp",
-#     log2 > 0.5  ~ "ShallowAmp",
-#     TRUE        ~ "Neutral"
-#   ))
-
 combined_cnvkit = combined_cnvkit %>%
   mutate(cnv_call = case_when(
     log2 < -1.5 ~ "DeepDel",
@@ -39,27 +29,7 @@ combined_cnvkit = combined_cnvkit %>%
 
 
 ## Rename the pair names by tumor sample names
-# pair_df_subset_unfiltered = read_tsv("../data/processed/qc_tables/tumor_WES_pair_status.tsv")
-# combined_cnvkit_mapped_unfiltered = combined_cnvkit %>%
-#   left_join(
-#     pair_df_subset_unfiltered %>% 
-#       dplyr::select(`entity:pair_id`, case_sample), 
-#     by = c("sample_id" = "entity:pair_id")
-#   ) %>%
-#   relocate(case_sample, .after = sample_id)
-
 pair_df_subset_filtered = read.csv("../data/processed/qc_tables/all_filter_passed_pairs.csv")
-pair_df_subset_filtered
-
-# combined_cnvkit_mapped = merge(
-#   combined_cnvkit,
-#   pair_df_subset_filtered[,c("case_sample","entity.pair_id")],
-#   by.x="sample_id",
-#   by.y="entity.pair_id",
-#   all.x=TRUE
-# )
-
-
 combined_cnvkit_mapped = combined_cnvkit %>%
   left_join(
     pair_df_subset_filtered %>% 
@@ -107,34 +77,5 @@ combined_cnvkit_filtered_subset = combined_cnvkit_filtered %>%
   rename(c("gene"="Gene","case_sample"="Sample_name","cnv_call"="CN"))
 
 ggplot(combined_cnvkit_filtered %>% filter(log2 > 1),aes(x=cn)) + geom_histogram()
- 
-write.csv(combined_cnvkit_filtered_subset,"../data/processed/tumor_WES/combined_cnvkit_calls.csv",row.names = FALSE,quote = FALSE)
 
-# # 1. Get the total number of unique samples in your dataset
-# n_samples <- n_distinct(combined_cnvkit_filtered$sample_id)
-# 
-# # 2. Get the Top 10 Most Common Gains
-# top_10_gains <- combined_cnvkit_filtered %>%
-#   filter(cnv_call == "Amp") %>%
-#   dplyr::count(gene, name = "count", sort = TRUE) %>%
-#   mutate(freq_pct = (count / n_samples) * 100) %>%
-#   slice_max(count, n = 50)
-# top_10_gains
-# 
-# # 3. Get the Top 10 Most Common Losses
-# top_10_losses <- combined_cnvkit_filtered %>%
-#   filter(cnv_call == "Deep Deletion") %>%
-#   dplyr::count(gene, name = "count", sort = TRUE) %>%
-#   mutate(freq_pct = (count / n_samples) * 100) %>%
-#   slice_max(count, n = 50)
-# 
-# # Display results
-# print("--- Top 10 Gains ---")
-# print(top_10_gains)
-# 
-# print("--- Top 10 Losses ---")
-# print(top_10_losses)
-# 
-# subdf = combined_cnvkit_filtered %>% filter(gene=="CRKL")
-# ggplot(subdf,aes(x=log2,fill=gainloss_call)) + 
-#   geom_histogram()
+write.csv(combined_cnvkit_filtered_subset,"../data/processed/tumor_WES/combined_cnvkit_calls.csv",row.names = FALSE,quote = FALSE)

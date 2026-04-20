@@ -1,19 +1,12 @@
 library(dplyr)
 library(maftools)
+
 ## This script filters the MAF to only retain high confidence tumor variant calls
-
-#maf_path = "../data/raw/tumor_WES/ASC_mutations_merged_raw.maf"
-#maf_path = "../data/raw/tumor_WES/Mar2023_pass_qc_pairs.final_analysis_set.maf"
-## There is a mismatch because in the new analysis we will look at more than one sample per patient but the annotated maf didnt include all samples due to some failures
-## TODO: add pysam annotation to failed samples, remerge the MAF, and redo processing
 maf_path = "../data/raw/tumor_WES/CombinedMAF_20260202.maf"
-
-
 maf_df = read.csv(maf_path,sep="\t")
+
 # A single sample's name formatted incorrectly
 maf_df["Tumor_Sample_Barcode"] = gsub("ASCProject_0194__", "ASCProject_0194_", maf_df$Tumor_Sample_Barcode)
-#maf_df["sample_alias"] = gsub("ASCProject_0194__", "ASCProject_0194_ ", maf_df$)
-#maf_df["individual_alias"] = gsub("ASCProject_0194__", "ASCProject_0194_ ", maf_df$Tumor_Sample_Barcode)
 
 ## Sample-level filter
 ## Discard variants in samples that did not pass QC
@@ -59,8 +52,6 @@ filtered_maf = filtered_maf %>% filter(detected_in_both_strands == "True")
 
 filtered_maf["tumor_mutation_id"] = with(filtered_maf, paste(Hugo_Symbol,Chromosome, Start_position, End_position, Tumor_Seq_Allele1,Tumor_Seq_Allele2,Protein_Change,sep="_"))
 filtered_maf["tumor_mutation_id_short"] = with(filtered_maf, paste(Hugo_Symbol,Protein_Change,sep="_"))
-#filtered_maf["tumor_mutation_id_short_pos_only"] = with(filtered_maf, paste(Hugo_Symbol,Protein_Change,sep="_"))
-
 
 ## Variants that occur in more than two individuals are subject to manual IGV review
 sample_meta_df = read.csv("../data/processed/sample_clin_data.tsv",check.names = FALSE,sep="\t")
@@ -83,55 +74,14 @@ mut_unique_counts[mut_unique_counts$unique_individuals > 1,]
 # 
 # filtered_maf_merged = filtered_maf_merged %>% filter(!tumor_mutation_id %in% igv_blacklist)
 
-#write.table(filtered_maf,file="../data/processed/tumor_WES/ASC_mutations.maf",sep="\t",row.names=FALSE,quote = FALSE)
 write.table(filtered_maf,file="../data/processed/tumor_WES/ASC_mutations.maf",sep="\t",row.names=FALSE,quote = FALSE)
 
-
 ## Sanity maftool check
-maf_to_check = filtered_maf_merged#[filtered_maf_merged$`PRIMARY SITE (Combined)` == "BREAST (CUTANEOUS)",]
+maf_to_check = filtered_maf_merged
 asc_maf = read.maf(maf=maf_to_check)
 oncoplot(maf = asc_maf,
          top = 30,
          draw_titv = TRUE,
          fontSize = 0.6,
 )
-
-# Discard variants seen more than once in blood and no where else
-#all_filters_passed_df = read.csv("data/processed/sample_clin_data.tsv",check.names = FALSE,sep="\t")
-# filter_status_df = read.csv("data/processed/qc_tables/tumor_WES_pair_status.tsv",check.names = FALSE,sep="\t")
-# sample_meta_df = read.csv("data/processed/sample_clin_data.tsv",check.names = FALSE,sep="\t")
-# filtered_maf_merged = merge(filtered_maf,filter_status_df,
-#                             by.x=c("Tumor_Sample_Barcode","Matched_Norm_Sample_Barcode"),
-#                             by.y=c("case_sample","control_sample"),
-#                             all.x=TRUE
-#                             )
-# filtered_maf_merged = filtered_maf_merged %>% filter(pass_final_filter==TRUE)
-# filtered_maf_merged = merge(filtered_maf_merged,sample_meta_df,by.x="Tumor_Sample_Barcode",by.y="entity:sample_id",all.x=TRUE)
-
-# 
-# variant_type_counts = filtered_maf_merged %>%
-#   group_by(tumor_mutation_id) %>%
-#   summarize(
-#     count=n(),
-#     blood_sample_count = sum(tumor_timepoint == "BLOOD"),
-#     non_blood_sample_count = sum(tumor_timepoint != "BLOOD"),
-#     unique_individuals = length(unique(individual_alias))
-#   )
-# 
-# # These variants and the genes they are found in are now blacklisted
-# blacklist_variants = variant_type_counts %>% filter(blood_sample_count >= 2 & non_blood_sample_count == 0)
-# blacklist_variants$gene = sapply(strsplit(blacklist_variants$tumor_mutation_id, "_"), `[`, 1)
-# 
-# filtered_maf_merged = filtered_maf_merged %>% filter(!tumor_mutation_id %in% blacklist_variants$tumor_mutation_id)
-# filtered_maf_merged = filtered_maf_merged %>% filter(!Hugo_Symbol %in% blacklist_variants$gene)
-
-# ## Variants that occur in more than two individuals are subject to manual IGV review
-# mut_unique_counts = filtered_maf_merged %>%
-#   group_by(tumor_mutation_id) %>% summarize(
-#     count=n(),
-#     unique_individuals = length(unique(individual_alias))
-#   )
-# mut_unique_counts = mut_unique_counts[order(-mut_unique_counts$unique_individuals),]
-# mut_unique_counts[mut_unique_counts$unique_individuals > 1,]
-# 
 

@@ -7,7 +7,6 @@ library(ggpubr)
 
 # Read MAF
 maf_path = "../data/processed/tumor_WES/ASC_mutations.maf"
-#maf_path = "../data/processed/tumor_WES/ASC_mutations_new.maf"
 
 maf_df = read.csv(maf_path,sep="\t")
 
@@ -18,29 +17,15 @@ asc_cn_df = read.csv(asc_cn_call_path)
 asc_maf_samples = unique(maf_df$Tumor_Sample_Barcode)
 asc_cn_samples = unique(asc_cn_df$Sample_name)
 meta_keep_samples = union(asc_maf_samples,asc_cn_samples)
-#meta_keep_samples = intersect(asc_maf_samples,asc_cn_samples)
 
 # clinical meta information
 clin_sample_meta_path = "../data/processed/sample_clin_data.tsv"
 sample_meta_df = read.csv(clin_sample_meta_path,check.names = FALSE,sep="\t")
 
-
 # subset to samples in MAF
-#sample_meta_df_subset = sample_meta_df[sample_meta_df$`entity:sample_id` %in% maf_df$Tumor_Sample_Barcode,]
 sample_meta_df_subset = sample_meta_df[sample_meta_df$`entity:sample_id` %in% meta_keep_samples,]
 
 sample_meta_df_subset
-
-# Seurat metadata 
-# seurat_meta_path = "data/processed/rna/02_seurat_processed_metadata.tsv"
-# seurat_meta_data = read.csv(seurat_meta_path,sep="\t",check.names = FALSE)
-# seurat_meta_short = seurat_meta_data[,c(setdiff(colnames(seurat_meta_data), colnames(sample_meta_df_subset)),"sample_alias","entity:sample_id")]
-# seurat_meta_short[["paired_RNA_sample"]] = seurat_meta_short[["entity:sample_id"]]
-# seurat_meta_short[["entity:sample_id"]] = NULL
-
-# Add seurat information to sample meta df subset
-# clin_seurat_merged = merge(sample_meta_df_subset,seurat_meta_short,by="sample_alias",all.x=TRUE)
-# dim(clin_seurat_merged)
 
 # Count the number of total mutations and non-syn mutations per sample
 # Calculate the TMB as well assuming the size of the exome is 30Mb
@@ -106,14 +91,6 @@ total_mutations_per_sample_combined_with_meta_merged = merge(
   by.x="Tumor_Sample_Barcode",by.y="case_sample",all.x=TRUE
 )
 
-# total_mutations_per_sample_combined_with_meta_merged$TMB_renormalized = 
-#   total_mutations_per_sample_combined_with_meta_merged$Total_Mutations/total_mutations_per_sample_combined_with_meta_merged$total_length
-# 
-# ggplot(total_mutations_per_sample_combined_with_meta_merged,aes(x=fga,y=TMB_renormalized)) +
-#   geom_point()
-# 
-# ggplot(total_mutations_per_sample_combined_with_meta_merged,aes(x=fga,y=Total_Mutations)) +
-#   geom_point()
 
 if (FALSE) {
   write.csv(total_mutations_per_sample_combined_with_meta,file="./outputs/tables/total_mutations_per_sample.csv",row.names=FALSE)
@@ -136,12 +113,8 @@ sample_meta_df_added = merge(sample_meta_df_added,sig_matrix_t,by.x="entity:samp
 
 ## Plot TMB by primary sites
 tmb_by_site_plot = ggplot(sample_meta_df_added,aes(x=fct_reorder(`Primary Site (Recombined)`,-TMB_all_mutations),y=TMB_all_mutations,color =`Primary Site (Recombined)`)) +
-  #geom_violin() +
   geom_boxplot(color="black",outlier.shape = NA)+
-  #geom_point(size=0.5) +
   scale_y_continuous(trans='log10') +
-  #labs(x="Primary Site",y="TMB") +
-  #annotation_logticks(sides = 'l') +
   stat_compare_means(comparisons = list(
     c("Breast (Cutaneous)","Breast (Parenchymal)"),
     c("HNFS","Breast (Cutaneous)"),
@@ -162,14 +135,10 @@ sample_meta_df_added %>% group_by(`Primary Site (Recombined)`) %>% summarise(med
 
 # Change column name and order for downstream compatibility
 processed_meta_data = sample_meta_df_added %>% rename("entity:sample_id"="Tumor_Sample_Barcode")
-#write.csv(processed_meta_data, "../data/processed/tumor_WES/ASC_mutations_metadata.csv",row.names = FALSE)
 write_tsv(processed_meta_data, "../data/processed/tumor_WES/ASC_mutations_metadata.tsv")
 
 write.csv(processed_meta_data, "../data/processed/tumor_WES/ASC_mutations_metadata_new.csv",row.names = FALSE)
-#write.csv(processed_meta_data, "../data/processed/tumor_WES/ASC_mutations_metadata_new_small.csv",row.names = FALSE)
 
-
-#write.table(processed_meta_data, "../data/processed/tumor_WES/ASC_mutations_metadata.tsv", sep = "\t",quote = TRUE,row.names = FALSE)
 
 
 

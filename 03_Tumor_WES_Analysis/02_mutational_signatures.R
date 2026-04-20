@@ -5,7 +5,6 @@ library(GenomicRanges)
 library(BSgenome.Hsapiens.UCSC.hg19)
 
 maf_df = read.csv(file="../data/processed/tumor_WES/ASC_mutations.maf",sep="\t",check.names=FALSE)
-#maf_df = read.csv(file="../data/processed/tumor_WES/ASC_mutations_new.maf",sep="\t",check.names=FALSE)
 
 ## Calculate tri-nucleotide frequency 
 mut_genomic_ranges = GRanges(
@@ -27,7 +26,6 @@ tri_nuc_mat_to_write = cbind(Tumor_Sample_Barcode = rownames(tri_nuc_mat_to_writ
 
 if(FALSE) {
   write.table(tri_nuc_mat_to_write,file="../data/processed/tumor_WES/ASC_trinucleotide_mutation_counts.tsv",sep="\t",quote = FALSE,row.names = FALSE)
-  #write.table(tri_nuc_mat_to_write,file="../data/processed/tumor_WES/ASC_trinucleotide_mutation_counts_new.tsv",sep="\t",quote = FALSE,row.names = FALSE)
 }
 
 # Fit to existing signatures
@@ -43,7 +41,6 @@ strict_decomp = fit_to_signatures_strict(
 strict_decomp_res = strict_decomp$fit_res$contribution
 strict_decomp_res_rel = as.data.frame(sweep(strict_decomp_res,2,colSums(strict_decomp_res),`/`),check.names=FALSE)
 strict_decomp_res_rel = cbind(SBS = rownames(strict_decomp_res_rel), strict_decomp_res_rel)
-# strict_decomp_res_rel$SBS = rownames(strict_decomp_res_rel)
 strict_decomp_res_rel_long = strict_decomp_res_rel %>%
   pivot_longer(
     cols = -SBS, 
@@ -109,7 +106,6 @@ sample_meta_df = read.csv("../data/processed/sample_clin_data.tsv",check.names =
   `entity:sample_id` %in% maf_df$Tumor_Sample_Barcode
 )
 strict_decomp_res_rel_long_no_zero_sbs7_only = strict_decomp_res_rel_long_no_zero %>% filter(SBS=="SBS7b" | SBS=="SBS7a")
-#strict_decomp_res_rel_long_no_zero_sbs7_only = strict_decomp_res_rel_long_no_zero %>% filter(SBS=="SBS1")
 
 sample_meta_with_sbs7 = merge(sample_meta_df,strict_decomp_res_rel_long_no_zero_sbs7_only,
                               by.x="entity:sample_id",by.y="sample",all.x=TRUE) %>% replace_na(list(value=0))
@@ -129,14 +125,13 @@ ggsave(sbs7_prop_plot,file="./outputs/plots/02_over_050_SBS7_proportion_by_site_
 
 
 if (FALSE) {
-  write.table(strict_decomp_res_rel,file="../data/processed/tumor_WES/ASC_mutational_signature_relative.tsv",sep="\t",quote = FALSE,row.names = FALSE)
+  #write.table(strict_decomp_res_rel,file="../data/processed/tumor_WES/ASC_mutational_signature_relative.tsv",sep="\t",quote = FALSE,row.names = FALSE)
   write.table(strict_decomp_res_rel,file="../data/processed/tumor_WES/ASC_mutational_signature_relative_new.tsv",sep="\t",quote = FALSE,row.names = FALSE)
 }
 
 
 # Obtain primary sites
 sample_meta_df = read.csv("../data/processed/sample_clin_data.tsv",check.names = FALSE,sep="\t")
-#primary_sites = sample_meta_df_subset %>% filter(`entity:sample_id` %in% rownames(mut_type_occurrences)) %>% pull(`Primary Site (Recombined)`)
 primary_sites = sample_meta_df_subset[sample_meta_df_subset$`entity:sample_id` %in% rownames(mut_type_occurrences),]$`Primary Site (Recombined)`
 # Obtain mutation type counts by samples
 mut_type_occurrences = mut_type_occurrences(snv_grl, ref_genome = BSgenome.Hsapiens.UCSC.hg19)
