@@ -15,3 +15,6 @@ Unless otherwise specificied, the analysis code should be ran in ascending order
 - `06_Tumor_RNA_WES_Integration_Analysis` Scripts used for performing join Tumor WES and Tumor RNA analysis. Inlucdes scripts for performing differential expression conditioned on mutation status of individual genes. 
 
 If there any question about the data or the scripts, please reach out to hoyinchu2016@gmail.com.
+
+A version of the repository with large data files are also available on zenodo:
+https://doi.org/10.5281/zenodo.20415539
