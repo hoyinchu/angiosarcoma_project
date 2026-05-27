@@ -17,4 +17,4 @@ Unless otherwise specificied, the analysis code should be ran in ascending order
 If there any question about the data or the scripts, please reach out to hoyinchu2016@gmail.com.
 
 A version of the repository with large data files are also available on zenodo:
-https://doi.org/10.5281/zenodo.20415539
+https://doi.org/10.5281/zenodo.20416385
