@@ -1,0 +1,304 @@
+repo_patient_id	cbioportal_patient_id	id_type	in_SD1_clinical_data	has_sequencing_in_repo	notes
+ASCProject_0003	P4WZVT	legacy_numeric	TRUE	TRUE	
+ASCProject_0005	PRLB6M	legacy_numeric	TRUE	TRUE	
+ASCProject_0006	PECPQ7	legacy_numeric	TRUE	TRUE	
+ASCProject_0007	PU22EL	legacy_numeric	TRUE	TRUE	
+ASCProject_0008	P4RTQK	legacy_numeric	TRUE	TRUE	
+ASCProject_0009	PLQNQU	legacy_numeric	TRUE	TRUE	
+ASCProject_0010		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0011	P9XH7B	legacy_numeric	TRUE	TRUE	
+ASCProject_0012	PK7CAE	legacy_numeric	TRUE	TRUE	
+ASCProject_0013	PKNK7V	legacy_numeric	TRUE	TRUE	
+ASCProject_0014	PF8J3J	legacy_numeric	TRUE	TRUE	
+ASCProject_0015	PR3DWN	legacy_numeric	TRUE	TRUE	
+ASCProject_0016	PLLNVH	legacy_numeric	TRUE	TRUE	
+ASCProject_0017	P4C7TN	legacy_numeric	TRUE	TRUE	
+ASCProject_0020	PF3F68	legacy_numeric	TRUE	TRUE	
+ASCProject_0021	PJ6AZV	legacy_numeric	TRUE	TRUE	
+ASCProject_0023	PCFXWM	legacy_numeric	TRUE	TRUE	
+ASCProject_0024	PNT3KX	legacy_numeric	TRUE	TRUE	
+ASCProject_0025	P9KBWE	legacy_numeric	TRUE	TRUE	
+ASCProject_0026	PULG23	legacy_numeric	TRUE	TRUE	
+ASCProject_0027	PYTEYV	legacy_numeric	TRUE	TRUE	
+ASCProject_0028	PZWUW2	legacy_numeric	TRUE	TRUE	
+ASCProject_0030	PRYD2Q	legacy_numeric	TRUE	TRUE	
+ASCProject_0032		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0034	PB8ZVG	legacy_numeric	TRUE	TRUE	
+ASCProject_0035	PL9KMQ	legacy_numeric	TRUE	TRUE	
+ASCProject_0036		legacy_numeric	FALSE	TRUE	Excluded from the cBioPortal release
+ASCProject_0038	PXCLPP	legacy_numeric	TRUE	TRUE	
+ASCProject_0039	PVEJ4R	legacy_numeric	TRUE	TRUE	
+ASCProject_0042	P74JJT	legacy_numeric	TRUE	TRUE	
+ASCProject_0043	PZUDLM	legacy_numeric	FALSE	FALSE	Same patient as ASCProject_PZUDLM
+ASCProject_0044	PD8NJ9	legacy_numeric	TRUE	TRUE	
+ASCProject_0045	PKJP3D	legacy_numeric	TRUE	TRUE	
+ASCProject_0046	PHLCR4	legacy_numeric	TRUE	TRUE	
+ASCProject_0047	PQ8J3C	legacy_numeric	TRUE	TRUE	
+ASCProject_0049	PEZEJX	legacy_numeric	TRUE	TRUE	
+ASCProject_0051	P9XXKN	legacy_numeric	TRUE	TRUE	
+ASCProject_0052	PKAFMF	legacy_numeric	TRUE	TRUE	
+ASCProject_0055	PFYXPH	legacy_numeric	TRUE	TRUE	
+ASCProject_0056	PH4CTH	legacy_numeric	TRUE	TRUE	
+ASCProject_0057	PEHNBD	legacy_numeric	TRUE	TRUE	
+ASCProject_0058	PLNFHW	legacy_numeric	TRUE	TRUE	
+ASCProject_0059	PPUPN6	legacy_numeric	TRUE	TRUE	
+ASCProject_0060	PKWREA	legacy_numeric	TRUE	TRUE	
+ASCProject_0061	PA9B8Q	legacy_numeric	TRUE	TRUE	
+ASCProject_0062	PTVLMC	legacy_numeric	TRUE	FALSE	
+ASCProject_0063	PXBCCZ	legacy_numeric	TRUE	TRUE	
+ASCProject_0064	PNAH8R	legacy_numeric	TRUE	TRUE	
+ASCProject_0065	P3P6KZ	legacy_numeric	TRUE	TRUE	
+ASCProject_0066	PYUKJX	legacy_numeric	TRUE	TRUE	
+ASCProject_0067	PNRUB6	legacy_numeric	TRUE	TRUE	
+ASCProject_0068	P62TT4	legacy_numeric	TRUE	TRUE	
+ASCProject_0069		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0073	PBXCBW	legacy_numeric	TRUE	TRUE	
+ASCProject_0074	PXLACQ	legacy_numeric	TRUE	TRUE	
+ASCProject_0076	PVHY2N	legacy_numeric	TRUE	TRUE	
+ASCProject_0078	PVEA77	legacy_numeric	TRUE	TRUE	
+ASCProject_0079	PRJYM6	legacy_numeric	FALSE	FALSE	
+ASCProject_0080	PBB33Y	legacy_numeric	TRUE	TRUE	
+ASCProject_0081		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0082	PXLJBB	legacy_numeric	TRUE	TRUE	
+ASCProject_0084	PZCY79	legacy_numeric	TRUE	TRUE	
+ASCProject_0086	PKK4YZ	legacy_numeric	TRUE	TRUE	
+ASCProject_0088	PHH637	legacy_numeric	TRUE	TRUE	
+ASCProject_0089	P8UK7Z	legacy_numeric	TRUE	TRUE	
+ASCProject_0090	PF93AN	legacy_numeric	TRUE	TRUE	
+ASCProject_0091	PGABLX	legacy_numeric	TRUE	TRUE	
+ASCProject_0092	PZPH6Z	legacy_numeric	TRUE	TRUE	
+ASCProject_0093	P8TGV9	legacy_numeric	TRUE	TRUE	
+ASCProject_0094	PD4KK7	legacy_numeric	TRUE	TRUE	
+ASCProject_0095	P78CVV	legacy_numeric	TRUE	TRUE	
+ASCProject_0096		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0097	PEUKQZ	legacy_numeric	TRUE	TRUE	
+ASCProject_0098	PPEVAZ	legacy_numeric	TRUE	TRUE	
+ASCProject_0099	PXGQNL	legacy_numeric	TRUE	TRUE	
+ASCProject_0100	PYC39N	legacy_numeric	TRUE	TRUE	
+ASCProject_0101	P3VEWK	legacy_numeric	TRUE	TRUE	
+ASCProject_0102	P2TRUP	legacy_numeric	TRUE	TRUE	
+ASCProject_0103	PN382B	legacy_numeric	TRUE	TRUE	
+ASCProject_0105	P7TDR9	legacy_numeric	TRUE	TRUE	
+ASCProject_0108	PHD4CR	legacy_numeric	TRUE	TRUE	
+ASCProject_0109	PD8N6L	legacy_numeric	TRUE	TRUE	
+ASCProject_0113	PF7PTC	legacy_numeric	TRUE	TRUE	
+ASCProject_0116		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0117	PRW8WL	legacy_numeric	TRUE	TRUE	
+ASCProject_0118	PFVV9F	legacy_numeric	TRUE	TRUE	
+ASCProject_0119	PB9T8W	legacy_numeric	TRUE	TRUE	
+ASCProject_0120	P3XDKP	legacy_numeric	TRUE	TRUE	
+ASCProject_0121	PB2L2C	legacy_numeric	TRUE	TRUE	
+ASCProject_0122	P8HG7L	legacy_numeric	FALSE	FALSE	
+ASCProject_0123	P4YYDK	legacy_numeric	TRUE	TRUE	
+ASCProject_0130	PNLYWZ	legacy_numeric	TRUE	FALSE	
+ASCProject_0131		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0132		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0134	PEYD2T	legacy_numeric	TRUE	TRUE	
+ASCProject_0135	PBMM28	legacy_numeric	TRUE	TRUE	
+ASCProject_0136	P33DPW	legacy_numeric	TRUE	TRUE	
+ASCProject_0145	PMVHBY	legacy_numeric	TRUE	TRUE	
+ASCProject_0146	P9GHC4	legacy_numeric	TRUE	TRUE	
+ASCProject_0148	PDQURJ	legacy_numeric	TRUE	TRUE	
+ASCProject_0149	PTZY99	legacy_numeric	TRUE	FALSE	
+ASCProject_0153	P9N384	legacy_numeric	TRUE	TRUE	
+ASCProject_0157	PARJAK	legacy_numeric	TRUE	TRUE	
+ASCProject_0158	PU2K4Q	legacy_numeric	TRUE	TRUE	
+ASCProject_0159	P2PMTJ	legacy_numeric	TRUE	TRUE	
+ASCProject_0164	PCZKYD	legacy_numeric	TRUE	TRUE	
+ASCProject_0165	PEENDG	legacy_numeric	TRUE	TRUE	
+ASCProject_0166	PDQ92X	legacy_numeric	TRUE	TRUE	
+ASCProject_0167	P3AMZF	legacy_numeric	TRUE	TRUE	
+ASCProject_0168	P8RLAH	legacy_numeric	TRUE	TRUE	
+ASCProject_0169	PUJKPK	legacy_numeric	FALSE	FALSE	
+ASCProject_0170	PVFAQQ	legacy_numeric	TRUE	TRUE	
+ASCProject_0171		legacy_numeric	TRUE	FALSE	No cBioPortal ID assigned
+ASCProject_0172	PBBWV6	legacy_numeric	TRUE	TRUE	
+ASCProject_0173	P376RW	legacy_numeric	TRUE	TRUE	
+ASCProject_0175	PQJ4ZC	legacy_numeric	TRUE	TRUE	
+ASCProject_0176	PTULAU	legacy_numeric	TRUE	TRUE	
+ASCProject_0177		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0179	PGRY6A	legacy_numeric	TRUE	TRUE	
+ASCProject_0180	PP76A8	legacy_numeric	TRUE	TRUE	
+ASCProject_0182	PFECWL	legacy_numeric	TRUE	TRUE	
+ASCProject_0184	P4TTRZ	legacy_numeric	TRUE	TRUE	
+ASCProject_0187	P393RN	legacy_numeric	TRUE	TRUE	
+ASCProject_0189	PW2AVQ	legacy_numeric	TRUE	TRUE	
+ASCProject_0192	PECA4C	legacy_numeric	FALSE	FALSE	
+ASCProject_0193	P37JRR	legacy_numeric	TRUE	TRUE	
+ASCProject_0194	PMJ2YA	legacy_numeric	TRUE	TRUE	
+ASCProject_0196		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0197	PGR6XA	legacy_numeric	TRUE	TRUE	
+ASCProject_0201	P49A6K	legacy_numeric	TRUE	TRUE	
+ASCProject_0202	PEZ7ZR	legacy_numeric	TRUE	TRUE	
+ASCProject_0205	P8ADGQ	legacy_numeric	TRUE	TRUE	
+ASCProject_0207	P78Y47	legacy_numeric	TRUE	TRUE	
+ASCProject_0208	PGW7KE	legacy_numeric	TRUE	TRUE	
+ASCProject_0212	PWWWTB	legacy_numeric	TRUE	TRUE	
+ASCProject_0214	PHXAQM	legacy_numeric	TRUE	TRUE	
+ASCProject_0216	PLHYAN	legacy_numeric	TRUE	TRUE	
+ASCProject_0217	PL4WR3	legacy_numeric	TRUE	TRUE	
+ASCProject_0218	P32UZE	legacy_numeric	TRUE	TRUE	
+ASCProject_0219	PM3Z76	legacy_numeric	TRUE	TRUE	
+ASCProject_0220	PNN3PN	legacy_numeric	TRUE	TRUE	
+ASCProject_0221	PBMCTJ	legacy_numeric	TRUE	TRUE	
+ASCProject_0222	PBFXN9	legacy_numeric	TRUE	TRUE	
+ASCProject_0223	P86YRP	legacy_numeric	TRUE	TRUE	
+ASCProject_0225	PWTHG7	legacy_numeric	TRUE	TRUE	
+ASCProject_0226	PWPVGV	legacy_numeric	TRUE	TRUE	
+ASCProject_0235	PJTX4B	legacy_numeric	TRUE	TRUE	
+ASCProject_0237	PEPZEF	legacy_numeric	TRUE	TRUE	
+ASCProject_0241	PMMUGU	legacy_numeric	TRUE	TRUE	
+ASCProject_0243	P3FJAL	legacy_numeric	TRUE	TRUE	
+ASCProject_0247	P962GX	legacy_numeric	TRUE	TRUE	
+ASCProject_0251	P9A3F3	legacy_numeric	FALSE	FALSE	
+ASCProject_0252	PQ7WR9	legacy_numeric	TRUE	TRUE	
+ASCProject_0255	P83ALT	legacy_numeric	FALSE	FALSE	
+ASCProject_0257	PGGNTU	legacy_numeric	TRUE	TRUE	
+ASCProject_0258	PQAQU4	legacy_numeric	TRUE	TRUE	
+ASCProject_0259	P6EY8T	legacy_numeric	TRUE	TRUE	
+ASCProject_0261	PDRL9K	legacy_numeric	TRUE	TRUE	
+ASCProject_0264	PUWB3Y	legacy_numeric	TRUE	TRUE	
+ASCProject_0266	PBDY49	legacy_numeric	TRUE	TRUE	
+ASCProject_0267	PQNA3A	legacy_numeric	TRUE	TRUE	
+ASCProject_0268	PMYW6F	legacy_numeric	TRUE	TRUE	
+ASCProject_0270	PXK8DH	legacy_numeric	TRUE	TRUE	
+ASCProject_0273	PBRTV8	legacy_numeric	TRUE	FALSE	
+ASCProject_0275	PKWB2B	legacy_numeric	TRUE	TRUE	
+ASCProject_0277	PCEDFV	legacy_numeric	TRUE	TRUE	
+ASCProject_0278	PGLA4G	legacy_numeric	TRUE	TRUE	
+ASCProject_0285		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0288		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0289	P48WUU	legacy_numeric	TRUE	TRUE	
+ASCProject_0290	PPGPFJ	legacy_numeric	TRUE	TRUE	
+ASCProject_0293	PNML4F	legacy_numeric	TRUE	TRUE	
+ASCProject_0294	PMP4R2	legacy_numeric	TRUE	TRUE	
+ASCProject_0299		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0300		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0301	PY6FJH	legacy_numeric	TRUE	FALSE	Same patient as ASCProject_PY6FJH
+ASCProject_0303	P8D6QK	legacy_numeric	TRUE	TRUE	
+ASCProject_0304		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0305		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0306	P36LVY	legacy_numeric	TRUE	TRUE	
+ASCProject_0309	PN9U4J	legacy_numeric	TRUE	TRUE	
+ASCProject_0310	P6XEAC	legacy_numeric	TRUE	TRUE	
+ASCProject_0321	P6X93C	legacy_numeric	TRUE	TRUE	
+ASCProject_0322	PPT3Q7	legacy_numeric	TRUE	TRUE	
+ASCProject_0325	PL37HA	legacy_numeric	TRUE	TRUE	
+ASCProject_0332	PD3A7Q	legacy_numeric	TRUE	TRUE	
+ASCProject_0335	PLXJQ9	legacy_numeric	TRUE	TRUE	
+ASCProject_0340	PTZTLP	legacy_numeric	TRUE	TRUE	
+ASCProject_0341	PPXHP3	legacy_numeric	TRUE	TRUE	
+ASCProject_0342	PNKJ4A	legacy_numeric	TRUE	TRUE	
+ASCProject_0343	PLQ8NR	legacy_numeric	TRUE	TRUE	
+ASCProject_0345	PCRDWY	legacy_numeric	TRUE	TRUE	
+ASCProject_0351	PXCNFJ	legacy_numeric	TRUE	TRUE	
+ASCProject_0353	PRJCV3	legacy_numeric	TRUE	TRUE	
+ASCProject_0354	P6L6XL	legacy_numeric	FALSE	FALSE	
+ASCProject_0355	P6ADCF	legacy_numeric	TRUE	TRUE	
+ASCProject_0356	PY8QY9	legacy_numeric	TRUE	TRUE	
+ASCProject_0357	PDWCNE	legacy_numeric	TRUE	TRUE	
+ASCProject_0361	PXY7T4	legacy_numeric	TRUE	TRUE	
+ASCProject_0365	PHX3AE	legacy_numeric	TRUE	FALSE	
+ASCProject_0367	P3KWY4	legacy_numeric	TRUE	TRUE	
+ASCProject_0368	PEB62T	legacy_numeric	TRUE	TRUE	
+ASCProject_0369	P7Q2ZT	legacy_numeric	TRUE	TRUE	
+ASCProject_0371		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0372	PUKND7	legacy_numeric	TRUE	TRUE	
+ASCProject_0373	PYG9PB	legacy_numeric	TRUE	TRUE	
+ASCProject_0375	PRFNJY	legacy_numeric	TRUE	TRUE	
+ASCProject_0378		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0381		legacy_numeric	TRUE	FALSE	No cBioPortal ID assigned
+ASCProject_0382	P3Z3KT	legacy_numeric	TRUE	TRUE	
+ASCProject_0385	PQRZPC	legacy_numeric	TRUE	TRUE	
+ASCProject_0387	PLMWG2	legacy_numeric	TRUE	TRUE	
+ASCProject_0388		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0389	PAKHAN	legacy_numeric	TRUE	TRUE	
+ASCProject_0393	PFDNLX	legacy_numeric	TRUE	TRUE	
+ASCProject_0394	P6C762	legacy_numeric	TRUE	TRUE	
+ASCProject_0397	PDG2LP	legacy_numeric	TRUE	FALSE	
+ASCProject_0398	PFHCKX	legacy_numeric	TRUE	TRUE	
+ASCProject_0401	PRCZRT	legacy_numeric	TRUE	TRUE	
+ASCProject_0403	PGEYYK	legacy_numeric	TRUE	TRUE	
+ASCProject_0411	PNCJ2Y	legacy_numeric	TRUE	TRUE	
+ASCProject_0412	PCL6ZJ	legacy_numeric	TRUE	TRUE	
+ASCProject_0413		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0414	PDQ7ZZ	legacy_numeric	TRUE	TRUE	
+ASCProject_0415	PX6MEL	legacy_numeric	TRUE	TRUE	
+ASCProject_0417	P9TVXH	legacy_numeric	TRUE	TRUE	
+ASCProject_0418	PF9X9N	legacy_numeric	TRUE	TRUE	
+ASCProject_0420	P7RK7E	legacy_numeric	TRUE	TRUE	
+ASCProject_0422	PH6DQT	legacy_numeric	TRUE	TRUE	
+ASCProject_0427	PXE776	legacy_numeric	TRUE	TRUE	
+ASCProject_0428		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0430		legacy_numeric	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_0432	PBFXLR	legacy_numeric	TRUE	TRUE	
+ASCProject_0434	PLW6HD	legacy_numeric	TRUE	FALSE	
+ASCProject_0435	PX86V9	legacy_numeric	TRUE	TRUE	
+ASCProject_P24LBA	P24LBA	same_as_cbioportal	FALSE	FALSE	
+ASCProject_P2HVYU	P2HVYU	same_as_cbioportal	TRUE	TRUE	
+ASCProject_P2Y46D	P2Y46D	same_as_cbioportal	FALSE	FALSE	
+ASCProject_P3EXLP	P3EXLP	same_as_cbioportal	FALSE	FALSE	
+ASCProject_P47D8Z	P47D8Z	same_as_cbioportal	TRUE	TRUE	
+ASCProject_P4JYLY	P4JYLY	same_as_cbioportal	FALSE	FALSE	
+ASCProject_P68AP7	P68AP7	same_as_cbioportal	TRUE	TRUE	
+ASCProject_P6WZK7	P6WZK7	same_as_cbioportal	FALSE	FALSE	
+ASCProject_P6YLY10		same_as_cbioportal	TRUE	FALSE	Not in the cBioPortal release; Possibly a duplicate of ASCProject_P6YLY9 (same age and primary site); not a valid cBioPortal ID
+ASCProject_P6YLY9	P6YLY9	same_as_cbioportal	TRUE	TRUE	
+ASCProject_P739VX	P739VX	same_as_cbioportal	TRUE	TRUE	
+ASCProject_P7938V	P7938V	same_as_cbioportal	FALSE	FALSE	
+ASCProject_P79RG8	P79RG8	same_as_cbioportal	FALSE	FALSE	
+ASCProject_P7MYLP	P7MYLP	same_as_cbioportal	FALSE	FALSE	
+ASCProject_P842QL	P842QL	same_as_cbioportal	FALSE	FALSE	
+ASCProject_P8B8WN	P8B8WN	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PA2AMK	PA2AMK	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PAJVKP	PAJVKP	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PAMWDK	PAMWDK	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PBHQJN	PBHQJN	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PBPCT2	PBPCT2	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PBUW6E	PBUW6E	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PDHLYR	PDHLYR	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PE46M9	PE46M9	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PGUJKF	PGUJKF	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PGXPR8	PGXPR8	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PGY8CM	PGY8CM	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PHCG7A	PHCG7A	same_as_cbioportal	FALSE	TRUE	
+ASCProject_PHV2UZ	PHV2UZ	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PJH7YF	PJH7YF	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PJT8MW	PJT8MW	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PK92KU	PK92KU	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PKDW2V	PKDW2V	same_as_cbioportal	TRUE	FALSE	
+ASCProject_PKGJBY	PKGJBY	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PKGZN6	PKGZN6	same_as_cbioportal	TRUE	FALSE	
+ASCProject_PKUUAC	PKUUAC	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PKVR6G	PKVR6G	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PKWACM	PKWACM	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PKYCDL	PKYCDL	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PMBKPU	PMBKPU	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PMGVWU	PMGVWU	same_as_cbioportal	TRUE	FALSE	
+ASCProject_PMTPQM	PMTPQM	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PN38F9	PN38F9	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PN4GH4	PN4GH4	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PNMVM4	PNMVM4	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PNNKT9	PNNKT9	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PQGFUK	PQGFUK	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PQHM2E	PQHM2E	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PRBW2L	PRBW2L	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PRCTTZ	PRCTTZ	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PRDZ3M	PRDZ3M	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PTB8PF	PTB8PF	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PTLPDP	PTLPDP	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PTMM6Y	PTMM6Y	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PUXC3Q	PUXC3Q	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PVKXV6	PVKXV6	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PWNLUF	PWNLUF	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PWVGDV	PWVGDV	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PXCNPP	PXCNPP	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PXGMWL	PXGMWL	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PXPTMJ	PXPTMJ	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PY6FJH	PY6FJH	same_as_cbioportal	TRUE	TRUE	Same patient as ASCProject_0301
+ASCProject_PYMFBV	PYMFBV	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PYYKC9		same_as_cbioportal	TRUE	TRUE	Not in the cBioPortal release
+ASCProject_PZAQRT	PZAQRT	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PZCXCF	PZCXCF	same_as_cbioportal	TRUE	TRUE	
+ASCProject_PZGXFC	PZGXFC	same_as_cbioportal	FALSE	FALSE	
+ASCProject_PZUDLM	PZUDLM	same_as_cbioportal	TRUE	FALSE	Same patient as ASCProject_0043
