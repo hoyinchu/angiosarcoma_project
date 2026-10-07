@@ -1,22 +1,40 @@
 # data
 
-Items marked *Zenodo only* are in the full snapshot at https://zenodo.org/records/20416385, not on GitHub.
+Items marked *Zenodo only* are in the full snapshot at https://zenodo.org/records/20416385, not on GitHub. Raw sequencing data are in dbGaP ([phs001931](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001931.v1.p1), controlled access).
 
 ## Supplementary data (start here)
 
-De-identified data released with the paper, in `supplementary_data/`:
+De-identified data released with the paper, in `supplementary_data/`. The file numbers here do **not** match the paper's Supplementary Data numbers; use the last column.
 
-| File | Contents |
+| File | Contents | Paper |
+| --- | --- | --- |
+| `SD1_clinical_data_manual_deident.tsv` | Per-patient clinical data | Supp. Data 1 |
+| `SD2_other_cancer_data.tsv` | Other (non-angiosarcoma) cancers | Supp. Data 2 |
+| `SD3_metastatic_occurence_count_table.csv` | Metastatic site counts | – |
+| `SD4_treatment_data.tsv` | Treatments | Supp. Data 3 |
+| `SD5_ASCSeuratObj2025.rds` | Seurat object: tumor RNA-seq expression and sample metadata | – |
+| `SD6_Seurat_all_markers_DEGs.csv` | RNA-seq marker genes | – (DESeq2 results for Supp. Data 4–6 are in `02_Tumor_RNA_Analysis/outputs/DEGs/`) |
+| `SD7_Mutsig_Output.tsv` | MutSig significantly mutated genes | Supp. Data 7 |
+| `SD8_Germline_Pathogenic_Variants.tsv` | Germline pathogenic variants | Supp. Data 9 |
+| `SD9_Selection_of_Sarcoma_Genes.tsv` | 107 sarcoma-related genes | Supp. Data 8 |
+
+`supplementary_table/` holds copies of `SD8` and `SD9`. Results for Supp. Data 10–11 (expression by mutation status) are in `06_Tumor_RNA_WES_Integration_Analysis/outputs/tables/by_gene/` (*Zenodo only*).
+
+**Known issues:** in `SD8` (and its copy), the `VAF` column repeats `DP`; compute VAF from `AD` (alt / total). In `processed/tumor_WES/ASC_mutations.maf`, `NCBI_Build` reads `__UNKNOWN__`; all coordinates are GRCh37/hg19.
+
+## Glossary
+
+| Term | Meaning |
 | --- | --- |
-| `SD1_clinical_data_manual_deident.tsv` | Per-patient clinical data |
-| `SD2_other_cancer_data.tsv` | Other (non-angiosarcoma) cancers |
-| `SD3_metastatic_occurence_count_table.csv` | Metastatic site counts |
-| `SD4_treatment_data.tsv` | Treatments |
-| `SD5_ASCSeuratObj2025.rds` | Seurat object: tumor RNA-seq expression and sample metadata |
-| `SD6_Seurat_all_markers_DEGs.csv` | RNA-seq marker genes |
-| `SD7_Mutsig_Output.tsv` | MutSig significantly mutated genes |
-| `SD8_Germline_Pathogenic_Variants.tsv` | Germline pathogenic variants (= Supplementary Table 1 in `supplementary_table/`) |
-| `SD9_Selection_of_Sarcoma_Genes.tsv` | Sarcoma gene list (= Supplementary Table 2) |
+| HNFS | Head, neck, face and scalp |
+| RAAS / LAAS | Radiation- / lymphedema-associated angiosarcoma (LAAS includes Stewart–Treves) |
+| `(EHR_EXTRACTED)`, MedR | From abstracted medical records |
+| `(PRD)` | Patient-reported data (survey) |
+| `(Combined)` | Medical record value if available, otherwise patient-reported |
+| `(Wagner2024)` | Site categories following Wagner et al., JAMA Netw. Open 2024 |
+| `(Recombined)` | Site grouping used in the paper's figures |
+| Blank values | Not available (e.g. blank `SEX (EHR_EXTRACTED)` for patients without abstracted medical records); shown as blank categories in `01_Clinical_Data_Analysis/outputs/tables/` |
+| QC | Tumor WES: FFPE, OxoG, contamination and tumor-in-normal filters; RNA: contamination, rRNA/mRNA rate, chimeric reads, genes detected |
 
 ## Other folders
 
@@ -40,8 +58,9 @@ Most patients here have legacy numeric IDs (`ASCProject_0005`); cBioPortal uses 
 | `patient_sequencing_data_map.tsv` | Patient (303) | `canonical_normal_wes_sample`, `analysis_tumor_normal_pairs`, `analysis_rna_samples`, and all tumor WES / normal WES / RNA samples with barcodes |
 
 - **`passed_qc`** means the sample was used in the paper: tumor WES in a QC-passing pair (94, = `ASC_mutations.maf`), normal WES passing germline QC (229), RNA passing QC (122; 121 after removing a duplicate).
-- **`in_cbioportal`**: 129 tumor WES and 157 RNA samples. Normals are never on cBioPortal. DNA and RNA from one biopsy share a cBioPortal sample ID.
+- **`in_cbioportal`**: 129 tumor WES and 157 RNA samples. Normals are never on cBioPortal. DNA and RNA from one biopsy share a cBioPortal sample ID, so `repo_sample_alias` and `cbioportal_sample_id` are not unique in `sample_id_map.tsv`; join on `repo_sample_barcode`.
 - **Canonical normal**: the patient's normal that passed germline QC. At most one per patient, and it is the normal in every QC-passing tumor/normal pair. Blank for 3 patients whose only normal failed QC and 9 with no normal.
+- 47 patients in `patient_id_map.tsv` are only on cBioPortal (no SD1 data or sequencing here). `ASCProject_0036_BLOOD` (sample type `Unknown`) belongs to a patient excluded from the study.
 - In `patient_sequencing_data_map.tsv`, lists are `;`-separated and each `*_samples` column matches the order of its `*_barcodes` column. When a tumor has several normals and none passed QC, all are listed with `;` in `sample_sequencing_data_map.tsv`.
 
 ## FAQ: Differences from cBioPortal
@@ -55,13 +74,13 @@ cBioPortal study [`angs_painter_2025`](https://www.cbioportal.org/study/summary?
 | | This repository | cBioPortal |
 | --- | --- | --- |
 | Patients with clinical data | 254 (228 on cBioPortal) | 274 |
-| Tumor WES | 143 pairs, 94 pass QC | 129 samples, 81 with mutations |
+| Tumor WES | 143 pairs, 94 pass QC | 129 samples, 81 with mutations (13 of the 94 QC-passing tumors have none there) |
 | Tumor RNA-seq | 159 samples, 122 pass QC | 157 samples |
 | Total samples | – | 328, incl. 140 `*_PLACEHOLDER` (clinical data only) |
 
 Use the files here to reproduce the paper.
 
-**Mutations.** `ASC_mutations.maf` has all variant classes (23,022 variants, incl. silent and non-coding); cBioPortal shows protein-altering and splice variants only (9,759). Filter to nonsynonymous classes before comparing; most calls then agree. Both use hg19.
+**Mutations.** `ASC_mutations.maf` has all variant classes (23,022 variants, incl. silent and non-coding); cBioPortal shows protein-altering and splice variants only (9,759). Filter to nonsynonymous classes before comparing; calls then largely agree for samples with mutations on cBioPortal. Both use hg19.
 
 **Copy number.** Gene-level CNVkit calls here (`combined_cnvkit_calls.csv`: Amp, ShallowAmp, DeepDel, …; segments in `ASC_cnvkit_pair_cns.tsv`, *Zenodo only*) vs. GISTIC discrete calls on cBioPortal; not directly comparable.
 

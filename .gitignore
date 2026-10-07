@@ -84,3 +84,7 @@ Temporary Items
 .apdisk
 #### PRIVATE: Terra bucket paths for sequencing files
 data/id_mapping/sequencing_file_links.tsv
+
+#### OS / editor files
+.DS_Store
+.ipynb_checkpoints/
