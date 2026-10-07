@@ -1,0 +1,530 @@
+repo_sample_barcode	repo_sample_alias	repo_patient_id	cbioportal_sample_id	cbioportal_patient_id	in_cbioportal	data_type	sample_type	cbioportal_has_mutations	cbioportal_has_rna	passed_qc	qc_criteria	notes
+RP-1447_ASCProject_0003_SALIVA_v1_Exome_OnPrem	ASCProject_0003_SALIVA	ASCProject_0003			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0003_T1_v1_Exome_OnPrem	ASCProject_0003_T1	ASCProject_0003	ASCProject_P4WZVT_T1	P4WZVT	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0003_T3_v2_Exome_OnPrem	ASCProject_0003_T3	ASCProject_0003	ASCProject_P4WZVT_T3	P4WZVT	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0005_BLOOD_Normal_v1_Exome_OnPrem	ASCProject_0005_BLOOD_Normal	ASCProject_0005			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0005_BLOOD_v1_Exome_OnPrem	ASCProject_0005_BLOOD	ASCProject_0005	ASCProject_PRLB6M_BLOOD	PRLB6M	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0005_SALIVA_v3_Exome_OnPrem	ASCProject_0005_SALIVA	ASCProject_0005			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0005_T2_v1_Exome_OnPrem	ASCProject_0005_T2	ASCProject_0005	ASCProject_PRLB6M_T2	PRLB6M	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0005_T3_v2_Exome_OnPrem	ASCProject_0005_T3	ASCProject_0005	ASCProject_PRLB6M_T3	PRLB6M	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0006_BLOOD_Normal_v4_Exome_OnPrem	ASCProject_0006_BLOOD_Normal	ASCProject_0006			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0006_BLOOD_v1_Exome_OnPrem	ASCProject_0006_BLOOD	ASCProject_0006	ASCProject_PECPQ7_BLOOD	PECPQ7	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0006_T1_v2_Exome_OnPrem	ASCProject_0006_T1	ASCProject_0006	ASCProject_PECPQ7_T1	PECPQ7	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0006_T2_v2_Exome_OnPrem	ASCProject_0006_T2	ASCProject_0006	ASCProject_PECPQ7_T2	PECPQ7	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0007_SALIVA_v1_Exome_OnPrem	ASCProject_0007_SALIVA	ASCProject_0007			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0007_T1_v2_Exome_OnPrem	ASCProject_0007_T1	ASCProject_0007	ASCProject_PU22EL_T1	PU22EL	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0007_T2_v2_Exome_OnPrem	ASCProject_0007_T2	ASCProject_0007	ASCProject_PU22EL_T2	PU22EL	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0008_SALIVA_v1_Exome_OnPrem	ASCProject_0008_SALIVA	ASCProject_0008			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0008_T1_v1_Exome_OnPrem	ASCProject_0008_T1	ASCProject_0008	ASCProject_P4RTQK_T1	P4RTQK	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0009_SALIVA_v2_Exome_OnPrem	ASCProject_0009_SALIVA	ASCProject_0009			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0010_SALIVA_v1_Exome_OnPrem	ASCProject_0010_SALIVA	ASCProject_0010			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0011_SALIVA_v1_Exome_OnPrem	ASCProject_0011_SALIVA	ASCProject_0011			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0011_T1_v1_Exome_OnPrem	ASCProject_0011_T1	ASCProject_0011	ASCProject_P9XH7B_T1	P9XH7B	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0012_SALIVA_v2_Exome_OnPrem	ASCProject_0012_SALIVA	ASCProject_0012			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0012_T2_v2_Exome_OnPrem	ASCProject_0012_T2	ASCProject_0012	ASCProject_PK7CAE_T2	PK7CAE	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0013_SALIVA_v3_Exome_OnPrem	ASCProject_0013_SALIVA	ASCProject_0013			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0013_T1_v3_Exome_OnPrem	ASCProject_0013_T1	ASCProject_0013	ASCProject_PKNK7V_T1	PKNK7V	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0014_SALIVA_v1_Exome_OnPrem	ASCProject_0014_SALIVA	ASCProject_0014			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0015_SALIVA_v1_Exome_OnPrem	ASCProject_0015_SALIVA	ASCProject_0015			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0016_SALIVA_v1_Exome_OnPrem	ASCProject_0016_SALIVA	ASCProject_0016			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0017_BLOOD_Normal_v1_Exome_OnPrem	ASCProject_0017_BLOOD_Normal	ASCProject_0017			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0017_BLOOD_v1_Exome_OnPrem	ASCProject_0017_BLOOD	ASCProject_0017	ASCProject_P4C7TN_BLOOD	P4C7TN	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0017_SALIVA_v3_Exome_OnPrem	ASCProject_0017_SALIVA	ASCProject_0017			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0017_T1_v1_Exome_OnPrem	ASCProject_0017_T1	ASCProject_0017	ASCProject_P4C7TN_T1	P4C7TN	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0017_T2_v2_Exome_OnPrem	ASCProject_0017_T2	ASCProject_0017	ASCProject_P4C7TN_T2	P4C7TN	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0020_SALIVA_v2_Exome_OnPrem	ASCProject_0020_SALIVA	ASCProject_0020			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0020_T1_v2_Exome_OnPrem	ASCProject_0020_T1	ASCProject_0020	ASCProject_PF3F68_T1	PF3F68	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0021_SALIVA_v1_Exome_OnPrem	ASCProject_0021_SALIVA	ASCProject_0021			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0023_SALIVA_v1_Exome_OnPrem	ASCProject_0023_SALIVA	ASCProject_0023			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0024_BLOOD_Normal_v1_Exome_OnPrem	ASCProject_0024_BLOOD_Normal	ASCProject_0024			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0024_SALIVA_v3_Exome_OnPrem	ASCProject_0024_SALIVA	ASCProject_0024			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0024_T2_v1_Exome_OnPrem	ASCProject_0024_T2	ASCProject_0024	ASCProject_PNT3KX_T2	PNT3KX	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0025_SALIVA_v1_Exome_OnPrem	ASCProject_0025_SALIVA	ASCProject_0025			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0026_BLOOD_Normal_v2_Exome_OnPrem	ASCProject_0026_BLOOD_Normal	ASCProject_0026			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0026_BLOOD_v1_Exome_OnPrem	ASCProject_0026_BLOOD	ASCProject_0026	ASCProject_PULG23_BLOOD	PULG23	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0026_T1_v2_Exome_OnPrem	ASCProject_0026_T1	ASCProject_0026	ASCProject_PULG23_T1	PULG23	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0027_SALIVA_v1_Exome_OnPrem	ASCProject_0027_SALIVA	ASCProject_0027			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0028_SALIVA_v1_Exome_OnPrem	ASCProject_0028_SALIVA	ASCProject_0028			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0030_SALIVA_v2_Exome_OnPrem	ASCProject_0030_SALIVA	ASCProject_0030			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0030_T1_v1_Exome_OnPrem	ASCProject_0030_T1	ASCProject_0030	ASCProject_PRYD2Q_T1	PRYD2Q	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0032_SALIVA_2_v1_Exome_OnPrem	ASCProject_0032_SALIVA_2	ASCProject_0032			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0034_SALIVA_v1_Exome_OnPrem	ASCProject_0034_SALIVA	ASCProject_0034			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0035_SALIVA_v3_Exome_OnPrem	ASCProject_0035_SALIVA	ASCProject_0035			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0035_T2_v3_Exome_OnPrem	ASCProject_0035_T2	ASCProject_0035	ASCProject_PL9KMQ_T2	PL9KMQ	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0036_BLOOD_v1_Exome_OnPrem	ASCProject_0036_BLOOD	ASCProject_0036			FALSE	DNA	Unknown	FALSE	FALSE			Not in the cBioPortal release
+RP-1447_ASCProject_0036_SALIVA_v2_Exome_OnPrem	ASCProject_0036_SALIVA	ASCProject_0036			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0036_T1_v2_Exome_OnPrem	ASCProject_0036_T1	ASCProject_0036			FALSE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	Not in the cBioPortal release
+RP-1447_ASCProject_0038_SALIVA_v2_Exome_OnPrem	ASCProject_0038_SALIVA	ASCProject_0038			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0038_T1_v3_Exome_OnPrem	ASCProject_0038_T1	ASCProject_0038	ASCProject_PXCLPP_T1	PXCLPP	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0039_SALIVA_v1_Exome_OnPrem	ASCProject_0039_SALIVA	ASCProject_0039			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0042_SALIVA_v1_Exome_OnPrem	ASCProject_0042_SALIVA	ASCProject_0042			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0044_BLOOD_Normal_v2_Exome_OnPrem	ASCProject_0044_BLOOD_Normal	ASCProject_0044			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0044_BLOOD_v1_Exome_OnPrem	ASCProject_0044_BLOOD	ASCProject_0044	ASCProject_PD8NJ9_BLOOD	PD8NJ9	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0044_SALIVA_v4_Exome_OnPrem	ASCProject_0044_SALIVA	ASCProject_0044			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0045_SALIVA_v3_Exome_OnPrem	ASCProject_0045_SALIVA	ASCProject_0045			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0045_T1_v3_Exome_OnPrem	ASCProject_0045_T1	ASCProject_0045	ASCProject_PKJP3D_T1	PKJP3D	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0046_SALIVA_v1_Exome_OnPrem	ASCProject_0046_SALIVA	ASCProject_0046			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0047_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0047_BLOOD_BC	ASCProject_0047			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0047_T1_v2_Exome_OnPrem	ASCProject_0047_T1	ASCProject_0047	ASCProject_PQ8J3C_T1	PQ8J3C	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0049_SALIVA_v3_Exome_OnPrem	ASCProject_0049_SALIVA	ASCProject_0049			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0049_T2_v3_Exome_OnPrem	ASCProject_0049_T2	ASCProject_0049	ASCProject_PEZEJX_T2	PEZEJX	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0051_SALIVA_v1_Exome_OnPrem	ASCProject_0051_SALIVA	ASCProject_0051			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0052_SALIVA_v1_Exome_OnPrem	ASCProject_0052_SALIVA	ASCProject_0052			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0052_T1_v1_Exome_OnPrem	ASCProject_0052_T1	ASCProject_0052	ASCProject_PKAFMF_T1	PKAFMF	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0055_BLOOD_Normal_v1_Exome_OnPrem	ASCProject_0055_BLOOD_Normal	ASCProject_0055			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0055_BLOOD_v1_Exome_OnPrem	ASCProject_0055_BLOOD	ASCProject_0055	ASCProject_PFYXPH_BLOOD	PFYXPH	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0055_SALIVA_v3_Exome_OnPrem	ASCProject_0055_SALIVA	ASCProject_0055			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0055_T1_v2_Exome_OnPrem	ASCProject_0055_T1	ASCProject_0055	ASCProject_PFYXPH_T1	PFYXPH	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0055_T2_v2_Exome_OnPrem	ASCProject_0055_T2	ASCProject_0055	ASCProject_PFYXPH_T2	PFYXPH	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0056_SALIVA_v1_Exome_OnPrem	ASCProject_0056_SALIVA	ASCProject_0056			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0057_SALIVA_v1_Exome_OnPrem	ASCProject_0057_SALIVA	ASCProject_0057			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0058_SALIVA_v1_Exome_OnPrem	ASCProject_0058_SALIVA	ASCProject_0058			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0059_SALIVA_v2_Exome_OnPrem	ASCProject_0059_SALIVA	ASCProject_0059			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0059_T1_v1_Exome_OnPrem	ASCProject_0059_T1	ASCProject_0059	ASCProject_PPUPN6_T1	PPUPN6	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0060_SALIVA_v1_Exome_OnPrem	ASCProject_0060_SALIVA	ASCProject_0060			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0061_SALIVA_v1_Exome_OnPrem	ASCProject_0061_SALIVA	ASCProject_0061			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0063_SALIVA_v1_Exome_OnPrem	ASCProject_0063_SALIVA	ASCProject_0063			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0063_T2_v1_Exome_OnPrem	ASCProject_0063_T2	ASCProject_0063	ASCProject_PXBCCZ_T2	PXBCCZ	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0063_T3_v1_Exome_OnPrem	ASCProject_0063_T3	ASCProject_0063	ASCProject_PXBCCZ_T3	PXBCCZ	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0064_SALIVA_v2_Exome_OnPrem	ASCProject_0064_SALIVA	ASCProject_0064			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0064_T1_v1_Exome_OnPrem	ASCProject_0064_T1	ASCProject_0064	ASCProject_PNAH8R_T1	PNAH8R	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0064_T2_v3_Exome_OnPrem	ASCProject_0064_T2	ASCProject_0064	ASCProject_PNAH8R_T2	PNAH8R	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0065_SALIVA_v1_Exome_OnPrem	ASCProject_0065_SALIVA	ASCProject_0065			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0066_SALIVA_v2_Exome_OnPrem	ASCProject_0066_SALIVA	ASCProject_0066			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0066_T1_v1_Exome_OnPrem	ASCProject_0066_T1	ASCProject_0066	ASCProject_PYUKJX_T1	PYUKJX	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0067_SALIVA_v1_Exome_OnPrem	ASCProject_0067_SALIVA	ASCProject_0067			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0067_T1_v2_Exome_OnPrem	ASCProject_0067_T1	ASCProject_0067	ASCProject_PNRUB6_T1	PNRUB6	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0068_SALIVA_v3_Exome_OnPrem	ASCProject_0068_SALIVA	ASCProject_0068			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0068_T1_v3_Exome_OnPrem	ASCProject_0068_T1	ASCProject_0068	ASCProject_P62TT4_T1	P62TT4	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0069_SALIVA_v1_Exome_OnPrem	ASCProject_0069_SALIVA	ASCProject_0069			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0073_SALIVA_v3_Exome_OnPrem	ASCProject_0073_SALIVA	ASCProject_0073			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0073_T1_v3_Exome_OnPrem	ASCProject_0073_T1	ASCProject_0073	ASCProject_PBXCBW_T1	PBXCBW	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0074_SALIVA_2_v1_Exome_OnPrem	ASCProject_0074_SALIVA_2	ASCProject_0074			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0076_SALIVA_v3_Exome_OnPrem	ASCProject_0076_SALIVA	ASCProject_0076			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0076_T1_v3_Exome_OnPrem	ASCProject_0076_T1	ASCProject_0076	ASCProject_PVHY2N_T1	PVHY2N	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0078_SALIVA_v1_Exome_OnPrem	ASCProject_0078_SALIVA	ASCProject_0078			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0080_SALIVA_v1_Exome_OnPrem	ASCProject_0080_SALIVA	ASCProject_0080			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0081_SALIVA_v1_Exome_OnPrem	ASCProject_0081_SALIVA	ASCProject_0081			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0082_SALIVA_v2_Exome_OnPrem	ASCProject_0082_SALIVA	ASCProject_0082			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0082_T1_v2_Exome_OnPrem	ASCProject_0082_T1	ASCProject_0082	ASCProject_PXLJBB_T1	PXLJBB	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0084_SALIVA_v1_Exome_OnPrem	ASCProject_0084_SALIVA	ASCProject_0084			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0084_T1_v1_Exome_OnPrem	ASCProject_0084_T1	ASCProject_0084	ASCProject_PZCY79_T1	PZCY79	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0086_SALIVA_v1_Exome_OnPrem	ASCProject_0086_SALIVA	ASCProject_0086			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0088_BLOOD_2_P_v1_Exome_OnPrem	ASCProject_0088_BLOOD_2_P	ASCProject_0088	ASCProject_PHH637_BLOOD_2_P	PHH637	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0088_SALIVA_v1_Exome_OnPrem	ASCProject_0088_SALIVA	ASCProject_0088			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0088_T3_v2_Exome_OnPrem	ASCProject_0088_T3	ASCProject_0088	ASCProject_PHH637_T3	PHH637	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0089_SALIVA_v2_Exome_OnPrem	ASCProject_0089_SALIVA	ASCProject_0089			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0089_T1_v3_Exome_OnPrem	ASCProject_0089_T1	ASCProject_0089	ASCProject_P8UK7Z_T1	P8UK7Z	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0090_SALIVA_v1_Exome_OnPrem	ASCProject_0090_SALIVA	ASCProject_0090			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0091_SALIVA_v1_Exome_OnPrem	ASCProject_0091_SALIVA	ASCProject_0091			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0092_SALIVA_v1_Exome_OnPrem	ASCProject_0092_SALIVA	ASCProject_0092			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0093_SALIVA_v1_Exome_OnPrem	ASCProject_0093_SALIVA	ASCProject_0093			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0094_NORMAL_v2_Exome_OnPrem	ASCProject_0094_NORMAL	ASCProject_0094			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0094_T1_v2_Exome_OnPrem	ASCProject_0094_T1	ASCProject_0094	ASCProject_PD4KK7_T1	PD4KK7	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0094_T2_v2_Exome_OnPrem	ASCProject_0094_T2	ASCProject_0094	ASCProject_PD4KK7_T2	PD4KK7	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0095_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0095_BLOOD_BC	ASCProject_0095			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0096_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0096_BLOOD_BC	ASCProject_0096			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0097_BLOOD_Normal_v1_Exome_OnPrem	ASCProject_0097_BLOOD_Normal	ASCProject_0097			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0097_SALIVA_2_v3_Exome_OnPrem	ASCProject_0097_SALIVA_2	ASCProject_0097			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0097_T2_v2_Exome_OnPrem	ASCProject_0097_T2	ASCProject_0097	ASCProject_PEUKQZ_T2	PEUKQZ	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0097_T3_v2_Exome_OnPrem	ASCProject_0097_T3	ASCProject_0097	ASCProject_PEUKQZ_T3	PEUKQZ	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0097_T4_v2_Exome_OnPrem	ASCProject_0097_T4	ASCProject_0097	ASCProject_PEUKQZ_T4	PEUKQZ	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0098_SALIVA_v1_Exome_OnPrem	ASCProject_0098_SALIVA	ASCProject_0098			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0098_T1_v2_Exome_OnPrem	ASCProject_0098_T1	ASCProject_0098	ASCProject_PPEVAZ_T1	PPEVAZ	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0099_SALIVA_v1_Exome_OnPrem	ASCProject_0099_SALIVA	ASCProject_0099			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0100_SALIVA_v1_Exome_OnPrem	ASCProject_0100_SALIVA	ASCProject_0100			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0101_SALIVA_v2_Exome_OnPrem	ASCProject_0101_SALIVA	ASCProject_0101			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0101_T1_v1_Exome_OnPrem	ASCProject_0101_T1	ASCProject_0101	ASCProject_P3VEWK_T1	P3VEWK	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0101_T2_v2_Exome_OnPrem	ASCProject_0101_T2	ASCProject_0101	ASCProject_P3VEWK_T2	P3VEWK	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0102_SALIVA_v1_Exome_OnPrem	ASCProject_0102_SALIVA	ASCProject_0102			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0102_T1_v1_Exome_OnPrem	ASCProject_0102_T1	ASCProject_0102	ASCProject_P2TRUP_T1	P2TRUP	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0102_T2_v1_Exome_OnPrem	ASCProject_0102_T2	ASCProject_0102	ASCProject_P2TRUP_T2	P2TRUP	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0103_SALIVA_v1_Exome_OnPrem	ASCProject_0103_SALIVA	ASCProject_0103			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0105_SALIVA_v1_Exome_OnPrem	ASCProject_0105_SALIVA	ASCProject_0105			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0108_SALIVA_v1_Exome_OnPrem	ASCProject_0108_SALIVA	ASCProject_0108			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0109_SALIVA_v1_Exome_OnPrem	ASCProject_0109_SALIVA	ASCProject_0109			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0113_SALIVA_v2_Exome_OnPrem	ASCProject_0113_SALIVA	ASCProject_0113			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0113_T1_v1_Exome_OnPrem	ASCProject_0113_T1	ASCProject_0113	ASCProject_PF7PTC_T1	PF7PTC	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0116_SALIVA_v1_Exome_OnPrem	ASCProject_0116_SALIVA	ASCProject_0116			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0117_SALIVA_v1_Exome_OnPrem	ASCProject_0117_SALIVA	ASCProject_0117			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0118_SALIVA_v1_Exome_OnPrem	ASCProject_0118_SALIVA	ASCProject_0118			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0119_SALIVA_v1_Exome_OnPrem	ASCProject_0119_SALIVA	ASCProject_0119			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0120_SALIVA_v1_Exome_OnPrem	ASCProject_0120_SALIVA	ASCProject_0120			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0121_SALIVA_v2_Exome_OnPrem	ASCProject_0121_SALIVA	ASCProject_0121			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0121_T2A_v4_Exome_OnPrem	ASCProject_0121_T2A	ASCProject_0121	ASCProject_PB2L2C_T2A	PB2L2C	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0123_SALIVA_v1_Exome_OnPrem	ASCProject_0123_SALIVA	ASCProject_0123			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0131_SALIVA_v1_Exome_OnPrem	ASCProject_0131_SALIVA	ASCProject_0131			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0132_SALIVA_v1_Exome_OnPrem	ASCProject_0132_SALIVA	ASCProject_0132			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0134_SALIVA_v1_Exome_OnPrem	ASCProject_0134_SALIVA	ASCProject_0134			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0134_T1_v1_Exome_OnPrem	ASCProject_0134_T1	ASCProject_0134	ASCProject_PEYD2T_T1	PEYD2T	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0134_T2_v2_Exome_OnPrem	ASCProject_0134_T2	ASCProject_0134	ASCProject_PEYD2T_T2	PEYD2T	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0135_SALIVA_v1_Exome_OnPrem	ASCProject_0135_SALIVA	ASCProject_0135			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0135_T2_v3_Exome_OnPrem	ASCProject_0135_T2	ASCProject_0135	ASCProject_PBMM28_T2	PBMM28	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0136_SALIVA_v1_Exome_OnPrem	ASCProject_0136_SALIVA	ASCProject_0136			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0145_BLOOD_Normal_v2_Exome_OnPrem	ASCProject_0145_BLOOD_Normal	ASCProject_0145			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0145_BLOOD_v1_Exome_OnPrem	ASCProject_0145_BLOOD	ASCProject_0145	ASCProject_PMVHBY_BLOOD	PMVHBY	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0145_SALIVA_v4_Exome_OnPrem	ASCProject_0145_SALIVA	ASCProject_0145			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0145_T2_v2_Exome_OnPrem	ASCProject_0145_T2	ASCProject_0145	ASCProject_PMVHBY_T2	PMVHBY	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0146_SALIVA_v2_Exome_OnPrem	ASCProject_0146_SALIVA	ASCProject_0146			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0146_T1A_v1_Exome_OnPrem	ASCProject_0146_T1A	ASCProject_0146	ASCProject_P9GHC4_T1A	P9GHC4	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0146_T1_v1_Exome_OnPrem	ASCProject_0146_T1	ASCProject_0146	ASCProject_P9GHC4_T1	P9GHC4	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0148_SALIVA_2_v1_Exome_OnPrem	ASCProject_0148_SALIVA_2	ASCProject_0148			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0153_SALIVA_v1_Exome_OnPrem	ASCProject_0153_SALIVA	ASCProject_0153			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0153_T2_v3_Exome_OnPrem	ASCProject_0153_T2	ASCProject_0153	ASCProject_P9N384_T2	P9N384	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0157_SALIVA_v1_Exome_OnPrem	ASCProject_0157_SALIVA	ASCProject_0157			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0158_SALIVA_v1_Exome_OnPrem	ASCProject_0158_SALIVA	ASCProject_0158			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0159_SALIVA_v2_Exome_OnPrem	ASCProject_0159_SALIVA	ASCProject_0159			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0159_T1_v4_Exome_OnPrem	ASCProject_0159_T1	ASCProject_0159	ASCProject_P2PMTJ_T1	P2PMTJ	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0164_SALIVA_v1_Exome_OnPrem	ASCProject_0164_SALIVA	ASCProject_0164			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0164_T1_v1_Exome_OnPrem	ASCProject_0164_T1	ASCProject_0164	ASCProject_PCZKYD_T1	PCZKYD	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0165_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0165_BLOOD_BC	ASCProject_0165			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0165_T2_v3_Exome_OnPrem	ASCProject_0165_T2	ASCProject_0165	ASCProject_PEENDG_T2	PEENDG	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0166_SALIVA_2_v1_Exome_OnPrem	ASCProject_0166_SALIVA_2	ASCProject_0166			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0166_T1_v2_Exome_OnPrem	ASCProject_0166_T1	ASCProject_0166	ASCProject_PDQ92X_T1	PDQ92X	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0167_SALIVA_v2_Exome_OnPrem	ASCProject_0167_SALIVA	ASCProject_0167			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0167_T1_v2_Exome_OnPrem	ASCProject_0167_T1	ASCProject_0167	ASCProject_P3AMZF_T1	P3AMZF	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0167_T2_v2_Exome_OnPrem	ASCProject_0167_T2	ASCProject_0167	ASCProject_P3AMZF_T2	P3AMZF	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0167_T3_v1_Exome_OnPrem	ASCProject_0167_T3	ASCProject_0167	ASCProject_P3AMZF_T3	P3AMZF	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0168_SALIVA_v1_Exome_OnPrem	ASCProject_0168_SALIVA	ASCProject_0168			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0170_SALIVA_v1_Exome_OnPrem	ASCProject_0170_SALIVA	ASCProject_0170			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0170_T1_v4_Exome_OnPrem	ASCProject_0170_T1	ASCProject_0170	ASCProject_PVFAQQ_T1	PVFAQQ	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0172_SALIVA_v1_Exome_OnPrem	ASCProject_0172_SALIVA	ASCProject_0172			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0172_T1_v3_Exome_OnPrem	ASCProject_0172_T1	ASCProject_0172	ASCProject_PBBWV6_T1	PBBWV6	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0173_SALIVA_v1_Exome_OnPrem	ASCProject_0173_SALIVA	ASCProject_0173			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0173_T1_v1_Exome_OnPrem	ASCProject_0173_T1	ASCProject_0173	ASCProject_P376RW_T1	P376RW	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0175_SALIVA_v1_Exome_OnPrem	ASCProject_0175_SALIVA	ASCProject_0175			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0175_T1_v1_Exome_OnPrem	ASCProject_0175_T1	ASCProject_0175	ASCProject_PQJ4ZC_T1	PQJ4ZC	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0176_SALIVA_v1_Exome_OnPrem	ASCProject_0176_SALIVA	ASCProject_0176			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0177_SALIVA_v1_Exome_OnPrem	ASCProject_0177_SALIVA	ASCProject_0177			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0179_SALIVA_v2_Exome_OnPrem	ASCProject_0179_SALIVA	ASCProject_0179			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0179_T1_v1_Exome_OnPrem	ASCProject_0179_T1	ASCProject_0179	ASCProject_PGRY6A_T1	PGRY6A	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0180_SALIVA_v1_Exome_OnPrem	ASCProject_0180_SALIVA	ASCProject_0180			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0182_SALIVA_v1_Exome_OnPrem	ASCProject_0182_SALIVA	ASCProject_0182			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0182_T1_v3_Exome_OnPrem	ASCProject_0182_T1	ASCProject_0182	ASCProject_PFECWL_T1	PFECWL	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0184_T1_v1_Exome_OnPrem	ASCProject_0184_T1	ASCProject_0184	ASCProject_P4TTRZ_T1	P4TTRZ	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (no tumor/normal pair)	
+RP-1447_ASCProject_0187_SALIVA_v1_Exome_OnPrem	ASCProject_0187_SALIVA	ASCProject_0187			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0189_SALIVA_v1_Exome_OnPrem	ASCProject_0189_SALIVA	ASCProject_0189			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0193_SALIVA_v1_Exome_OnPrem	ASCProject_0193_SALIVA	ASCProject_0193			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0194_SALIVA_v3_Exome_OnPrem	ASCProject_0194_SALIVA	ASCProject_0194			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0194_T2_v3_Exome_OnPrem	ASCProject_0194_T2	ASCProject_0194	ASCProject_PMJ2YA_T2	PMJ2YA	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0194_T1_v3_Exome_OnPrem	ASCProject_0194_T1	ASCProject_0194	ASCProject_PMJ2YA_T1	PMJ2YA	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0196_SALIVA_v1_Exome_OnPrem	ASCProject_0196_SALIVA	ASCProject_0196			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0197_SALIVA_v2_Exome_OnPrem	ASCProject_0197_SALIVA	ASCProject_0197			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0197_T1A_v4_Exome_OnPrem	ASCProject_0197_T1A	ASCProject_0197	ASCProject_PGR6XA_T1A	PGR6XA	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0197_T1B_v4_Exome_OnPrem	ASCProject_0197_T1B	ASCProject_0197	ASCProject_PGR6XA_T1B	PGR6XA	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0201_SALIVA_v1_Exome_OnPrem	ASCProject_0201_SALIVA	ASCProject_0201			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0201_T1_v1_Exome_OnPrem	ASCProject_0201_T1	ASCProject_0201	ASCProject_P49A6K_T1	P49A6K	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0201_T2_v1_Exome_OnPrem	ASCProject_0201_T2	ASCProject_0201	ASCProject_P49A6K_T2	P49A6K	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0202_SALIVA_v3_Exome_OnPrem	ASCProject_0202_SALIVA	ASCProject_0202			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0202_T1_v3_Exome_OnPrem	ASCProject_0202_T1	ASCProject_0202	ASCProject_PEZ7ZR_T1	PEZ7ZR	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0205_SALIVA_v1_Exome_OnPrem	ASCProject_0205_SALIVA	ASCProject_0205			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0207_T1_v4_Exome_OnPrem	ASCProject_0207_T1	ASCProject_0207	ASCProject_P78Y47_T1	P78Y47	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (no tumor/normal pair)	
+RP-1447_ASCProject_0207_T2_v4_Exome_OnPrem	ASCProject_0207_T2	ASCProject_0207	ASCProject_P78Y47_T2	P78Y47	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (no tumor/normal pair)	
+RP-1447_ASCProject_0208_SALIVA_v1_Exome_OnPrem	ASCProject_0208_SALIVA	ASCProject_0208			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0212_SALIVA_v2_Exome_OnPrem	ASCProject_0212_SALIVA	ASCProject_0212			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0212_T1_v3_Exome_OnPrem	ASCProject_0212_T1	ASCProject_0212	ASCProject_PWWWTB_T1	PWWWTB	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0214_SALIVA_v1_Exome_OnPrem	ASCProject_0214_SALIVA	ASCProject_0214			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0216_SALIVA_v1_Exome_OnPrem	ASCProject_0216_SALIVA	ASCProject_0216			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0217_SALIVA_v1_Exome_OnPrem	ASCProject_0217_SALIVA	ASCProject_0217			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0218_SALIVA_v1_Exome_OnPrem	ASCProject_0218_SALIVA	ASCProject_0218			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0219_SALIVA_v2_Exome_OnPrem	ASCProject_0219_SALIVA	ASCProject_0219			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0219_T1_v2_Exome_OnPrem	ASCProject_0219_T1	ASCProject_0219	ASCProject_PM3Z76_T1	PM3Z76	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0219_T3_v2_Exome_OnPrem	ASCProject_0219_T3	ASCProject_0219	ASCProject_PM3Z76_T3	PM3Z76	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0220_SALIVA_v1_Exome_OnPrem	ASCProject_0220_SALIVA	ASCProject_0220			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0220_T1_v1_Exome_OnPrem	ASCProject_0220_T1	ASCProject_0220	ASCProject_PNN3PN_T1	PNN3PN	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0220_T3_v1_Exome_OnPrem	ASCProject_0220_T3	ASCProject_0220	ASCProject_PNN3PN_T3	PNN3PN	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0221_SALIVA_v3_Exome_OnPrem	ASCProject_0221_SALIVA	ASCProject_0221			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0221_T1_v3_Exome_OnPrem	ASCProject_0221_T1	ASCProject_0221	ASCProject_PBMCTJ_T1	PBMCTJ	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0221_T2_v3_Exome_OnPrem	ASCProject_0221_T2	ASCProject_0221	ASCProject_PBMCTJ_T2	PBMCTJ	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0222_SALIVA_v3_Exome_OnPrem	ASCProject_0222_SALIVA	ASCProject_0222			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0222_T2_v3_Exome_OnPrem	ASCProject_0222_T2	ASCProject_0222	ASCProject_PBFXN9_T2	PBFXN9	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0223_SALIVA_v1_Exome_OnPrem	ASCProject_0223_SALIVA	ASCProject_0223			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0225_SALIVA_v1_Exome_OnPrem	ASCProject_0225_SALIVA	ASCProject_0225			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0226_SALIVA_v1_Exome_OnPrem	ASCProject_0226_SALIVA	ASCProject_0226			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0235_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0235_BLOOD_BC	ASCProject_0235			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0237_SALIVA_v1_Exome_OnPrem	ASCProject_0237_SALIVA	ASCProject_0237			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0241_SALIVA_v1_Exome_OnPrem	ASCProject_0241_SALIVA	ASCProject_0241			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0243_SALIVA_v1_Exome_OnPrem	ASCProject_0243_SALIVA	ASCProject_0243			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0247_SALIVA_v1_Exome_OnPrem	ASCProject_0247_SALIVA	ASCProject_0247			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0247_T1_v1_Exome_OnPrem	ASCProject_0247_T1	ASCProject_0247	ASCProject_P962GX_T1	P962GX	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0252_SALIVA_v1_Exome_OnPrem	ASCProject_0252_SALIVA	ASCProject_0252			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0257_SALIVA_v1_Exome_OnPrem	ASCProject_0257_SALIVA	ASCProject_0257			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0258_SALIVA_v1_Exome_OnPrem	ASCProject_0258_SALIVA	ASCProject_0258			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0258_T1_v1_Exome_OnPrem	ASCProject_0258_T1	ASCProject_0258	ASCProject_PQAQU4_T1	PQAQU4	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0259_SALIVA_v1_Exome_OnPrem	ASCProject_0259_SALIVA	ASCProject_0259			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0261_SALIVA_v2_Exome_OnPrem	ASCProject_0261_SALIVA	ASCProject_0261			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0261_T1_v1_Exome_OnPrem	ASCProject_0261_T1	ASCProject_0261	ASCProject_PDRL9K_T1	PDRL9K	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0264_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0264_BLOOD_BC	ASCProject_0264			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0266_SALIVA_v1_Exome_OnPrem	ASCProject_0266_SALIVA	ASCProject_0266			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0267_SALIVA_v1_Exome_OnPrem	ASCProject_0267_SALIVA	ASCProject_0267			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0268_SALIVA_v1_Exome_OnPrem	ASCProject_0268_SALIVA	ASCProject_0268			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0270_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0270_BLOOD_BC	ASCProject_0270			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0275_SALIVA_v1_Exome_OnPrem	ASCProject_0275_SALIVA	ASCProject_0275			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0277_SALIVA_v3_Exome_OnPrem	ASCProject_0277_SALIVA	ASCProject_0277			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0277_T1_v3_Exome_OnPrem	ASCProject_0277_T1	ASCProject_0277	ASCProject_PCEDFV_T1	PCEDFV	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0277_T2_v2_Exome_OnPrem	ASCProject_0277_T2	ASCProject_0277	ASCProject_PCEDFV_T2	PCEDFV	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0278_SALIVA_v1_Exome_OnPrem	ASCProject_0278_SALIVA	ASCProject_0278			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0285_SALIVA_v1_Exome_OnPrem	ASCProject_0285_SALIVA	ASCProject_0285			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0288_SALIVA_v1_Exome_OnPrem	ASCProject_0288_SALIVA	ASCProject_0288			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0289_SALIVA_v3_Exome_OnPrem	ASCProject_0289_SALIVA	ASCProject_0289			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0289_T1_v3_Exome_OnPrem	ASCProject_0289_T1	ASCProject_0289	ASCProject_P48WUU_T1	P48WUU	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0289_T2_v3_Exome_OnPrem	ASCProject_0289_T2	ASCProject_0289	ASCProject_P48WUU_T2	P48WUU	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0289_T3_v3_Exome_OnPrem	ASCProject_0289_T3	ASCProject_0289	ASCProject_P48WUU_T3	P48WUU	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0290_SALIVA_v2_Exome_OnPrem	ASCProject_0290_SALIVA	ASCProject_0290			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0290_T1_v4_Exome_OnPrem	ASCProject_0290_T1	ASCProject_0290	ASCProject_PPGPFJ_T1	PPGPFJ	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0293_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0293_BLOOD_BC	ASCProject_0293			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0293_BLOOD_P_v1_Exome_OnPrem	ASCProject_0293_BLOOD_P	ASCProject_0293	ASCProject_PNML4F_BLOOD_P	PNML4F	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0294_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0294_BLOOD_BC	ASCProject_0294			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0294_BLOOD_P_v1_Exome_OnPrem	ASCProject_0294_BLOOD_P	ASCProject_0294	ASCProject_PMP4R2_BLOOD_P	PMP4R2	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0299_SALIVA_v1_Exome_OnPrem	ASCProject_0299_SALIVA	ASCProject_0299			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0300_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0300_BLOOD_BC	ASCProject_0300			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0303_SALIVA_v1_Exome_OnPrem	ASCProject_0303_SALIVA	ASCProject_0303			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0304_SALIVA_v1_Exome_OnPrem	ASCProject_0304_SALIVA	ASCProject_0304			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0305_SALIVA_v1_Exome_OnPrem	ASCProject_0305_SALIVA	ASCProject_0305			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0306_SALIVA_v1_Exome_OnPrem	ASCProject_0306_SALIVA	ASCProject_0306			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0309_BLOOD_BC_v2_Exome_OnPrem	ASCProject_0309_BLOOD_BC	ASCProject_0309			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0309_BLOOD_P_v2_Exome_OnPrem	ASCProject_0309_BLOOD_P	ASCProject_0309	ASCProject_PN9U4J_BLOOD_P	PN9U4J	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0310_SALIVA_v1_Exome_OnPrem	ASCProject_0310_SALIVA	ASCProject_0310			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0321_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0321_BLOOD_BC	ASCProject_0321			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0321_BLOOD_P_v1_Exome_OnPrem	ASCProject_0321_BLOOD_P	ASCProject_0321	ASCProject_P6X93C_BLOOD_P	P6X93C	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0322_SALIVA_v1_Exome_OnPrem	ASCProject_0322_SALIVA	ASCProject_0322			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0325_SALIVA_v2_Exome_OnPrem	ASCProject_0325_SALIVA	ASCProject_0325			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0325_T1_v4_Exome_OnPrem	ASCProject_0325_T1	ASCProject_0325	ASCProject_PL37HA_T1	PL37HA	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0332_SALIVA_v1_Exome_OnPrem	ASCProject_0332_SALIVA	ASCProject_0332			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0335_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0335_BLOOD_BC	ASCProject_0335			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0335_BLOOD_P_v1_Exome_OnPrem	ASCProject_0335_BLOOD_P	ASCProject_0335	ASCProject_PLXJQ9_BLOOD_P	PLXJQ9	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0340_SALIVA_v2_Exome_OnPrem	ASCProject_0340_SALIVA	ASCProject_0340			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0340_T1_v2_Exome_OnPrem	ASCProject_0340_T1	ASCProject_0340	ASCProject_PTZTLP_T1	PTZTLP	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0341_SALIVA_v1_Exome_OnPrem	ASCProject_0341_SALIVA	ASCProject_0341			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0342_SALIVA_v1_Exome_OnPrem	ASCProject_0342_SALIVA	ASCProject_0342			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0342_T1_v1_Exome_OnPrem	ASCProject_0342_T1	ASCProject_0342	ASCProject_PNKJ4A_T1	PNKJ4A	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0343_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0343_BLOOD_BC	ASCProject_0343			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0343_BLOOD_P_v1_Exome_OnPrem	ASCProject_0343_BLOOD_P	ASCProject_0343	ASCProject_PLQ8NR_BLOOD_P	PLQ8NR	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0345_SALIVA_v1_Exome_OnPrem	ASCProject_0345_SALIVA	ASCProject_0345			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0351_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0351_BLOOD_BC	ASCProject_0351			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0351_BLOOD_P_v1_Exome_OnPrem	ASCProject_0351_BLOOD_P	ASCProject_0351	ASCProject_PXCNFJ_BLOOD_P	PXCNFJ	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0353_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0353_BLOOD_BC	ASCProject_0353			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0353_BLOOD_P_v1_Exome_OnPrem	ASCProject_0353_BLOOD_P	ASCProject_0353	ASCProject_PRJCV3_BLOOD_P	PRJCV3	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0355_SALIVA_v1_Exome_OnPrem	ASCProject_0355_SALIVA	ASCProject_0355			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0356_SALIVA_v1_Exome_OnPrem	ASCProject_0356_SALIVA	ASCProject_0356			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0356_T2_v1_Exome_OnPrem	ASCProject_0356_T2	ASCProject_0356	ASCProject_PY8QY9_T2	PY8QY9	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0357_SALIVA_2_v2_Exome_OnPrem	ASCProject_0357_SALIVA_2	ASCProject_0357			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0357_T1_v2_Exome_OnPrem	ASCProject_0357_T1	ASCProject_0357	ASCProject_PDWCNE_T1	PDWCNE	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0361_SALIVA_v1_Exome_OnPrem	ASCProject_0361_SALIVA	ASCProject_0361			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0367_SALIVA_v2_Exome_OnPrem	ASCProject_0367_SALIVA	ASCProject_0367			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0367_T1_v2_Exome_OnPrem	ASCProject_0367_T1	ASCProject_0367	ASCProject_P3KWY4_T1	P3KWY4	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0368_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0368_BLOOD_BC	ASCProject_0368			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0369_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0369_BLOOD_BC	ASCProject_0369			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0371_SALIVA_v1_Exome_OnPrem	ASCProject_0371_SALIVA	ASCProject_0371			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0372_SALIVA_v1_Exome_OnPrem	ASCProject_0372_SALIVA	ASCProject_0372			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0372_T1_v1_Exome_OnPrem	ASCProject_0372_T1	ASCProject_0372	ASCProject_PUKND7_T1	PUKND7	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0373_BLOOD_BC_v2_Exome_OnPrem	ASCProject_0373_BLOOD_BC	ASCProject_0373			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0373_BLOOD_P_v2_Exome_OnPrem	ASCProject_0373_BLOOD_P	ASCProject_0373	ASCProject_PYG9PB_BLOOD_P	PYG9PB	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0375_SALIVA_v2_Exome_OnPrem	ASCProject_0375_SALIVA	ASCProject_0375			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0375_T1_v2_Exome_OnPrem	ASCProject_0375_T1	ASCProject_0375	ASCProject_PRFNJY_T1	PRFNJY	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0375_T2_v2_Exome_OnPrem	ASCProject_0375_T2	ASCProject_0375	ASCProject_PRFNJY_T2	PRFNJY	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0378_SALIVA_v1_Exome_OnPrem	ASCProject_0378_SALIVA	ASCProject_0378			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0382_SALIVA_v1_Exome_OnPrem	ASCProject_0382_SALIVA	ASCProject_0382			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0385_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0385_BLOOD_BC	ASCProject_0385			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0385_T2_v1_Exome_OnPrem	ASCProject_0385_T2	ASCProject_0385	ASCProject_PQRZPC_T2	PQRZPC	TRUE	DNA	Tumor	FALSE	FALSE	FALSE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0385_T3_v1_Exome_OnPrem	ASCProject_0385_T3	ASCProject_0385	ASCProject_PQRZPC_T3	PQRZPC	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0387_SALIVA_v1_Exome_OnPrem	ASCProject_0387_SALIVA	ASCProject_0387			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0387_T1_v1_Exome_OnPrem	ASCProject_0387_T1	ASCProject_0387	ASCProject_PLMWG2_T1	PLMWG2	TRUE	DNA	Tumor	TRUE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0388_SALIVA_v1_Exome_OnPrem	ASCProject_0388_SALIVA	ASCProject_0388			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0389_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0389_BLOOD_BC	ASCProject_0389			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0393_SALIVA_v1_Exome_OnPrem	ASCProject_0393_SALIVA	ASCProject_0393			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0394_SALIVA_v1_Exome_OnPrem	ASCProject_0394_SALIVA	ASCProject_0394			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0401_SALIVA_v2_Exome_OnPrem	ASCProject_0401_SALIVA	ASCProject_0401			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0401_T1A_v2_Exome_OnPrem	ASCProject_0401_T1A	ASCProject_0401	ASCProject_PRCZRT_T1A	PRCZRT	TRUE	DNA	Tumor	FALSE	FALSE	TRUE	Tumor WES pair QC (FFPE, OxoG, contamination, tumor-in-normal)	
+RP-1447_ASCProject_0403_SALIVA_v1_Exome_OnPrem	ASCProject_0403_SALIVA	ASCProject_0403			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0411_SALIVA_v1_Exome_OnPrem	ASCProject_0411_SALIVA	ASCProject_0411			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0412_SALIVA_v1_Exome_OnPrem	ASCProject_0412_SALIVA	ASCProject_0412			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0413_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0413_BLOOD_BC	ASCProject_0413			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0414_SALIVA_v1_Exome_OnPrem	ASCProject_0414_SALIVA	ASCProject_0414			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0415_SALIVA_v1_Exome_OnPrem	ASCProject_0415_SALIVA	ASCProject_0415			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0417_SALIVA_v1_Exome_OnPrem	ASCProject_0417_SALIVA	ASCProject_0417			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0418_SALIVA_v1_Exome_OnPrem	ASCProject_0418_SALIVA	ASCProject_0418			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0420_SALIVA_v1_Exome_OnPrem	ASCProject_0420_SALIVA	ASCProject_0420			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0422_BLOOD_BC_v1_Exome_OnPrem	ASCProject_0422_BLOOD_BC	ASCProject_0422			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0427_SALIVA_v1_Exome_OnPrem	ASCProject_0427_SALIVA	ASCProject_0427			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0428_SALIVA_v1_Exome_OnPrem	ASCProject_0428_SALIVA	ASCProject_0428			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0430_SALIVA_v1_Exome_OnPrem	ASCProject_0430_SALIVA	ASCProject_0430			FALSE	DNA	Normal	FALSE	FALSE	FALSE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0432_SALIVA_v1_Exome_OnPrem	ASCProject_0432_SALIVA	ASCProject_0432			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_0435_SALIVA_v1_Exome_OnPrem	ASCProject_0435_SALIVA	ASCProject_0435			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_P47D8Z_SALIVA_v1_Exome_OnPrem	ASCProject_P47D8Z_SALIVA	ASCProject_P47D8Z			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_P68AP7_SALIVA_v1_Exome_OnPrem	ASCProject_P68AP7_SALIVA	ASCProject_P68AP7			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_P6YLY9_SALIVA_v1_Exome_OnPrem	ASCProject_P6YLY9_SALIVA	ASCProject_P6YLY9			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_P739VX_SALIVA_v1_Exome_OnPrem	ASCProject_P739VX_SALIVA	ASCProject_P739VX			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_P8B8WN_SALIVA_v1_Exome_OnPrem	ASCProject_P8B8WN_SALIVA	ASCProject_P8B8WN			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PAMWDK_BLOOD_BC_v1_Exome_OnPrem	ASCProject_PAMWDK_BLOOD_BC	ASCProject_PAMWDK			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PBHQJN_SALIVA_v1_Exome_OnPrem	ASCProject_PBHQJN_SALIVA	ASCProject_PBHQJN			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PBPCT2_SALIVA_v1_Exome_OnPrem	ASCProject_PBPCT2_SALIVA	ASCProject_PBPCT2			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PE46M9_SALIVA_v1_Exome_OnPrem	ASCProject_PE46M9_SALIVA	ASCProject_PE46M9			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PJT8MW_SALIVA_v1_Exome_OnPrem	ASCProject_PJT8MW_SALIVA	ASCProject_PJT8MW			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PKYCDL_SALIVA_v1_Exome_OnPrem	ASCProject_PKYCDL_SALIVA	ASCProject_PKYCDL			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PN38F9_SALIVA_v1_Exome_OnPrem	ASCProject_PN38F9_SALIVA	ASCProject_PN38F9			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PQHM2E_SALIVA_v1_Exome_OnPrem	ASCProject_PQHM2E_SALIVA	ASCProject_PQHM2E			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PTLPDP_SALIVA_v1_Exome_OnPrem	ASCProject_PTLPDP_SALIVA	ASCProject_PTLPDP			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PY6FJH_SALIVA_v1_Exome_OnPrem	ASCProject_PY6FJH_SALIVA	ASCProject_PY6FJH			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PYMFBV_SALIVA_v1_Exome_OnPrem	ASCProject_PYMFBV_SALIVA	ASCProject_PYMFBV			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PYYKC9_SALIVA_v1_Exome_OnPrem	ASCProject_PYYKC9_SALIVA	ASCProject_PYYKC9			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+RP-1447_ASCProject_PZCXCF_SALIVA_v1_Exome_OnPrem	ASCProject_PZCXCF_SALIVA	ASCProject_PZCXCF			FALSE	DNA	Normal	FALSE	FALSE	TRUE	Germline WES QC	Normal samples are not on cBioPortal
+G136942_ASCProject_0005_T1_v1_RNA_OnPrem	ASCProject_0005_T1	ASCProject_0005	ASCProject_PRLB6M_T1	PRLB6M	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G136942_ASCProject_0007_T1_v1_RNA_OnPrem	ASCProject_0007_T1	ASCProject_0007	ASCProject_PU22EL_T1	PU22EL	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G136942_ASCProject_0007_T2_v1_RNA_OnPrem	ASCProject_0007_T2	ASCProject_0007	ASCProject_PU22EL_T2	PU22EL	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G136942_ASCProject_0026_T1_v1_RNA_OnPrem	ASCProject_0026_T1	ASCProject_0026	ASCProject_PULG23_T1	PULG23	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G136942_ASCProject_0042_T1_v1_RNA_OnPrem	ASCProject_0042_T1	ASCProject_0042	ASCProject_P74JJT_T1	P74JJT	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G136942_ASCProject_0055_T1_v1_RNA_OnPrem	ASCProject_0055_T1	ASCProject_0055	ASCProject_PFYXPH_T1	PFYXPH	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G136942_ASCProject_0067_T1_v1_RNA_OnPrem	ASCProject_0067_T1	ASCProject_0067	ASCProject_PNRUB6_T1	PNRUB6	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G136942_ASCProject_0098_T1_v1_RNA_OnPrem	ASCProject_0098_T1	ASCProject_0098	ASCProject_PPEVAZ_T1	PPEVAZ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G136942_ASCProject_0134_T2_v1_RNA_OnPrem	ASCProject_0134_T2	ASCProject_0134	ASCProject_PEYD2T_T2	PEYD2T	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0003_T1_v1_RNA_OnPrem	ASCProject_0003_T1	ASCProject_0003	ASCProject_P4WZVT_T1	P4WZVT	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0011_T1_v1_RNA_OnPrem	ASCProject_0011_T1	ASCProject_0011	ASCProject_P9XH7B_T1	P9XH7B	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0030_T1_v1_RNA_OnPrem	ASCProject_0030_T1	ASCProject_0030	ASCProject_PRYD2Q_T1	PRYD2Q	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0059_T1_v1_RNA_OnPrem	ASCProject_0059_T1	ASCProject_0059	ASCProject_PPUPN6_T1	PPUPN6	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0066_T1_v1_RNA_OnPrem	ASCProject_0066_T1	ASCProject_0066	ASCProject_PYUKJX_T1	PYUKJX	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0084_T1_v1_RNA_OnPrem	ASCProject_0084_T1	ASCProject_0084	ASCProject_PZCY79_T1	PZCY79	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0113_T1_v1_RNA_OnPrem	ASCProject_0113_T1	ASCProject_0113	ASCProject_PF7PTC_T1	PF7PTC	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0118_T2_v1_RNA_OnPrem	ASCProject_0118_T2	ASCProject_0118	ASCProject_PFVV9F_T2	PFVV9F	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0146_T1_v1_RNA_OnPrem	ASCProject_0146_T1	ASCProject_0146	ASCProject_P9GHC4_T1	P9GHC4	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0164_T1_v1_RNA_OnPrem	ASCProject_0164_T1	ASCProject_0164	ASCProject_PCZKYD_T1	PCZKYD	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0167_T1_v1_RNA_OnPrem	ASCProject_0167_T1	ASCProject_0167	ASCProject_P3AMZF_T1	P3AMZF	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0167_T2_v1_RNA_OnPrem	ASCProject_0167_T2	ASCProject_0167	ASCProject_P3AMZF_T2	P3AMZF	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0167_T3_v1_RNA_OnPrem	ASCProject_0167_T3	ASCProject_0167	ASCProject_P3AMZF_T3	P3AMZF	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0179_T1_v1_RNA_OnPrem	ASCProject_0179_T1	ASCProject_0179	ASCProject_PGRY6A_T1	PGRY6A	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+G141042_ASCProject_0184_T1_v1_RNA_OnPrem	ASCProject_0184_T1	ASCProject_0184	ASCProject_P4TTRZ_T1	P4TTRZ	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0003_T3_v1_RNA_OnPrem	ASCProject_0003_T3	ASCProject_0003	ASCProject_P4WZVT_T3	P4WZVT	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0005_T2_v1_RNA_OnPrem	ASCProject_0005_T2	ASCProject_0005	ASCProject_PRLB6M_T2	PRLB6M	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0005_T3_v2_RNA_OnPrem	ASCProject_0005_T3	ASCProject_0005	ASCProject_PRLB6M_T3	PRLB6M	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0006_T1_v1_RNA_OnPrem	ASCProject_0006_T1	ASCProject_0006	ASCProject_PECPQ7_T1	PECPQ7	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0006_T2_v1_RNA_OnPrem	ASCProject_0006_T2	ASCProject_0006	ASCProject_PECPQ7_T2	PECPQ7	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0008_T1_v1_RNA_OnPrem	ASCProject_0008_T1	ASCProject_0008	ASCProject_P4RTQK_T1	P4RTQK	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0012_T2_v1_RNA_OnPrem	ASCProject_0012_T2	ASCProject_0012	ASCProject_PK7CAE_T2	PK7CAE	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0013_T1_v1_RNA_OnPrem	ASCProject_0013_T1	ASCProject_0013	ASCProject_PKNK7V_T1	PKNK7V	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0014_T1_v1_RNA_OnPrem	ASCProject_0014_T1	ASCProject_0014	ASCProject_PF8J3J_T1	PF8J3J	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0017_T1_v1_RNA_OnPrem	ASCProject_0017_T1	ASCProject_0017	ASCProject_P4C7TN_T1	P4C7TN	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0017_T2_v1_RNA_OnPrem	ASCProject_0017_T2	ASCProject_0017	ASCProject_P4C7TN_T2	P4C7TN	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0020_T1_v1_RNA_OnPrem	ASCProject_0020_T1	ASCProject_0020	ASCProject_PF3F68_T1	PF3F68	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0024_T2_v1_RNA_OnPrem	ASCProject_0024_T2	ASCProject_0024	ASCProject_PNT3KX_T2	PNT3KX	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0025_T1_v2_RNA_OnPrem	ASCProject_0025_T1	ASCProject_0025	ASCProject_P9KBWE_T1	P9KBWE	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0025_T2_v2_RNA_OnPrem	ASCProject_0025_T2	ASCProject_0025	ASCProject_P9KBWE_T2	P9KBWE	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0035_T2_v1_RNA_OnPrem	ASCProject_0035_T2	ASCProject_0035	ASCProject_PL9KMQ_T2	PL9KMQ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0036_T1_v1_RNA_OnPrem	ASCProject_0036_T1	ASCProject_0036			FALSE	RNA	Tumor	FALSE	FALSE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	Not in the cBioPortal release
+RP-1447_ASCProject_0038_T1_v1_RNA_OnPrem	ASCProject_0038_T1	ASCProject_0038	ASCProject_PXCLPP_T1	PXCLPP	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0038_T2_v1_RNA_OnPrem	ASCProject_0038_T2	ASCProject_0038	ASCProject_PXCLPP_T2	PXCLPP	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0044_T1_v1_RNA_OnPrem	ASCProject_0044_T1	ASCProject_0044	ASCProject_PD8NJ9_T1	PD8NJ9	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0045_T1_v1_RNA_OnPrem	ASCProject_0045_T1	ASCProject_0045	ASCProject_PKJP3D_T1	PKJP3D	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0047_T1_v1_RNA_OnPrem	ASCProject_0047_T1	ASCProject_0047	ASCProject_PQ8J3C_T1	PQ8J3C	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0049_T2_v1_RNA_OnPrem	ASCProject_0049_T2	ASCProject_0049	ASCProject_PEZEJX_T2	PEZEJX	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0052_T1_v1_RNA_OnPrem	ASCProject_0052_T1	ASCProject_0052	ASCProject_PKAFMF_T1	PKAFMF	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0055_T2_v1_RNA_OnPrem	ASCProject_0055_T2	ASCProject_0055	ASCProject_PFYXPH_T2	PFYXPH	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0061_T1_v1_RNA_OnPrem	ASCProject_0061_T1	ASCProject_0061	ASCProject_PA9B8Q_T1	PA9B8Q	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0063_T1_v1_RNA_OnPrem	ASCProject_0063_T1	ASCProject_0063	ASCProject_PXBCCZ_T1	PXBCCZ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0063_T3_v1_RNA_OnPrem	ASCProject_0063_T3	ASCProject_0063	ASCProject_PXBCCZ_T3	PXBCCZ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0064_T2_v1_RNA_OnPrem	ASCProject_0064_T2	ASCProject_0064	ASCProject_PNAH8R_T2	PNAH8R	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0065_T1A_v1_RNA_OnPrem	ASCProject_0065_T1A	ASCProject_0065	ASCProject_P3P6KZ_T1A	P3P6KZ	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0065_T1B_v1_RNA_OnPrem	ASCProject_0065_T1B	ASCProject_0065	ASCProject_P3P6KZ_T1B	P3P6KZ	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0068_T1_v1_RNA_OnPrem	ASCProject_0068_T1	ASCProject_0068	ASCProject_P62TT4_T1	P62TT4	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0076_T1_v1_RNA_OnPrem	ASCProject_0076_T1	ASCProject_0076	ASCProject_PVHY2N_T1	PVHY2N	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0078_T6_v1_RNA_OnPrem	ASCProject_0078_T6	ASCProject_0078	ASCProject_PVEA77_T6	PVEA77	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0078_T8_v1_RNA_OnPrem	ASCProject_0078_T8	ASCProject_0078	ASCProject_PVEA77_T8	PVEA77	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0082_T1_v1_RNA_OnPrem	ASCProject_0082_T1	ASCProject_0082	ASCProject_PXLJBB_T1	PXLJBB	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0088_T3_v1_RNA_OnPrem	ASCProject_0088_T3	ASCProject_0088	ASCProject_PHH637_T3	PHH637	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0089_T1_v1_RNA_OnPrem	ASCProject_0089_T1	ASCProject_0089	ASCProject_P8UK7Z_T1	P8UK7Z	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0092_T1_v1_RNA_OnPrem	ASCProject_0092_T1	ASCProject_0092	ASCProject_PZPH6Z_T1	PZPH6Z	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0097_T2_v1_RNA_OnPrem	ASCProject_0097_T2	ASCProject_0097	ASCProject_PEUKQZ_T2	PEUKQZ	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0097_T3_v1_RNA_OnPrem	ASCProject_0097_T3	ASCProject_0097	ASCProject_PEUKQZ_T3	PEUKQZ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0097_T4_v1_RNA_OnPrem	ASCProject_0097_T4	ASCProject_0097	ASCProject_PEUKQZ_T4	PEUKQZ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0099_T1A_v1_RNA_OnPrem	ASCProject_0099_T1A	ASCProject_0099	ASCProject_PXGQNL_T1A	PXGQNL	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0101_T1_v1_RNA_OnPrem	ASCProject_0101_T1	ASCProject_0101	ASCProject_P3VEWK_T1	P3VEWK	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0102_T1_v1_RNA_OnPrem	ASCProject_0102_T1	ASCProject_0102	ASCProject_P2TRUP_T1	P2TRUP	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0102_T2_v2_RNA_OnPrem	ASCProject_0102_T2	ASCProject_0102	ASCProject_P2TRUP_T2	P2TRUP	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0105_T1_v1_RNA_OnPrem	ASCProject_0105_T1	ASCProject_0105	ASCProject_P7TDR9_T1	P7TDR9	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0109_T2_v1_RNA_OnPrem	ASCProject_0109_T2	ASCProject_0109	ASCProject_PD8N6L_T2	PD8N6L	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0117_T1_v1_RNA_OnPrem	ASCProject_0117_T1	ASCProject_0117	ASCProject_PRW8WL_T1	PRW8WL	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0118_T1_v1_RNA_OnPrem	ASCProject_0118_T1	ASCProject_0118	ASCProject_PFVV9F_T1	PFVV9F	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0121_T2A_v1_RNA_OnPrem	ASCProject_0121_T2A	ASCProject_0121	ASCProject_PB2L2C_T2A	PB2L2C	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0134_T1_v1_RNA_OnPrem	ASCProject_0134_T1	ASCProject_0134	ASCProject_PEYD2T_T1	PEYD2T	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0135_T2_v1_RNA_OnPrem	ASCProject_0135_T2	ASCProject_0135	ASCProject_PBMM28_T2	PBMM28	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0145_T2_v1_RNA_OnPrem	ASCProject_0145_T2	ASCProject_0145	ASCProject_PMVHBY_T2	PMVHBY	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0146_T1A_v1_RNA_OnPrem	ASCProject_0146_T1A	ASCProject_0146	ASCProject_P9GHC4_T1A	P9GHC4	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0148_T0_v1_RNA_OnPrem	ASCProject_0148_T0	ASCProject_0148	ASCProject_PDQURJ_T0	PDQURJ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0153_T2_v1_RNA_OnPrem	ASCProject_0153_T2	ASCProject_0153	ASCProject_P9N384_T2	P9N384	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0157_T1_v1_RNA_OnPrem	ASCProject_0157_T1	ASCProject_0157	ASCProject_PARJAK_T1	PARJAK	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0158_T1B_v1_RNA_OnPrem	ASCProject_0158_T1B	ASCProject_0158	ASCProject_PU2K4Q_T1B	PU2K4Q	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0164_T0_Whitelisted_v1_RNA_OnPrem	ASCProject_0164_T0_Whitelisted	ASCProject_0164	ASCProject_PCZKYD_T0_Whitelisted	PCZKYD	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0165_T2_v1_RNA_OnPrem	ASCProject_0165_T2	ASCProject_0165	ASCProject_PEENDG_T2	PEENDG	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0166_T1_v1_RNA_OnPrem	ASCProject_0166_T1	ASCProject_0166	ASCProject_PDQ92X_T1	PDQ92X	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0170_T1_v1_RNA_OnPrem	ASCProject_0170_T1	ASCProject_0170	ASCProject_PVFAQQ_T1	PVFAQQ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0170_T2_v1_RNA_OnPrem	ASCProject_0170_T2	ASCProject_0170	ASCProject_PVFAQQ_T2	PVFAQQ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0172_T1_v1_RNA_OnPrem	ASCProject_0172_T1	ASCProject_0172	ASCProject_PBBWV6_T1	PBBWV6	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0173_T1_v1_RNA_OnPrem	ASCProject_0173_T1	ASCProject_0173	ASCProject_P376RW_T1	P376RW	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0175_T1_v1_RNA_OnPrem	ASCProject_0175_T1	ASCProject_0175	ASCProject_PQJ4ZC_T1	PQJ4ZC	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0179_T1A_v1_RNA_OnPrem	ASCProject_0179_T1A	ASCProject_0179	ASCProject_PGRY6A_T1A	PGRY6A	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0182_T1_v1_RNA_OnPrem	ASCProject_0182_T1	ASCProject_0182	ASCProject_PFECWL_T1	PFECWL	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0184_T1B_v1_RNA_OnPrem	ASCProject_0184_T1B	ASCProject_0184	ASCProject_P4TTRZ_T1B	P4TTRZ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0197_T1A_v1_RNA_OnPrem	ASCProject_0197_T1A	ASCProject_0197	ASCProject_PGR6XA_T1A	PGR6XA	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0197_T1B_v1_RNA_OnPrem	ASCProject_0197_T1B	ASCProject_0197	ASCProject_PGR6XA_T1B	PGR6XA	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0201_T1_v1_RNA_OnPrem	ASCProject_0201_T1	ASCProject_0201	ASCProject_P49A6K_T1	P49A6K	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0201_T2_v1_RNA_OnPrem	ASCProject_0201_T2	ASCProject_0201	ASCProject_P49A6K_T2	P49A6K	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0202_T1_v1_RNA_OnPrem	ASCProject_0202_T1	ASCProject_0202	ASCProject_PEZ7ZR_T1	PEZ7ZR	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0205_T1_v1_RNA_OnPrem	ASCProject_0205_T1	ASCProject_0205	ASCProject_P8ADGQ_T1	P8ADGQ	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0207_T1_v1_RNA_OnPrem	ASCProject_0207_T1	ASCProject_0207	ASCProject_P78Y47_T1	P78Y47	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0207_T2_v1_RNA_OnPrem	ASCProject_0207_T2	ASCProject_0207	ASCProject_P78Y47_T2	P78Y47	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0212_T1_v1_RNA_OnPrem	ASCProject_0212_T1	ASCProject_0212	ASCProject_PWWWTB_T1	PWWWTB	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0218_T1_v1_RNA_OnPrem	ASCProject_0218_T1	ASCProject_0218	ASCProject_P32UZE_T1	P32UZE	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0219_T1_v1_RNA_OnPrem	ASCProject_0219_T1	ASCProject_0219	ASCProject_PM3Z76_T1	PM3Z76	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0219_T3_v1_RNA_OnPrem	ASCProject_0219_T3	ASCProject_0219	ASCProject_PM3Z76_T3	PM3Z76	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0220_T3_v1_RNA_OnPrem	ASCProject_0220_T3	ASCProject_0220	ASCProject_PNN3PN_T3	PNN3PN	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0221_T1_v2_RNA_OnPrem	ASCProject_0221_T1	ASCProject_0221	ASCProject_PBMCTJ_T1	PBMCTJ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0221_T2_v1_RNA_OnPrem	ASCProject_0221_T2	ASCProject_0221	ASCProject_PBMCTJ_T2	PBMCTJ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0222_T2_v1_RNA_OnPrem	ASCProject_0222_T2	ASCProject_0222	ASCProject_PBFXN9_T2	PBFXN9	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0226_T1C_v1_RNA_OnPrem	ASCProject_0226_T1C	ASCProject_0226	ASCProject_PWPVGV_T1C	PWPVGV	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0247_T1_v1_RNA_OnPrem	ASCProject_0247_T1	ASCProject_0247	ASCProject_P962GX_T1	P962GX	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0247_T2_v1_RNA_OnPrem	ASCProject_0247_T2	ASCProject_0247	ASCProject_P962GX_T2	P962GX	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0264_T1A_v1_RNA_OnPrem	ASCProject_0264_T1A	ASCProject_0264	ASCProject_PUWB3Y_T1A	PUWB3Y	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0264_T1B_v1_RNA_OnPrem	ASCProject_0264_T1B	ASCProject_0264	ASCProject_PUWB3Y_T1B	PUWB3Y	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0268_T1B_v1_RNA_OnPrem	ASCProject_0268_T1B	ASCProject_0268	ASCProject_PMYW6F_T1B	PMYW6F	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0275_T1_v1_RNA_OnPrem	ASCProject_0275_T1	ASCProject_0275	ASCProject_PKWB2B_T1	PKWB2B	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0277_T1_v1_RNA_OnPrem	ASCProject_0277_T1	ASCProject_0277	ASCProject_PCEDFV_T1	PCEDFV	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0277_T2_v2_RNA_OnPrem	ASCProject_0277_T2	ASCProject_0277	ASCProject_PCEDFV_T2	PCEDFV	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0289_T1_v1_RNA_OnPrem	ASCProject_0289_T1	ASCProject_0289	ASCProject_P48WUU_T1	P48WUU	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0289_T2_v1_RNA_OnPrem	ASCProject_0289_T2	ASCProject_0289	ASCProject_P48WUU_T2	P48WUU	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0289_T3_v1_RNA_OnPrem	ASCProject_0289_T3	ASCProject_0289	ASCProject_P48WUU_T3	P48WUU	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0325_T1_v1_RNA_OnPrem	ASCProject_0325_T1	ASCProject_0325	ASCProject_PL37HA_T1	PL37HA	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0332_T2_v1_RNA_OnPrem	ASCProject_0332_T2	ASCProject_0332	ASCProject_PD3A7Q_T2	PD3A7Q	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0341_T1_v1_RNA_OnPrem	ASCProject_0341_T1	ASCProject_0341	ASCProject_PPXHP3_T1	PPXHP3	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0342_T1_v1_RNA_OnPrem	ASCProject_0342_T1	ASCProject_0342	ASCProject_PNKJ4A_T1	PNKJ4A	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0356_T1_v1_RNA_OnPrem	ASCProject_0356_T1	ASCProject_0356	ASCProject_PY8QY9_T1	PY8QY9	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0356_T2_v1_RNA_OnPrem	ASCProject_0356_T2	ASCProject_0356	ASCProject_PY8QY9_T2	PY8QY9	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0357_T1_v1_RNA_OnPrem	ASCProject_0357_T1	ASCProject_0357	ASCProject_PDWCNE_T1	PDWCNE	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0367_T1_v1_RNA_OnPrem	ASCProject_0367_T1	ASCProject_0367	ASCProject_P3KWY4_T1	P3KWY4	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0368_T1_v1_RNA_OnPrem	ASCProject_0368_T1	ASCProject_0368	ASCProject_PEB62T_T1	PEB62T	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0369_UNKNOWN_T1_v1_RNA_OnPrem	ASCProject_0369_UNKNOWN_T1	ASCProject_0369			FALSE	RNA	Tumor	FALSE	FALSE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	Older duplicate of RP-1447_ASCProject_0369_UNKNOWN_T1_v2_RNA_OnPrem; not uploaded
+RP-1447_ASCProject_0369_UNKNOWN_T1_v2_RNA_OnPrem	ASCProject_0369_UNKNOWN_T1	ASCProject_0369	ASCProject_P7Q2ZT_UNKNOWN_T1	P7Q2ZT	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0372_T1_v1_RNA_OnPrem	ASCProject_0372_T1	ASCProject_0372	ASCProject_PUKND7_T1	PUKND7	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0375_T1_v2_RNA_OnPrem	ASCProject_0375_T1	ASCProject_0375	ASCProject_PRFNJY_T1	PRFNJY	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0375_T2_v1_RNA_OnPrem	ASCProject_0375_T2	ASCProject_0375	ASCProject_PRFNJY_T2	PRFNJY	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0385_T1_v1_RNA_OnPrem	ASCProject_0385_T1	ASCProject_0385	ASCProject_PQRZPC_T1	PQRZPC	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0385_T2_v1_RNA_OnPrem	ASCProject_0385_T2	ASCProject_0385	ASCProject_PQRZPC_T2	PQRZPC	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0385_T3_v1_RNA_OnPrem	ASCProject_0385_T3	ASCProject_0385	ASCProject_PQRZPC_T3	PQRZPC	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0387_T1_v1_RNA_OnPrem	ASCProject_0387_T1	ASCProject_0387	ASCProject_PLMWG2_T1	PLMWG2	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0393_T1_v1_RNA_OnPrem	ASCProject_0393_T1	ASCProject_0393	ASCProject_PFDNLX_T1	PFDNLX	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0398_T1_v1_RNA_OnPrem	ASCProject_0398_T1	ASCProject_0398	ASCProject_PFHCKX_T1	PFHCKX	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0401_T1A_v1_RNA_OnPrem	ASCProject_0401_T1A	ASCProject_0401	ASCProject_PRCZRT_T1A	PRCZRT	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0401_T1B_v1_RNA_OnPrem	ASCProject_0401_T1B	ASCProject_0401	ASCProject_PRCZRT_T1B	PRCZRT	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0403_T1_v1_RNA_OnPrem	ASCProject_0403_T1	ASCProject_0403	ASCProject_PGEYYK_T1	PGEYYK	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0414_T1_v1_RNA_OnPrem	ASCProject_0414_T1	ASCProject_0414	ASCProject_PDQ7ZZ_T1	PDQ7ZZ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0418_T1_v1_RNA_OnPrem	ASCProject_0418_T1	ASCProject_0418	ASCProject_PF9X9N_T1	PF9X9N	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0420_T1_v1_RNA_OnPrem	ASCProject_0420_T1	ASCProject_0420	ASCProject_P7RK7E_T1	P7RK7E	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0422_T3_v1_RNA_OnPrem	ASCProject_0422_T3	ASCProject_0422	ASCProject_PH6DQT_T3	PH6DQT	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0427_T2_v1_RNA_OnPrem	ASCProject_0427_T2	ASCProject_0427	ASCProject_PXE776_T2	PXE776	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_0427_T5_v1_RNA_OnPrem	ASCProject_0427_T5	ASCProject_0427	ASCProject_PXE776_T5	PXE776	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_P2HVYU_T1_v1_RNA_OnPrem	ASCProject_P2HVYU_T1	ASCProject_P2HVYU	ASCProject_P2HVYU_T1	P2HVYU	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_P8B8WN_T2_v1_RNA_OnPrem	ASCProject_P8B8WN_T2	ASCProject_P8B8WN	ASCProject_P8B8WN_T2	P8B8WN	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_PGXPR8_T2_v1_RNA_OnPrem	ASCProject_PGXPR8_T2	ASCProject_PGXPR8	ASCProject_PGXPR8_T2	PGXPR8	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_PHCG7A_T1_v1_RNA_OnPrem	ASCProject_PHCG7A_T1	ASCProject_PHCG7A	ASCProject_PHCG7A_T1	PHCG7A	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_PRDZ3M_T2_v1_RNA_OnPrem	ASCProject_PRDZ3M_T2	ASCProject_PRDZ3M	ASCProject_PRDZ3M_T2	PRDZ3M	TRUE	RNA	Tumor	FALSE	TRUE	FALSE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_PWNLUF_T1_v1_RNA_OnPrem	ASCProject_PWNLUF_T1	ASCProject_PWNLUF	ASCProject_PWNLUF_T1	PWNLUF	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_PXPTMJ_T1_v1_RNA_OnPrem	ASCProject_PXPTMJ_T1	ASCProject_PXPTMJ	ASCProject_PXPTMJ_T1	PXPTMJ	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
+RP-1447_ASCProject_PY6FJH_T1_v1_RNA_OnPrem	ASCProject_PY6FJH_T1	ASCProject_PY6FJH	ASCProject_PY6FJH_T1	PY6FJH	TRUE	RNA	Tumor	FALSE	TRUE	TRUE	RNA QC (contamination, rRNA/mRNA rate, chimeras, genes detected)	
